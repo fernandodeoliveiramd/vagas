@@ -1,0 +1,163 @@
+# Configuração de Palavras-Chave e Categorias de Vagas
+categories:
+  industrial_eletrica:
+    name: "Industrial, Elétrica & Eletrônica"
+    color: "#2563eb" # Blue
+    roles:
+      - name: "Eletricista"
+        search_terms:
+          - "eletricista"
+          - "eletricista industrial"
+          - "eletricista predial"
+          - "eletricista de manutencao"
+          - "eletricista montador"
+          - "eletricista forca e controle"
+        positive_keywords:
+          - "eletricista"
+          - "eletricidade"
+          - "alta tensao"
+          - "baixa tensao"
+          - "nr10"
+          - "nr-10"
+          - "painel eletrico"
+          - "instalacoes eletricas"
+          - "comandos eletricos"
+
+      - name: "Eletroinstrumentista"
+        search_terms:
+          - "eletroinstrumentista"
+          - "instrumentista"
+          - "tecnico instrumentacao"
+          - "instrumentista industrial"
+          - "instrumentacao industrial"
+        positive_keywords:
+          - "eletroinstrumentista"
+          - "instrumentacao"
+          - "calibracao"
+          - "transmissores"
+          - "valvulas de controle"
+          - "sensores"
+          - "malhas de controle"
+          - "clp"
+          - "plc"
+
+      - name: "Técnico em Eletrônica / Automação"
+        search_terms:
+          - "tecnico em eletronica"
+          - "tecnico eletronico"
+          - "tecnico em eletrotecnica"
+          - "tecnico eletrotecnico"
+          - "tecnico automacao"
+          - "tecnico mecatronica"
+        positive_keywords:
+          - "eletronica"
+          - "eletrotecnica"
+          - "automacao"
+          - "placas de circuito"
+          - "manutencao eletronica"
+          - "componentes"
+          - "soldagem eletronica"
+          - "inversores"
+
+  tecnologia_jr:
+    name: "Tecnologia & Dados (Júnior)"
+    color: "#10b981" # Green
+    roles:
+      - name: "Desenvolvedor / Programador Júnior"
+        search_terms:
+          - "desenvolvedor junior"
+          - "programador junior"
+          - "dev junior"
+          - "desenvolvedor jr"
+          - "programador jr"
+          - "desenvolvedor python"
+          - "desenvolvedor frontend junior"
+          - "desenvolvedor backend junior"
+          - "desenvolvedor fullstack junior"
+          - "software engineer junior"
+        positive_keywords:
+          - "desenvolvedor"
+          - "programador"
+          - "software"
+          - "python"
+          - "javascript"
+          - "typescript"
+          - "react"
+          - "node"
+          - "sql"
+          - "git"
+          - "junior"
+          - "jr"
+          - "trainee"
+          - "estagio"
+
+      - name: "Analista de Dados Júnior"
+        search_terms:
+          - "analista de dados junior"
+          - "analista de dados jr"
+          - "data analyst junior"
+          - "analista de bi junior"
+          - "analista de bi jr"
+          - "business intelligence junior"
+        positive_keywords:
+          - "dados"
+          - "bi"
+          - "power bi"
+          - "sql"
+          - "excel"
+          - "dashboard"
+          - "python"
+          - "etl"
+          - "analytics"
+          - "tableau"
+          - "junior"
+          - "jr"
+
+  gestao_projetos:
+    name: "Gestão & Projetos"
+    color: "#8b5cf6" # Purple
+    roles:
+      - name: "Analista de Projetos"
+        search_terms:
+          - "analista de projetos"
+          - "analista de projetos junior"
+          - "analista de projetos jr"
+          - "analista pmo"
+          - "analista de planejamento"
+        positive_keywords:
+          - "projetos"
+          - "pmo"
+          - "cronograma"
+          - "scrum"
+          - "agil"
+          - "ms project"
+          - "planejamento"
+          - "indicadores"
+          - "gestao de projetos"
+
+      - name: "Assistente de Projetos"
+        search_terms:
+          - "assistente de projetos"
+          - "auxiliar de projetos"
+          - "assistente pmo"
+          - "assistente de planejamento"
+        positive_keywords:
+          - "assistente"
+          - "auxiliar"
+          - "projetos"
+          - "documentacao"
+          - "acompanhamento"
+          - "relatorios"
+          - "suporte a projetos"
+
+# Termos para exclusão (reduz falso-positivo)
+negative_keywords:
+  - "senior"
+  - "sr."
+  - "especialista"
+  - "coordenador"
+  - "diretor"
+  - "gerente executivo"
+  - "vendedor de loja"
+  - "atendente de lanchonete"
+  - "corretor de imoveis"

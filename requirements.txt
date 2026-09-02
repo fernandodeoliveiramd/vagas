@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+httpx
+beautifulsoup4
+pyyaml
+apscheduler
+python-multipart
+python-dotenv

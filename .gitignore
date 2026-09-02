@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.env
+test_gupy.py
+test_scraper.py
+test_sources.py
+.DS_Store
+Thumbs.db

@@ -1,0 +1,32 @@
+# Configuração de Localizações e Cidades
+locations:
+  - id: "pelotas"
+    name: "Pelotas"
+    state: "RS"
+    aliases:
+      - "Pelotas"
+      - "Pelotas/RS"
+      - "Pelotas - RS"
+      - "RS - Pelotas"
+      - "Pelotas, RS"
+
+  - id: "rio_grande"
+    name: "Rio Grande"
+    state: "RS"
+    aliases:
+      - "Rio Grande"
+      - "Rio Grande/RS"
+      - "Rio Grande - RS"
+      - "RS - Rio Grande"
+      - "Rio Grande, RS"
+
+  - id: "remoto"
+    name: "Remoto / Home Office"
+    state: "BR"
+    aliases:
+      - "Remoto"
+      - "Home Office"
+      - "Teletrabalho"
+      - "100% Remoto"
+      - "Trabalho Remoto"
+      - "Qualquer lugar"
