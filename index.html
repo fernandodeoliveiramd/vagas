@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-slate-900 text-slate-100">
+<html lang="pt-BR" class="h-full bg-slate-50 text-slate-900">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +10,6 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -22,54 +21,52 @@
               700: '#4338ca',
             },
             linkedin: '#0a66c2',
-            gupy: '#00e676',
-            trabalhabrasil: '#ff6f00',
           }
         }
       }
     }
   </script>
   <style>
-    /* Custom Scrollbar */
+    /* Custom Minimalist Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
-<body class="h-full flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="h-full flex flex-col font-sans antialiased bg-slate-50 text-slate-800 selection:bg-brand-500 selection:text-white">
 
   <!-- TOP NAVIGATION BAR -->
-  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40">
+  <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <!-- Logo & Title -->
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
-          <i data-lucide="compass" class="w-6 h-6 text-white"></i>
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-md shadow-brand-500/20">
+          <i data-lucide="compass" class="w-5 h-5 text-white"></i>
         </div>
         <div>
-          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-            Vagas RS <span class="text-xs px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Pelotas & Rio Grande</span>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            Vagas RS <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-brand-50 text-brand-700 font-semibold border border-brand-200/60">Pelotas & Rio Grande</span>
           </h1>
-          <p class="text-xs text-slate-400">LinkedIn • Trabalha Brasil / SINE • Gupy • Polo Regional</p>
+          <p class="text-xs text-slate-500">LinkedIn • Polo Regional • Gupy • Oportunidades Verificadas</p>
         </div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center gap-3">
-        <button id="btnScrape" onclick="triggerScrape()" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-sm font-medium rounded-lg shadow-md shadow-brand-600/25 transition-all transform active:scale-95">
-          <i data-lucide="refresh-cw" id="scrapeIcon" class="w-4 h-4"></i>
+      <div class="flex items-center gap-2.5">
+        <button id="btnScrape" onclick="triggerScrape()" class="flex items-center gap-2 px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-all transform active:scale-95">
+          <i data-lucide="refresh-cw" id="scrapeIcon" class="w-3.5 h-3.5"></i>
           <span id="scrapeText">Atualizar Vagas</span>
         </button>
 
-        <button onclick="openConfigModal()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition" title="Configurações & Telegram">
-          <i data-lucide="settings" class="w-5 h-5"></i>
+        <button onclick="openConfigModal()" class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl border border-slate-200 transition" title="Configurações & Telegram">
+          <i data-lucide="settings" class="w-4 h-4"></i>
         </button>
 
-        <button onclick="exportCSV()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition" title="Exportar CSV">
-          <i data-lucide="download" class="w-5 h-5"></i>
+        <button onclick="exportCSV()" class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl border border-slate-200 transition" title="Exportar CSV">
+          <i data-lucide="download" class="w-4 h-4"></i>
         </button>
       </div>
     </div>
@@ -81,75 +78,75 @@
     <!-- KPI STATS CARDS -->
     <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       <!-- Total Vagas -->
-      <div class="bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl relative overflow-hidden group hover:border-slate-600 transition">
+      <div class="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:shadow transition">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Vagas</span>
-          <i data-lucide="briefcase" class="w-4 h-4 text-brand-400"></i>
+          <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Ativas</span>
+          <i data-lucide="briefcase" class="w-4 h-4 text-brand-600"></i>
         </div>
         <div class="mt-2 flex items-baseline gap-2">
-          <span id="statTotal" class="text-2xl font-bold text-white">0</span>
-          <span id="statTodayBadge" class="text-xs text-emerald-400 font-medium">+0 hoje</span>
+          <span id="statTotal" class="text-2xl font-bold text-slate-900">0</span>
+          <span id="statTodayBadge" class="text-xs text-emerald-600 font-semibold">+0 hoje</span>
         </div>
       </div>
 
       <!-- Industrial & Elétrica -->
-      <div onclick="setCategoryFilter('industrial_eletrica')" class="cursor-pointer bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl relative overflow-hidden group hover:border-blue-500/50 transition">
+      <div onclick="setCategoryFilter('industrial_eletrica')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-blue-300 hover:shadow transition">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-medium text-blue-400 uppercase tracking-wider">Industrial/Elétrica</span>
-          <i data-lucide="zap" class="w-4 h-4 text-blue-400"></i>
+          <span class="text-[11px] font-semibold text-blue-700 uppercase tracking-wider">Industrial/Elétrica</span>
+          <i data-lucide="zap" class="w-4 h-4 text-blue-600"></i>
         </div>
         <div class="mt-2">
-          <span id="statIndustrial" class="text-2xl font-bold text-white">0</span>
+          <span id="statIndustrial" class="text-2xl font-bold text-slate-900">0</span>
         </div>
       </div>
 
       <!-- Tecnologia Jr -->
-      <div onclick="setCategoryFilter('tecnologia_jr')" class="cursor-pointer bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl relative overflow-hidden group hover:border-emerald-500/50 transition">
+      <div onclick="setCategoryFilter('tecnologia_jr')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-emerald-300 hover:shadow transition">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-medium text-emerald-400 uppercase tracking-wider">Tecnologia Jr</span>
-          <i data-lucide="code" class="w-4 h-4 text-emerald-400"></i>
+          <span class="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">Tecnologia Jr</span>
+          <i data-lucide="code" class="w-4 h-4 text-emerald-600"></i>
         </div>
         <div class="mt-2">
-          <span id="statTech" class="text-2xl font-bold text-white">0</span>
+          <span id="statTech" class="text-2xl font-bold text-slate-900">0</span>
         </div>
       </div>
 
       <!-- Gestão & Projetos -->
-      <div onclick="setCategoryFilter('gestao_projetos')" class="cursor-pointer bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl relative overflow-hidden group hover:border-purple-500/50 transition">
+      <div onclick="setCategoryFilter('gestao_projetos')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-purple-300 hover:shadow transition">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-medium text-purple-400 uppercase tracking-wider">Projetos</span>
-          <i data-lucide="layout-grid" class="w-4 h-4 text-purple-400"></i>
+          <span class="text-[11px] font-semibold text-purple-700 uppercase tracking-wider">Projetos</span>
+          <i data-lucide="layout-grid" class="w-4 h-4 text-purple-600"></i>
         </div>
         <div class="mt-2">
-          <span id="statProjects" class="text-2xl font-bold text-white">0</span>
+          <span id="statProjects" class="text-2xl font-bold text-slate-900">0</span>
         </div>
       </div>
 
       <!-- Pelotas -->
-      <div onclick="setCityFilter('Pelotas')" class="cursor-pointer bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl relative overflow-hidden group hover:border-amber-500/50 transition">
+      <div onclick="setCityFilter('Pelotas')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-amber-300 hover:shadow transition">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-medium text-amber-400 uppercase tracking-wider">Pelotas/RS</span>
-          <i data-lucide="map-pin" class="w-4 h-4 text-amber-400"></i>
+          <span class="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">Pelotas/RS</span>
+          <i data-lucide="map-pin" class="w-4 h-4 text-amber-600"></i>
         </div>
         <div class="mt-2">
-          <span id="statPelotas" class="text-2xl font-bold text-white">0</span>
+          <span id="statPelotas" class="text-2xl font-bold text-slate-900">0</span>
         </div>
       </div>
 
       <!-- Rio Grande -->
-      <div onclick="setCityFilter('Rio Grande')" class="cursor-pointer bg-slate-800/60 border border-slate-700/60 p-4 rounded-xl relative overflow-hidden group hover:border-cyan-500/50 transition">
+      <div onclick="setCityFilter('Rio Grande')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-cyan-300 hover:shadow transition">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-medium text-cyan-400 uppercase tracking-wider">Rio Grande/RS</span>
-          <i data-lucide="anchor" class="w-4 h-4 text-cyan-400"></i>
+          <span class="text-[11px] font-semibold text-cyan-700 uppercase tracking-wider">Rio Grande/RS</span>
+          <i data-lucide="anchor" class="w-4 h-4 text-cyan-600"></i>
         </div>
         <div class="mt-2">
-          <span id="statRioGrande" class="text-2xl font-bold text-white">0</span>
+          <span id="statRioGrande" class="text-2xl font-bold text-slate-900">0</span>
         </div>
       </div>
     </section>
 
     <!-- SEARCH & FILTER TOOLBAR -->
-    <section class="bg-slate-800/80 border border-slate-700/80 p-4 rounded-2xl space-y-4 shadow-lg">
+    <section class="bg-white border border-slate-200/80 p-4 sm:p-5 rounded-2xl space-y-4 shadow-sm">
       <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
         
         <!-- Search Input -->
@@ -159,15 +156,15 @@
             type="text" 
             id="searchInput"
             oninput="handleSearch(this.value)"
-            placeholder="Buscar por cargo, empresa, tecnologia, fonte..." 
-            class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+            placeholder="Buscar por cargo, empresa, tecnologia..." 
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
           />
         </div>
 
         <!-- Filter Dropdowns -->
         <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <!-- Cidade -->
-          <select id="filterCity" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+          <select id="filterCity" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
             <option value="todas">📍 Todas as Cidades</option>
             <option value="Pelotas">Pelotas, RS</option>
             <option value="Rio Grande">Rio Grande, RS</option>
@@ -175,7 +172,7 @@
           </select>
 
           <!-- Modalidade -->
-          <select id="filterWorkModel" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+          <select id="filterWorkModel" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
             <option value="todos">🏢 Todas Modalidades</option>
             <option value="Presencial">Presencial</option>
             <option value="Híbrido">Híbrido</option>
@@ -183,7 +180,7 @@
           </select>
 
           <!-- Status -->
-          <select id="filterStatus" onchange="applyFilters()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+          <select id="filterStatus" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
             <option value="todas">🎯 Todos os Status</option>
             <option value="nova">Novas Vagas</option>
             <option value="interesse">Tenho Interesse</option>
@@ -193,12 +190,12 @@
           </select>
 
           <!-- View Mode Toggle (Cards vs Kanban) -->
-          <div class="flex items-center bg-slate-900 p-1 border border-slate-700 rounded-xl ml-auto">
-            <button id="btnViewCards" onclick="setViewMode('cards')" class="px-3 py-1 text-xs rounded-lg font-medium transition bg-brand-600 text-white flex items-center gap-1.5">
-              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+          <div class="flex items-center bg-slate-100 p-1 border border-slate-200 rounded-xl ml-auto">
+            <button id="btnViewCards" onclick="setViewMode('cards')" class="px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-brand-600"></i>
               <span>Cards</span>
             </button>
-            <button id="btnViewKanban" onclick="setViewMode('kanban')" class="px-3 py-1 text-xs rounded-lg font-medium transition text-slate-400 hover:text-white flex items-center gap-1.5">
+            <button id="btnViewKanban" onclick="setViewMode('kanban')" class="px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
               <i data-lucide="columns-3" class="w-3.5 h-3.5"></i>
               <span>Kanban</span>
             </button>
@@ -208,19 +205,19 @@
       </div>
 
       <!-- Category Filter Tabs -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 border-t border-slate-700/60 pt-3 text-xs font-medium">
-        <button onclick="setCategoryFilter('todas')" id="catTab_todas" class="cat-tab px-3 py-1.5 rounded-lg bg-slate-700 text-white border border-slate-600">
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 border-t border-slate-100 pt-3 text-xs font-medium">
+        <button onclick="setCategoryFilter('todas')" id="catTab_todas" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-900 text-white font-semibold shadow-xs">
           Todas as Áreas
         </button>
-        <button onclick="setCategoryFilter('industrial_eletrica')" id="catTab_industrial_eletrica" class="cat-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 flex items-center gap-1.5">
+        <button onclick="setCategoryFilter('industrial_eletrica')" id="catTab_industrial_eletrica" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-blue-500"></span>
           ⚡ Elétrica, Eletrônica & Instrumentação
         </button>
-        <button onclick="setCategoryFilter('tecnologia_jr')" id="catTab_tecnologia_jr" class="cat-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 flex items-center gap-1.5">
+        <button onclick="setCategoryFilter('tecnologia_jr')" id="catTab_tecnologia_jr" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
           💻 Tecnologia & Dados (Júnior)
         </button>
-        <button onclick="setCategoryFilter('gestao_projetos')" id="catTab_gestao_projetos" class="cat-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-700 flex items-center gap-1.5">
+        <button onclick="setCategoryFilter('gestao_projetos')" id="catTab_gestao_projetos" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-purple-500"></span>
           📊 Gestão & Assistência de Projetos
         </button>
@@ -236,13 +233,13 @@
       </div>
       
       <!-- Empty State -->
-      <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 bg-slate-800/30 rounded-2xl border border-slate-800">
-        <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">
+      <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
           <i data-lucide="search-x" class="w-6 h-6"></i>
         </div>
-        <h3 class="text-base font-semibold text-slate-200">Nenhuma vaga encontrada com os filtros selecionados</h3>
-        <p class="text-xs text-slate-400 max-w-sm">Tente limpar os filtros ou clique em "Atualizar Vagas" para carregar novas oportunidades.</p>
-        <button onclick="resetFilters()" class="text-xs text-brand-400 hover:underline">Limpar Filtros</button>
+        <h3 class="text-base font-semibold text-slate-800">Nenhuma vaga encontrada com os filtros selecionados</h3>
+        <p class="text-xs text-slate-500 max-w-sm">Tente limpar os filtros ou clique em "Atualizar Vagas" para varrer novas oportunidades.</p>
+        <button onclick="resetFilters()" class="text-xs text-brand-600 font-semibold hover:underline">Limpar Filtros</button>
       </div>
     </div>
 
@@ -251,9 +248,9 @@
       <div class="flex gap-4 min-w-[1200px]">
         
         <!-- Col: Novas -->
-        <div class="flex-1 bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-700">
-            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+        <div class="flex-1 bg-slate-100/70 border border-slate-200 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
+            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-slate-400"></span>
               Novas Vagas (<span id="count_nova">0</span>)
             </span>
@@ -262,10 +259,10 @@
         </div>
 
         <!-- Col: Tenho Interesse -->
-        <div class="flex-1 bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-700">
-            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+        <div class="flex-1 bg-amber-50/60 border border-amber-200/70 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200">
+            <span class="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
               Tenho Interesse (<span id="count_interesse">0</span>)
             </span>
           </div>
@@ -273,10 +270,10 @@
         </div>
 
         <!-- Col: Candidatado -->
-        <div class="flex-1 bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-700">
-            <span class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+        <div class="flex-1 bg-blue-50/60 border border-blue-200/70 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-blue-200">
+            <span class="text-xs font-bold text-blue-800 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
               Candidatado (<span id="count_candidatado">0</span>)
             </span>
           </div>
@@ -284,10 +281,10 @@
         </div>
 
         <!-- Col: Entrevista -->
-        <div class="flex-1 bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-700">
-            <span class="text-xs font-bold text-purple-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+        <div class="flex-1 bg-purple-50/60 border border-purple-200/70 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-purple-200">
+            <span class="text-xs font-bold text-purple-800 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
               Em Entrevista (<span id="count_entrevista">0</span>)
             </span>
           </div>
@@ -295,10 +292,10 @@
         </div>
 
         <!-- Col: Descartada -->
-        <div class="flex-1 bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-700">
-            <span class="text-xs font-bold text-red-400 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-red-400"></span>
+        <div class="flex-1 bg-slate-100/50 border border-slate-200 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
+            <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-slate-300"></span>
               Descartadas (<span id="count_descartada">0</span>)
             </span>
           </div>
@@ -311,48 +308,48 @@
   </main>
 
   <!-- MODAL DE DETALHES & ANOTAÇÕES -->
-  <div id="jobModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      <button onclick="closeJobModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+  <div id="jobModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-6 sm:p-7 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeJobModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <div class="space-y-1">
+      <div class="space-y-1.5">
         <div id="modalCategoryBadge"></div>
-        <h2 id="modalTitle" class="text-xl font-bold text-white"></h2>
-        <p id="modalCompany" class="text-sm text-slate-300 font-medium"></p>
+        <h2 id="modalTitle" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"></h2>
+        <p id="modalCompany" class="text-xs sm:text-sm text-slate-600 font-medium"></p>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700">
-          <span class="text-slate-400 block">Localização</span>
-          <span id="modalLocation" class="font-medium text-slate-200"></span>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+          <span class="text-slate-500 block mb-0.5">Localização</span>
+          <span id="modalLocation" class="font-semibold text-slate-800"></span>
         </div>
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700">
-          <span class="text-slate-400 block">Modalidade</span>
-          <span id="modalWorkModel" class="font-medium text-slate-200"></span>
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+          <span class="text-slate-500 block mb-0.5">Modalidade</span>
+          <span id="modalWorkModel" class="font-semibold text-slate-800"></span>
         </div>
-        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700">
-          <span class="text-slate-400 block">Salário</span>
-          <span id="modalSalary" class="font-medium text-slate-200"></span>
+        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
+          <span class="text-slate-500 block mb-0.5">Salário</span>
+          <span id="modalSalary" class="font-semibold text-emerald-700"></span>
         </div>
       </div>
 
       <div>
-        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Descrição da Vaga</h4>
-        <div id="modalDescription" class="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60 whitespace-pre-line max-h-48 overflow-y-auto"></div>
+        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Descrição da Oportunidade</h4>
+        <div id="modalDescription" class="text-xs text-slate-700 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 whitespace-pre-line max-h-48 overflow-y-auto leading-relaxed"></div>
       </div>
 
       <!-- Anotações do Usuário -->
       <div>
-        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Minhas Anotações & Histórico</label>
-        <textarea id="modalNotes" rows="3" placeholder="Ex: Enviei currículo pelo site em 02/09, contato do RH: Fulano..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-brand-500"></textarea>
+        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Minhas Anotações Privadas</label>
+        <textarea id="modalNotes" rows="3" placeholder="Ex: Currículo enviado em 02/09, contato do RH: Fulano..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"></textarea>
       </div>
 
-      <div class="flex items-center justify-between pt-2 border-t border-slate-700">
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
         <div class="flex items-center gap-2">
-          <label class="text-xs text-slate-400">Status:</label>
-          <select id="modalStatusSelect" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200">
+          <label class="text-xs text-slate-500 font-medium">Status:</label>
+          <select id="modalStatusSelect" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 font-medium">
             <option value="nova">Nova</option>
             <option value="interesse">Tenho Interesse</option>
             <option value="candidatado">Candidatado</option>
@@ -362,11 +359,11 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="saveModalChanges()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium rounded-lg transition">
-            Salvar Anotações
+          <button onclick="saveModalChanges()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition">
+            Salvar
           </button>
-          <a id="modalApplyBtn" href="#" target="_blank" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-medium rounded-lg flex items-center gap-1.5 transition">
-            <span>Ir para Inscrição</span>
+          <a id="modalApplyBtn" href="#" target="_blank" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition shadow-sm">
+            <span>Ir para Vaga</span>
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
           </a>
         </div>
@@ -375,34 +372,34 @@
   </div>
 
   <!-- CONFIG & TELEGRAM MODAL -->
-  <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
-      <button onclick="closeConfigModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+  <div id="configModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
+      <button onclick="closeConfigModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <h3 class="text-lg font-bold text-white flex items-center gap-2">
-        <i data-lucide="send" class="w-5 h-5 text-brand-400"></i>
+      <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+        <i data-lucide="send" class="w-5 h-5 text-brand-600"></i>
         Alertas no Telegram
       </h3>
 
-      <p class="text-xs text-slate-300">
-        Receba alertas automáticos no seu celular assim que novas vagas em Pelotas e Rio Grande forem descobertas no LinkedIn, Trabalha Brasil ou Gupy.
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Receba notificações instantâneas no seu Telegram assim que novas vagas em Pelotas e Rio Grande forem encontradas.
       </p>
 
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-400 mb-1">Telegram Bot Token:</label>
-          <input type="text" id="cfgBotToken" placeholder="Ex: 123456789:ABCdefGHIjklMNO..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-brand-500" />
+          <label class="block text-slate-600 font-medium mb-1">Telegram Bot Token:</label>
+          <input type="text" id="cfgBotToken" placeholder="Ex: 123456789:ABCdefGHIjklMNO..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:bg-white focus:outline-none focus:border-brand-500" />
         </div>
         <div>
-          <label class="block text-slate-400 mb-1">Telegram Chat ID:</label>
-          <input type="text" id="cfgChatId" placeholder="Ex: 987654321" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-slate-200 focus:outline-none focus:border-brand-500" />
+          <label class="block text-slate-600 font-medium mb-1">Telegram Chat ID:</label>
+          <input type="text" id="cfgChatId" placeholder="Ex: 987654321" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:bg-white focus:outline-none focus:border-brand-500" />
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-700">
-        <button onclick="testTelegramAlert()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition flex items-center gap-1.5">
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+        <button onclick="testTelegramAlert()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shadow-sm">
           <i data-lucide="bell" class="w-3.5 h-3.5"></i>
           Testar Envio
         </button>
@@ -570,45 +567,45 @@
         const categoryBadge = getCategoryBadge(job.category);
         const workModelBadge = getWorkModelBadge(job.work_model);
         const sourceBadge = getSourceBadge(job.source);
-        const scoreBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">${job.match_score}% Match</span>`;
+        const scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">${job.match_score}% Match</span>`;
 
         const card = `
-          <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-4 flex flex-col justify-between hover:border-slate-600 hover:shadow-xl hover:shadow-black/40 transition group">
-            <div class="space-y-2.5">
+          <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all group">
+            <div class="space-y-3">
               <div class="flex items-center justify-between gap-2">
                 ${categoryBadge}
                 ${scoreBadge}
               </div>
 
               <div>
-                <h3 onclick="openJobModal(${job.id})" class="text-sm font-bold text-white group-hover:text-brand-400 transition cursor-pointer line-clamp-2">
+                <h3 onclick="openJobModal(${job.id})" class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition cursor-pointer line-clamp-2 leading-snug">
                   ${escapeHtml(job.title)}
                 </h3>
-                <p class="text-xs text-slate-300 font-medium mt-0.5">${escapeHtml(job.company)}</p>
+                <p class="text-xs text-slate-600 font-medium mt-1">${escapeHtml(job.company)}</p>
               </div>
 
-              <div class="flex flex-wrap items-center gap-1.5 text-[11px] text-slate-300">
-                <span class="inline-flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-700/60">
-                  <i data-lucide="map-pin" class="w-3 h-3 text-slate-400"></i>
+              <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+                <span class="inline-flex items-center gap-1 bg-slate-100/80 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200/60 font-medium">
+                  <i data-lucide="map-pin" class="w-3 h-3 text-slate-500"></i>
                   ${escapeHtml(job.location || job.city || 'Pelotas/RG')}
                 </span>
                 ${workModelBadge}
                 ${sourceBadge}
               </div>
 
-              <div class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+              <div class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
                 <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
                 ${escapeHtml(job.salary || 'A combinar')}
               </div>
 
-              <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+              <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                 ${escapeHtml(job.description || 'Sem descrição adicional.')}
               </p>
             </div>
 
             <!-- Footer Actions -->
-            <div class="pt-3 mt-3 border-t border-slate-700/60 flex items-center justify-between gap-2">
-              <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[11px] text-slate-300 focus:outline-none focus:border-brand-500">
+            <div class="pt-3.5 mt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
+              <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
                 <option value="nova" ${job.status === 'nova' ? 'selected' : ''}>📥 Nova</option>
                 <option value="interesse" ${job.status === 'interesse' ? 'selected' : ''}>⭐ Interesse</option>
                 <option value="candidatado" ${job.status === 'candidatado' ? 'selected' : ''}>📤 Candidatado</option>
@@ -617,10 +614,10 @@
               </select>
 
               <div class="flex items-center gap-1.5">
-                <button onclick="openJobModal(${job.id})" class="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition" title="Ver Detalhes">
+                <button onclick="openJobModal(${job.id})" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition" title="Ver Detalhes">
                   <i data-lucide="eye" class="w-4 h-4"></i>
                 </button>
-                <a href="${job.url}" target="_blank" class="px-2.5 py-1 bg-brand-600 hover:bg-brand-500 text-white text-xs font-medium rounded-lg flex items-center gap-1 transition shadow-sm">
+                <a href="${job.url}" target="_blank" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1 transition shadow-xs">
                   <span>Vaga</span>
                   <i data-lucide="external-link" class="w-3 h-3"></i>
                 </a>
@@ -632,19 +629,19 @@
 
         if (kanbanCols[statusKey]) {
           const kanbanCard = document.createElement('div');
-          kanbanCard.className = "bg-slate-900 border border-slate-700 rounded-xl p-3 space-y-2 shadow-md hover:border-slate-500 transition";
+          kanbanCard.className = "bg-white border border-slate-200/90 rounded-xl p-3 space-y-2 shadow-xs hover:border-brand-300 hover:shadow-sm transition";
           kanbanCard.innerHTML = `
             <div class="flex items-center justify-between gap-1">
               ${categoryBadge}
-              <span class="text-[10px] text-slate-400">${escapeHtml(job.source)}</span>
+              <span class="text-[10px] text-slate-500 font-medium">${escapeHtml(job.source)}</span>
             </div>
-            <h4 onclick="openJobModal(${job.id})" class="text-xs font-bold text-white hover:text-brand-400 cursor-pointer line-clamp-2">
+            <h4 onclick="openJobModal(${job.id})" class="text-xs font-bold text-slate-900 hover:text-brand-600 cursor-pointer line-clamp-2 leading-tight">
               ${escapeHtml(job.title)}
             </h4>
-            <p class="text-[11px] text-slate-300">${escapeHtml(job.company)}</p>
-            <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+            <p class="text-[11px] text-slate-600">${escapeHtml(job.company)}</p>
+            <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1.5 border-t border-slate-100">
               <span>📍 ${escapeHtml(job.city || 'RS')}</span>
-              <a href="${job.url}" target="_blank" class="text-brand-400 hover:underline flex items-center gap-0.5">
+              <a href="${job.url}" target="_blank" class="text-brand-600 font-semibold hover:underline flex items-center gap-0.5">
                 Link <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
               </a>
             </div>
@@ -665,45 +662,45 @@
 
     function getCategoryBadge(cat) {
       if (cat === 'industrial_eletrica') {
-        return '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">⚡ Elétrica & Indústria</span>';
+        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/60">⚡ Elétrica & Indústria</span>';
       } else if (cat === 'tecnologia_jr') {
-        return '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">💻 Tecnologia Jr</span>';
+        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">💻 Tecnologia Jr</span>';
       } else if (cat === 'gestao_projetos') {
-        return '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">📊 Projetos</span>';
+        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200/60">📊 Projetos</span>';
       }
-      return '<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-700 text-slate-300">Geral</span>';
+      return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">Geral</span>';
     }
 
     function getWorkModelBadge(model) {
       if (model === 'Remoto') {
-        return '<span class="inline-flex items-center gap-1 bg-emerald-900/40 text-emerald-300 border border-emerald-700/50 px-2 py-0.5 rounded-md font-medium">🏠 Remoto</span>';
+        return '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-medium">🏠 Remoto</span>';
       } else if (model === 'Híbrido') {
-        return '<span class="inline-flex items-center gap-1 bg-amber-900/40 text-amber-300 border border-amber-700/50 px-2 py-0.5 rounded-md font-medium">🔄 Híbrido</span>';
+        return '<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-medium">🔄 Híbrido</span>';
       }
-      return '<span class="inline-flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-700/60">🏢 Presencial</span>';
+      return '<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-medium">🏢 Presencial</span>';
     }
 
     function getSourceBadge(source) {
       if (source === 'LinkedIn') {
-        return '<span class="inline-flex items-center gap-1 bg-sky-950/80 text-sky-300 border border-sky-600/50 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="linkedin" class="w-3 h-3 text-sky-400"></i> LinkedIn</span>';
+        return '<span class="inline-flex items-center gap-1 bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="linkedin" class="w-3 h-3 text-sky-600"></i> LinkedIn</span>';
       } else if (source && (source.includes('Trabalha Brasil') || source.includes('SINE'))) {
-        return '<span class="inline-flex items-center gap-1 bg-amber-950/80 text-amber-300 border border-amber-600/50 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="building" class="w-3 h-3 text-amber-400"></i> Trabalha Brasil</span>';
+        return '<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="building" class="w-3 h-3 text-amber-600"></i> Trabalha Brasil</span>';
       } else if (source === 'Gupy') {
-        return '<span class="inline-flex items-center gap-1 bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="layers" class="w-3 h-3 text-emerald-400"></i> Gupy</span>';
+        return '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="layers" class="w-3 h-3 text-emerald-600"></i> Gupy</span>';
       }
-      return `<span class="inline-flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-700/60"><i data-lucide="tag" class="w-3 h-3 text-slate-400"></i> ${escapeHtml(source || 'Web')}</span>`;
+      return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-medium"><i data-lucide="tag" class="w-3 h-3 text-slate-500"></i> ${escapeHtml(source || 'Web')}</span>`;
     }
 
     function setCategoryFilter(cat) {
       currentCategory = cat;
       document.querySelectorAll('.cat-tab').forEach(btn => {
-        btn.classList.remove('bg-slate-700', 'text-white', 'border-slate-600');
-        btn.classList.add('bg-slate-900', 'text-slate-300', 'border-slate-700');
+        btn.classList.remove('bg-slate-900', 'text-white', 'font-semibold', 'shadow-xs');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
       });
       const activeBtn = document.getElementById(`catTab_${cat}`);
       if (activeBtn) {
-        activeBtn.classList.remove('bg-slate-900', 'text-slate-300', 'border-slate-700');
-        activeBtn.classList.add('bg-slate-700', 'text-white', 'border-slate-600');
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+        activeBtn.classList.add('bg-slate-900', 'text-white', 'font-semibold', 'shadow-xs');
       }
       applyFilters();
     }
@@ -739,13 +736,13 @@
       if (mode === 'kanban') {
         cardsView.classList.add('hidden');
         kanbanView.classList.remove('hidden');
-        btnKanban.className = "px-3 py-1 text-xs rounded-lg font-medium transition bg-brand-600 text-white flex items-center gap-1.5";
-        btnCards.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-400 hover:text-white flex items-center gap-1.5";
+        btnKanban.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
+        btnCards.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
       } else {
         kanbanView.classList.add('hidden');
         cardsView.classList.remove('hidden');
-        btnCards.className = "px-3 py-1 text-xs rounded-lg font-medium transition bg-brand-600 text-white flex items-center gap-1.5";
-        btnKanban.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-400 hover:text-white flex items-center gap-1.5";
+        btnCards.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
+        btnKanban.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
       }
       lucide.createIcons();
     }
@@ -913,8 +910,8 @@
     function showToast(msg, type = "info") {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
-      const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-700';
-      toast.className = `${bg} text-white px-4 py-2.5 rounded-xl shadow-xl text-xs font-medium flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
+      const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-900';
+      toast.className = `${bg} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
       toast.innerHTML = `<span>${escapeHtml(msg)}</span>`;
       container.appendChild(toast);
 
