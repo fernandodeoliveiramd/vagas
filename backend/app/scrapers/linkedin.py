@@ -13,15 +13,15 @@ logger = logging.getLogger(__name__)
 
 class LinkedInScraper(BaseScraper):
     """
-    Coletor de vagas públicas do LinkedIn para Pelotas e Rio Grande (RS)
+    Coletor de vagas recentes e ativas do LinkedIn para Pelotas, Rio Grande e Remoto
     """
     def __init__(self):
         super().__init__(name="LinkedIn")
         self.base_url = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search"
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8",
             "Referer": "https://www.google.com/"
         }
 
@@ -30,7 +30,8 @@ class LinkedInScraper(BaseScraper):
         try:
             encoded_kw = urllib.parse.quote(keyword)
             encoded_loc = urllib.parse.quote(location_str)
-            url = f"{self.base_url}?keywords={encoded_kw}&location={encoded_loc}&start=0"
+            # f_TPR=r2592000 filtra vagas publicadas no último mês (garantindo vagas recentes e ativas)
+            url = f"{self.base_url}?keywords={encoded_kw}&location={encoded_loc}&f_TPR=r2592000&start=0"
             
             req = urllib.request.Request(url, headers=self.headers)
             ctx = ssl.create_default_context()
@@ -63,29 +64,28 @@ class LinkedInScraper(BaseScraper):
                     norm_loc = normalize_text(raw_loc)
                     norm_title = normalize_text(title)
 
-                    # Filtrar localização: apenas Pelotas, Rio Grande, RS ou Remoto
+                    # Filtrar localização
                     is_pelotas = "pelotas" in norm_loc or "pelotas" in norm_title
                     is_rio_grande = "rio grande" in norm_loc or "rio grande" in norm_title
                     is_region = any(c in norm_loc for c in ["capao do leao", "sao jose do norte"])
                     is_remote = any(r in norm_loc or r in norm_title for r in ["remoto", "remote", "home office"])
                     
-                    # Se não for da região nem remoto, descarta vagas de outros estados
-                    if not (is_pelotas or is_rio_grande or is_region or is_remote):
-                        continue
+                    if default_city in ("Pelotas", "Rio Grande"):
+                        if not (is_pelotas or is_rio_grande or is_region or is_remote):
+                            continue
+                        city = "Pelotas" if is_pelotas else ("Rio Grande" if (is_rio_grande or is_region) else default_city)
+                    else:
+                        city = "Remoto" if is_remote else default_city
 
-                    city = "Pelotas" if is_pelotas else ("Rio Grande" if (is_rio_grande or is_region) else ("Remoto" if is_remote else default_city))
-                    
                     work_model = "Presencial"
                     if is_remote:
                         work_model = "Remoto"
                     elif "hibrid" in norm_loc or "hybrid" in norm_loc:
                         work_model = "Híbrido"
 
-                    # Extrair ID numérico da URL do LinkedIn
                     id_match = re.search(r'-(\d+)$', full_url)
                     job_id = id_match.group(1) if id_match else str(abs(hash(full_url)) % 10000000)
-
-                    published_at = date_elem.get_text(strip=True) if date_elem else None
+                    published_at = date_elem.get_text(strip=True) if date_elem else "Recente"
 
                     job_dict = {
                         "external_id": f"linkedin_{job_id}",
@@ -95,7 +95,7 @@ class LinkedInScraper(BaseScraper):
                         "city": city,
                         "state": "RS",
                         "work_model": work_model,
-                        "description": f"Vaga de {title} na empresa {company} em {city}. Publicada no LinkedIn.",
+                        "description": f"Vaga recente de {title} na empresa {company} em {city}. Publicada no LinkedIn.",
                         "salary": "A combinar / Não informado",
                         "url": full_url,
                         "source": "LinkedIn",
@@ -111,22 +111,32 @@ class LinkedInScraper(BaseScraper):
         search_configs = [
             # Pelotas
             ("eletricista", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
+            ("eletrotecnica", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
             ("instrumentista", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
             ("eletronica", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
-            ("desenvolvedor", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
+            ("automacao", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
+            ("desenvolvedor junior", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
+            ("programador", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
             ("analista de dados", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
             ("analista de projetos", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
             ("assistente de projetos", "Pelotas, Rio Grande do Sul, Brasil", "Pelotas"),
             
             # Rio Grande
             ("eletricista", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
+            ("eletrotecnica", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
             ("instrumentista", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
             ("eletronica", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
             ("automacao", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
-            ("desenvolvedor", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
+            ("desenvolvedor junior", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
+            ("programador", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
             ("analista de dados", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
             ("analista de projetos", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
             ("assistente de projetos", "Rio Grande, Rio Grande do Sul, Brasil", "Rio Grande"),
+
+            # Remoto RS / Brasil (Áreas de Tecnologia e Projetos)
+            ("desenvolvedor junior remoto", "Brasil", "Remoto"),
+            ("analista de dados junior remoto", "Brasil", "Remoto"),
+            ("assistente de projetos remoto", "Brasil", "Remoto")
         ]
 
         tasks = [
@@ -141,5 +151,5 @@ class LinkedInScraper(BaseScraper):
             if isinstance(r, list):
                 all_jobs.extend(r)
 
-        logger.info(f"[LinkedIn] Total de vagas regionais coletadas: {len(all_jobs)}")
+        logger.info(f"[LinkedIn] Total de vagas recentes coletadas: {len(all_jobs)}")
         return all_jobs
