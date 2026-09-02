@@ -1,26 +1,25 @@
 {
   "success": true,
   "stats": {
-    "total_jobs": 76,
-    "today_jobs": 76,
+    "total_jobs": 49,
+    "today_jobs": 49,
     "by_status": {
-      "interesse": 25,
-      "nova": 51
+      "nova": 49
     },
     "by_category": {
-      "gestao_projetos": 16,
-      "industrial_eletrica": 55,
-      "tecnologia_jr": 5
+      "gestao_projetos": 6,
+      "industrial_eletrica": 39,
+      "tecnologia_jr": 4
     },
     "by_city": {
-      "Pelotas": 43,
-      "Rio Grande": 33
+      "Pelotas": 21,
+      "Rio Grande": 28
     },
     "by_source": {
       "EBR Offshore RG": 1,
       "Indústria Pelotas/Cruz Alta": 1,
       "Lifemed Pelotas": 1,
-      "LinkedIn": 8,
+      "LinkedIn": 6,
       "Pelotas Parque Tech": 1,
       "Polo Industrial RG": 2,
       "Polo Naval/Metalmecânico RG": 1,
@@ -28,8 +27,7 @@
       "Polo Tech Pelotas": 3,
       "Portos RS": 1,
       "Startup Pelotas": 1,
-      "Trabalha Brasil": 13,
-      "Trabalha Brasil / SINE": 41,
+      "Trabalha Brasil": 29,
       "Trabalha Brasil Pelotas": 1
     }
   }
