@@ -354,12 +354,15 @@
             <option value="interesse">Tenho Interesse</option>
             <option value="candidatado">Candidatado</option>
             <option value="entrevista">Entrevista</option>
-            <option value="descartada">Descartada</option>
           </select>
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="saveModalChanges()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition">
+          <button id="modalDiscardBtn" onclick="toggleDiscardFromModal()" class="px-3.5 py-2 bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition flex items-center gap-1.5">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            <span id="modalDiscardText">Descartar</span>
+          </button>
+          <button onclick="saveModalChanges()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition">
             Salvar
           </button>
           <a id="modalApplyBtn" href="#" target="_blank" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition shadow-sm">
@@ -530,6 +533,16 @@
         return true;
       });
 
+      // Ordenar: Vagas ativas primeiro, vagas descartadas enviadas para o final do feed
+      currentFilteredJobs.sort((a, b) => {
+        const aDiscarded = a.status === 'descartada' ? 1 : 0;
+        const bDiscarded = b.status === 'descartada' ? 1 : 0;
+        if (aDiscarded !== bDiscarded) {
+          return aDiscarded - bDiscarded;
+        }
+        return b.id - a.id;
+      });
+
       renderJobs();
     }
 
@@ -561,24 +574,43 @@
       let cardsHtml = '';
 
       currentFilteredJobs.forEach(job => {
+        const isDiscarded = job.status === 'descartada';
         const statusKey = job.status || 'nova';
         if (counts[statusKey] !== undefined) counts[statusKey]++;
 
-        const categoryBadge = getCategoryBadge(job.category);
-        const workModelBadge = getWorkModelBadge(job.work_model);
-        const sourceBadge = getSourceBadge(job.source);
-        const scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">${job.match_score}% Match</span>`;
+        const categoryBadge = getCategoryBadge(job.category, isDiscarded);
+        const workModelBadge = getWorkModelBadge(job.work_model, isDiscarded);
+        const sourceBadge = getSourceBadge(job.source, isDiscarded);
+        const scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isDiscarded ? 'bg-slate-200 text-slate-600 border border-slate-300' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">${job.match_score}% Match</span>`;
+
+        // Estilos para card ativo vs descartado (inativo / final do feed)
+        const cardContainerClasses = isDiscarded
+          ? "bg-slate-100/70 border border-slate-200/90 rounded-2xl p-5 flex flex-col justify-between opacity-60 grayscale-[60%] hover:opacity-90 hover:grayscale-0 transition-all group"
+          : "bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all group";
+
+        // Botão de Descartar / Restaurar no card
+        const discardButtonHtml = isDiscarded
+          ? `<button onclick="toggleDiscardJob(${job.id})" class="px-2.5 py-1 text-xs font-semibold text-red-700 bg-red-100/90 hover:bg-red-200 border border-red-200 rounded-xl transition flex items-center gap-1 shadow-xs" title="Clique para reativar esta vaga">
+               <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+               <span>Restaurar</span>
+             </button>`
+          : `<button onclick="toggleDiscardJob(${job.id})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl border border-transparent hover:border-red-200 transition" title="Descartar vaga">
+               <i data-lucide="trash-2" class="w-4 h-4"></i>
+             </button>`;
 
         const card = `
-          <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all group">
+          <div class="${cardContainerClasses}">
             <div class="space-y-3">
               <div class="flex items-center justify-between gap-2">
-                ${categoryBadge}
+                <div class="flex items-center gap-1.5">
+                  ${categoryBadge}
+                  ${isDiscarded ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-300 text-slate-700 font-bold">Descartada</span>' : ''}
+                </div>
                 ${scoreBadge}
               </div>
 
               <div>
-                <h3 onclick="openJobModal(${job.id})" class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition cursor-pointer line-clamp-2 leading-snug">
+                <h3 onclick="openJobModal(${job.id})" class="text-sm font-bold ${isDiscarded ? 'text-slate-700' : 'text-slate-900'} group-hover:text-brand-600 transition cursor-pointer line-clamp-2 leading-snug">
                   ${escapeHtml(job.title)}
                 </h3>
                 <p class="text-xs text-slate-600 font-medium mt-1">${escapeHtml(job.company)}</p>
@@ -593,7 +625,7 @@
                 ${sourceBadge}
               </div>
 
-              <div class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+              <div class="text-[11px] ${isDiscarded ? 'text-slate-600' : 'text-emerald-700'} font-semibold flex items-center gap-1">
                 <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
                 ${escapeHtml(job.salary || 'A combinar')}
               </div>
@@ -605,13 +637,17 @@
 
             <!-- Footer Actions -->
             <div class="pt-3.5 mt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
-              <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
-                <option value="nova" ${job.status === 'nova' ? 'selected' : ''}>📥 Nova</option>
-                <option value="interesse" ${job.status === 'interesse' ? 'selected' : ''}>⭐ Interesse</option>
-                <option value="candidatado" ${job.status === 'candidatado' ? 'selected' : ''}>📤 Candidatado</option>
-                <option value="entrevista" ${job.status === 'entrevista' ? 'selected' : ''}>🗓️ Entrevista</option>
-                <option value="descartada" ${job.status === 'descartada' ? 'selected' : ''}>✖️ Descartar</option>
-              </select>
+              <div class="flex items-center gap-1.5">
+                ${!isDiscarded ? `
+                <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
+                  <option value="nova" ${job.status === 'nova' ? 'selected' : ''}>📥 Nova</option>
+                  <option value="interesse" ${job.status === 'interesse' ? 'selected' : ''}>⭐ Interesse</option>
+                  <option value="candidatado" ${job.status === 'candidatado' ? 'selected' : ''}>📤 Candidatado</option>
+                  <option value="entrevista" ${job.status === 'entrevista' ? 'selected' : ''}>🗓️ Entrevista</option>
+                </select>
+                ` : ''}
+                ${discardButtonHtml}
+              </div>
 
               <div class="flex items-center gap-1.5">
                 <button onclick="openJobModal(${job.id})" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition" title="Ver Detalhes">
@@ -629,7 +665,7 @@
 
         if (kanbanCols[statusKey]) {
           const kanbanCard = document.createElement('div');
-          kanbanCard.className = "bg-white border border-slate-200/90 rounded-xl p-3 space-y-2 shadow-xs hover:border-brand-300 hover:shadow-sm transition";
+          kanbanCard.className = `bg-white border border-slate-200/90 rounded-xl p-3 space-y-2 shadow-xs hover:border-brand-300 hover:shadow-sm transition ${isDiscarded ? 'opacity-70' : ''}`;
           kanbanCard.innerHTML = `
             <div class="flex items-center justify-between gap-1">
               ${categoryBadge}
@@ -641,9 +677,14 @@
             <p class="text-[11px] text-slate-600">${escapeHtml(job.company)}</p>
             <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1.5 border-t border-slate-100">
               <span>📍 ${escapeHtml(job.city || 'RS')}</span>
-              <a href="${job.url}" target="_blank" class="text-brand-600 font-semibold hover:underline flex items-center gap-0.5">
-                Link <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
-              </a>
+              <div class="flex items-center gap-2">
+                <button onclick="toggleDiscardJob(${job.id})" class="text-slate-400 hover:text-brand-600 font-medium" title="${isDiscarded ? 'Restaurar' : 'Descartar'}">
+                  ${isDiscarded ? 'Restaurar' : 'Descartar'}
+                </button>
+                <a href="${job.url}" target="_blank" class="text-brand-600 font-semibold hover:underline flex items-center gap-0.5">
+                  Link <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                </a>
+              </div>
             </div>
           `;
           kanbanCols[statusKey].appendChild(kanbanCard);
@@ -660,7 +701,10 @@
       lucide.createIcons();
     }
 
-    function getCategoryBadge(cat) {
+    function getCategoryBadge(cat, isDiscarded = false) {
+      if (isDiscarded) {
+        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-200 text-slate-600 border border-slate-300">⚡ Área</span>';
+      }
       if (cat === 'industrial_eletrica') {
         return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/60">⚡ Elétrica & Indústria</span>';
       } else if (cat === 'tecnologia_jr') {
@@ -671,7 +715,10 @@
       return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">Geral</span>';
     }
 
-    function getWorkModelBadge(model) {
+    function getWorkModelBadge(model, isDiscarded = false) {
+      if (isDiscarded) {
+        return '<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-md font-medium">Modalidade</span>';
+      }
       if (model === 'Remoto') {
         return '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-medium">🏠 Remoto</span>';
       } else if (model === 'Híbrido') {
@@ -680,7 +727,10 @@
       return '<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-medium">🏢 Presencial</span>';
     }
 
-    function getSourceBadge(source) {
+    function getSourceBadge(source, isDiscarded = false) {
+      if (isDiscarded) {
+        return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200 font-medium">${escapeHtml(source || 'Web')}</span>`;
+      }
       if (source === 'LinkedIn') {
         return '<span class="inline-flex items-center gap-1 bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="linkedin" class="w-3 h-3 text-sky-600"></i> LinkedIn</span>';
       } else if (source && (source.includes('Trabalha Brasil') || source.includes('SINE'))) {
@@ -689,6 +739,19 @@
         return '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="layers" class="w-3 h-3 text-emerald-600"></i> Gupy</span>';
       }
       return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-medium"><i data-lucide="tag" class="w-3 h-3 text-slate-500"></i> ${escapeHtml(source || 'Web')}</span>`;
+    }
+
+    function toggleDiscardJob(jobId) {
+      const job = allLoadedJobs.find(j => j.id === jobId);
+      if (!job) return;
+      const isCurrentlyDiscarded = job.status === 'descartada';
+      const newStatus = isCurrentlyDiscarded ? 'nova' : 'descartada';
+      updateJobStatus(jobId, newStatus);
+      if (newStatus === 'descartada') {
+        showToast("Vaga descartada e movida para o final do feed.", "info");
+      } else {
+        showToast("Vaga restaurada com sucesso!", "success");
+      }
     }
 
     function setCategoryFilter(cat) {
@@ -793,7 +856,6 @@
         body: JSON.stringify({ status: newStatus })
       }).catch(() => {});
 
-      showToast(`Status atualizado para: ${newStatus}`, "success");
       applyFilters();
     }
 
@@ -802,7 +864,9 @@
       if (!job) return;
 
       currentModalJobId = jobId;
-      document.getElementById('modalCategoryBadge').innerHTML = getCategoryBadge(job.category);
+      const isDiscarded = job.status === 'descartada';
+
+      document.getElementById('modalCategoryBadge').innerHTML = getCategoryBadge(job.category, isDiscarded);
       document.getElementById('modalTitle').innerText = job.title;
       document.getElementById('modalCompany').innerText = `${job.company} • Fonte: ${job.source}`;
       document.getElementById('modalLocation').innerText = job.location || job.city || 'Pelotas/Rio Grande';
@@ -810,11 +874,27 @@
       document.getElementById('modalSalary').innerText = job.salary;
       document.getElementById('modalDescription').innerText = job.description || 'Nenhum detalhe adicional fornecido.';
       document.getElementById('modalNotes').value = job.notes || '';
-      document.getElementById('modalStatusSelect').value = job.status || 'nova';
+      document.getElementById('modalStatusSelect').value = isDiscarded ? 'nova' : (job.status || 'nova');
       document.getElementById('modalApplyBtn').href = job.url;
+
+      const discardBtn = document.getElementById('modalDiscardBtn');
+      const discardText = document.getElementById('modalDiscardText');
+      if (isDiscarded) {
+        discardBtn.className = "px-3.5 py-2 bg-red-100 hover:bg-red-200 text-red-800 text-xs font-semibold rounded-xl border border-red-200 transition flex items-center gap-1.5";
+        discardText.innerText = "Restaurar Vaga";
+      } else {
+        discardBtn.className = "px-3.5 py-2 bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition flex items-center gap-1.5";
+        discardText.innerText = "Descartar";
+      }
 
       document.getElementById('jobModal').classList.remove('hidden');
       lucide.createIcons();
+    }
+
+    function toggleDiscardFromModal() {
+      if (!currentModalJobId) return;
+      toggleDiscardJob(currentModalJobId);
+      closeJobModal();
     }
 
     function closeJobModal() {
