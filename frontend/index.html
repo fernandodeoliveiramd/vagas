@@ -189,15 +189,15 @@
             <option value="descartada">Descartadas</option>
           </select>
 
-          <!-- View Mode Toggle (Cards vs Kanban) -->
+          <!-- View Mode Toggle (Cards vs Lista) -->
           <div class="flex items-center bg-slate-100 p-1 border border-slate-200 rounded-xl ml-auto">
             <button id="btnViewCards" onclick="setViewMode('cards')" class="px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5">
               <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-brand-600"></i>
               <span>Cards</span>
             </button>
-            <button id="btnViewKanban" onclick="setViewMode('kanban')" class="px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
-              <i data-lucide="columns-3" class="w-3.5 h-3.5"></i>
-              <span>Kanban</span>
+            <button id="btnViewList" onclick="setViewMode('list')" class="px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+              <span>Lista</span>
             </button>
           </div>
         </div>
@@ -231,78 +231,23 @@
       <div id="jobsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Jobs inserted dynamically via JS -->
       </div>
-      
-      <!-- Empty State -->
-      <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 bg-white rounded-2xl border border-slate-200 shadow-sm">
-        <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
-          <i data-lucide="search-x" class="w-6 h-6"></i>
-        </div>
-        <h3 class="text-base font-semibold text-slate-800">Nenhuma vaga encontrada com os filtros selecionados</h3>
-        <p class="text-xs text-slate-500 max-w-sm">Tente limpar os filtros ou clique em "Atualizar Vagas" para varrer novas oportunidades.</p>
-        <button onclick="resetFilters()" class="text-xs text-brand-600 font-semibold hover:underline">Limpar Filtros</button>
+    </div>
+
+    <!-- 2. LIST VIEW (COMPACT ROWS) -->
+    <div id="listView" class="hidden space-y-3">
+      <div id="jobsList" class="space-y-2.5">
+        <!-- Jobs list rows inserted dynamically via JS -->
       </div>
     </div>
 
-    <!-- 2. KANBAN BOARD VIEW -->
-    <div id="kanbanView" class="hidden overflow-x-auto pb-4">
-      <div class="flex gap-4 min-w-[1200px]">
-        
-        <!-- Col: Novas -->
-        <div class="flex-1 bg-slate-100/70 border border-slate-200 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
-            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-              Novas Vagas (<span id="count_nova">0</span>)
-            </span>
-          </div>
-          <div id="col_nova" class="space-y-3 flex-1"></div>
-        </div>
-
-        <!-- Col: Tenho Interesse -->
-        <div class="flex-1 bg-amber-50/60 border border-amber-200/70 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-amber-200">
-            <span class="text-xs font-bold text-amber-800 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-              Tenho Interesse (<span id="count_interesse">0</span>)
-            </span>
-          </div>
-          <div id="col_interesse" class="space-y-3 flex-1"></div>
-        </div>
-
-        <!-- Col: Candidatado -->
-        <div class="flex-1 bg-blue-50/60 border border-blue-200/70 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-blue-200">
-            <span class="text-xs font-bold text-blue-800 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              Candidatado (<span id="count_candidatado">0</span>)
-            </span>
-          </div>
-          <div id="col_candidatado" class="space-y-3 flex-1"></div>
-        </div>
-
-        <!-- Col: Entrevista -->
-        <div class="flex-1 bg-purple-50/60 border border-purple-200/70 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-purple-200">
-            <span class="text-xs font-bold text-purple-800 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-              Em Entrevista (<span id="count_entrevista">0</span>)
-            </span>
-          </div>
-          <div id="col_entrevista" class="space-y-3 flex-1"></div>
-        </div>
-
-        <!-- Col: Descartada -->
-        <div class="flex-1 bg-slate-100/50 border border-slate-200 rounded-2xl p-3.5 flex flex-col min-h-[500px]">
-          <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200">
-            <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-slate-300"></span>
-              Descartadas (<span id="count_descartada">0</span>)
-            </span>
-          </div>
-          <div id="col_descartada" class="space-y-3 flex-1"></div>
-        </div>
-
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+        <i data-lucide="search-x" class="w-6 h-6"></i>
       </div>
+      <h3 class="text-base font-semibold text-slate-800">Nenhuma vaga encontrada com os filtros selecionados</h3>
+      <p class="text-xs text-slate-500 max-w-sm">Tente limpar os filtros ou clique em "Atualizar Vagas" para varrer novas oportunidades.</p>
+      <button onclick="resetFilters()" class="text-xs text-brand-600 font-semibold hover:underline">Limpar Filtros</button>
     </div>
 
   </main>
@@ -548,21 +493,12 @@
 
     function renderJobs() {
       const grid = document.getElementById('jobsGrid');
+      const list = document.getElementById('jobsList');
       const empty = document.getElementById('emptyState');
-
-      const counts = { nova: 0, interesse: 0, candidatado: 0, entrevista: 0, descartada: 0 };
-      const kanbanCols = {
-        nova: document.getElementById('col_nova'),
-        interesse: document.getElementById('col_interesse'),
-        candidatado: document.getElementById('col_candidatado'),
-        entrevista: document.getElementById('col_entrevista'),
-        descartada: document.getElementById('col_descartada')
-      };
-
-      Object.values(kanbanCols).forEach(col => { if (col) col.innerHTML = ''; });
 
       if (currentFilteredJobs.length === 0) {
         grid.innerHTML = '';
+        list.innerHTML = '';
         empty.classList.remove('hidden');
         empty.classList.add('flex');
         return;
@@ -572,11 +508,10 @@
       empty.classList.remove('flex');
 
       let cardsHtml = '';
+      let listHtml = '';
 
       currentFilteredJobs.forEach(job => {
         const isDiscarded = job.status === 'descartada';
-        const statusKey = job.status || 'nova';
-        if (counts[statusKey] !== undefined) counts[statusKey]++;
 
         const categoryBadge = getCategoryBadge(job.category, isDiscarded);
         const workModelBadge = getWorkModelBadge(job.work_model, isDiscarded);
@@ -588,16 +523,21 @@
           ? "bg-slate-100/70 border border-slate-200/90 rounded-2xl p-5 flex flex-col justify-between opacity-60 grayscale-[60%] hover:opacity-90 hover:grayscale-0 transition-all group"
           : "bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all group";
 
-        // Botão de Descartar / Restaurar no card
+        const listContainerClasses = isDiscarded
+          ? "bg-slate-100/70 border border-slate-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 opacity-60 grayscale-[60%] hover:opacity-90 hover:grayscale-0 transition-all group"
+          : "bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 hover:shadow-md transition-all group";
+
+        // Botão de Descartar / Restaurar
         const discardButtonHtml = isDiscarded
-          ? `<button onclick="toggleDiscardJob(${job.id})" class="px-2.5 py-1 text-xs font-semibold text-red-700 bg-red-100/90 hover:bg-red-200 border border-red-200 rounded-xl transition flex items-center gap-1 shadow-xs" title="Clique para reativar esta vaga">
+          ? `<button onclick="toggleDiscardJob(${job.id})" class="px-2.5 py-1.5 text-xs font-semibold text-red-700 bg-red-100/90 hover:bg-red-200 border border-red-200 rounded-xl transition flex items-center gap-1 shadow-xs" title="Clique para reativar esta vaga">
                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                <span>Restaurar</span>
              </button>`
-          : `<button onclick="toggleDiscardJob(${job.id})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl border border-transparent hover:border-red-200 transition" title="Descartar vaga">
+          : `<button onclick="toggleDiscardJob(${job.id})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl border border-transparent hover:border-red-200 transition" title="Descartar vaga">
                <i data-lucide="trash-2" class="w-4 h-4"></i>
              </button>`;
 
+        // 1. HTML DO CARD
         const card = `
           <div class="${cardContainerClasses}">
             <div class="space-y-3">
@@ -663,40 +603,67 @@
         `;
         cardsHtml += card;
 
-        if (kanbanCols[statusKey]) {
-          const kanbanCard = document.createElement('div');
-          kanbanCard.className = `bg-white border border-slate-200/90 rounded-xl p-3 space-y-2 shadow-xs hover:border-brand-300 hover:shadow-sm transition ${isDiscarded ? 'opacity-70' : ''}`;
-          kanbanCard.innerHTML = `
-            <div class="flex items-center justify-between gap-1">
-              ${categoryBadge}
-              <span class="text-[10px] text-slate-500 font-medium">${escapeHtml(job.source)}</span>
+        // 2. HTML DA LINHA DA LISTA (LIST VIEW)
+        const row = `
+          <div class="${listContainerClasses}">
+            <!-- Info Principal -->
+            <div class="flex-1 space-y-1.5">
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${categoryBadge}
+                ${scoreBadge}
+                ${isDiscarded ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-300 text-slate-700 font-bold">Descartada</span>' : ''}
+                <span class="text-xs text-slate-500 font-medium ml-1">${escapeHtml(job.company)}</span>
+              </div>
+
+              <h3 onclick="openJobModal(${job.id})" class="text-sm sm:text-base font-bold ${isDiscarded ? 'text-slate-700' : 'text-slate-900'} group-hover:text-brand-600 transition cursor-pointer leading-snug">
+                ${escapeHtml(job.title)}
+              </h3>
+
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500 pt-0.5">
+                <span class="inline-flex items-center gap-1 font-medium text-slate-600">
+                  <i data-lucide="map-pin" class="w-3 h-3 text-slate-400"></i>
+                  ${escapeHtml(job.location || job.city || 'Pelotas/RG')}
+                </span>
+                <span>•</span>
+                ${workModelBadge}
+                <span>•</span>
+                ${sourceBadge}
+                <span>•</span>
+                <span class="font-semibold ${isDiscarded ? 'text-slate-600' : 'text-emerald-700'}">${escapeHtml(job.salary || 'A combinar')}</span>
+              </div>
             </div>
-            <h4 onclick="openJobModal(${job.id})" class="text-xs font-bold text-slate-900 hover:text-brand-600 cursor-pointer line-clamp-2 leading-tight">
-              ${escapeHtml(job.title)}
-            </h4>
-            <p class="text-[11px] text-slate-600">${escapeHtml(job.company)}</p>
-            <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1.5 border-t border-slate-100">
-              <span>📍 ${escapeHtml(job.city || 'RS')}</span>
-              <div class="flex items-center gap-2">
-                <button onclick="toggleDiscardJob(${job.id})" class="text-slate-400 hover:text-brand-600 font-medium" title="${isDiscarded ? 'Restaurar' : 'Descartar'}">
-                  ${isDiscarded ? 'Restaurar' : 'Descartar'}
+
+            <!-- Ações da Linha -->
+            <div class="flex items-center gap-2 self-start sm:self-center pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 w-full sm:w-auto justify-between sm:justify-end">
+              <div class="flex items-center gap-1.5">
+                ${!isDiscarded ? `
+                <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
+                  <option value="nova" ${job.status === 'nova' ? 'selected' : ''}>📥 Nova</option>
+                  <option value="interesse" ${job.status === 'interesse' ? 'selected' : ''}>⭐ Interesse</option>
+                  <option value="candidatado" ${job.status === 'candidatado' ? 'selected' : ''}>📤 Candidatado</option>
+                  <option value="entrevista" ${job.status === 'entrevista' ? 'selected' : ''}>🗓️ Entrevista</option>
+                </select>
+                ` : ''}
+                ${discardButtonHtml}
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="openJobModal(${job.id})" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition" title="Ver Detalhes">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
                 </button>
-                <a href="${job.url}" target="_blank" class="text-brand-600 font-semibold hover:underline flex items-center gap-0.5">
-                  Link <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                <a href="${job.url}" target="_blank" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1 transition shadow-xs">
+                  <span>Vaga</span>
+                  <i data-lucide="external-link" class="w-3 h-3"></i>
                 </a>
               </div>
             </div>
-          `;
-          kanbanCols[statusKey].appendChild(kanbanCard);
-        }
+          </div>
+        `;
+        listHtml += row;
       });
 
       grid.innerHTML = cardsHtml;
-
-      Object.keys(counts).forEach(k => {
-        const el = document.getElementById(`count_${k}`);
-        if (el) el.innerText = counts[k];
-      });
+      list.innerHTML = listHtml;
 
       lucide.createIcons();
     }
@@ -792,20 +759,20 @@
     function setViewMode(mode) {
       currentView = mode;
       const cardsView = document.getElementById('cardsView');
-      const kanbanView = document.getElementById('kanbanView');
+      const listView = document.getElementById('listView');
       const btnCards = document.getElementById('btnViewCards');
-      const btnKanban = document.getElementById('btnViewKanban');
+      const btnList = document.getElementById('btnViewList');
 
-      if (mode === 'kanban') {
+      if (mode === 'list') {
         cardsView.classList.add('hidden');
-        kanbanView.classList.remove('hidden');
-        btnKanban.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
+        listView.classList.remove('hidden');
+        btnList.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
         btnCards.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
       } else {
-        kanbanView.classList.add('hidden');
+        listView.classList.add('hidden');
         cardsView.classList.remove('hidden');
         btnCards.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
-        btnKanban.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+        btnList.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
       }
       lucide.createIcons();
     }
