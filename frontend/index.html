@@ -307,7 +307,7 @@
             </div>
 
             <!-- KPI Mini Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
               <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
                 <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Localização</span>
                 <span id="inspectorLocation" class="font-bold text-slate-900 block truncate">Pelotas, RS</span>
@@ -321,8 +321,12 @@
                 <span id="inspectorSalary" class="font-bold text-emerald-700 block truncate">A combinar</span>
               </div>
               <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Compatibilidade</span>
+                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Match</span>
                 <span id="inspectorScore" class="font-bold text-brand-600 block">100% Match</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Publicação</span>
+                <span id="inspectorDate" class="font-bold text-slate-800 block truncate">Hoje</span>
               </div>
             </div>
 
@@ -626,6 +630,35 @@
       renderPipeline();
     }
 
+    function formatJobDate(job) {
+      if (job.published_at && job.published_at !== 'Recente' && job.published_at !== 'None' && job.published_at !== 'null') {
+        if (job.published_at.includes('-')) {
+          const parts = job.published_at.split('T')[0].split('-');
+          if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return job.published_at;
+      }
+      
+      if (job.created_at) {
+        try {
+          const d = new Date(job.created_at);
+          if (!isNaN(d.getTime())) {
+            const today = new Date();
+            const diffMs = today.getTime() - d.getTime();
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+            if (diffHours < 1) return 'Hoje (Agora)';
+            if (diffHours < 24 && today.getDate() === d.getDate()) return 'Hoje';
+            if (diffDays === 1 || (diffHours < 48 && today.getDate() !== d.getDate())) return 'Ontem';
+            if (diffDays > 1 && diffDays < 7) return `Há ${diffDays} dias`;
+            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          }
+        } catch (e) {}
+      }
+      return 'Recente';
+    }
+
     function renderFeed() {
       const feedContainer = document.getElementById('cardsList');
       const tableContainer = document.getElementById('tableListContainer');
@@ -656,6 +689,7 @@
         const isSelected = job.id === currentActiveJobId;
         const isDiscarded = job.status === 'descartada';
         const initial = (job.company || 'V').charAt(0).toUpperCase();
+        const dateStr = formatJobDate(job);
 
         const cardClasses = isDiscarded
           ? "cursor-pointer bg-slate-100/60 p-3 rounded-xl border border-slate-200/80 shadow-2xs transition-all opacity-60 grayscale-[60%]"
@@ -675,7 +709,10 @@
               </div>
               <div class="flex flex-col items-end shrink-0 font-mono text-[10px]">
                 <span class="font-bold ${isDiscarded ? 'text-slate-400' : 'text-emerald-700'}">${job.match_score}% match</span>
-                <span class="text-slate-400">${isDiscarded ? 'Descartada' : formatStatusBadge(job.status)}</span>
+                <span class="text-slate-500 flex items-center gap-0.5 mt-0.5" title="Data de publicação">
+                  <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
+                  ${dateStr}
+                </span>
               </div>
             </div>
 
@@ -686,13 +723,19 @@
             <div class="mt-2 flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
               <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200/60">${escapeHtml(job.work_model || 'Presencial')}</span>
               <span class="px-2 py-0.5 rounded ${isDiscarded ? 'bg-slate-200 text-slate-600' : 'bg-brand-50 text-brand-700 border border-brand-100 font-semibold'}">${escapeHtml(job.source)}</span>
+              <span class="px-2 py-0.5 rounded bg-slate-50 text-slate-500 border border-slate-200/60 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[11px] text-slate-400">schedule</span>
+                ${dateStr}
+              </span>
             </div>
 
             <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono">
               <span class="font-bold text-emerald-700">${escapeHtml(job.salary || 'A combinar')}</span>
-              <button onclick="event.stopPropagation(); toggleDiscard(${job.id})" class="text-slate-400 hover:text-red-600 transition font-semibold" title="${isDiscarded ? 'Restaurar vaga' : 'Descartar vaga'}">
-                ${isDiscarded ? '↺ Restaurar' : '✕ Descartar'}
-              </button>
+              <div class="flex items-center gap-2">
+                <button onclick="event.stopPropagation(); toggleDiscard(${job.id})" class="text-slate-400 hover:text-red-600 transition font-semibold" title="${isDiscarded ? 'Restaurar vaga' : 'Descartar vaga'}">
+                  ${isDiscarded ? '↺ Restaurar' : '✕ Descartar'}
+                </button>
+              </div>
             </div>
           </article>
         `;
@@ -704,6 +747,10 @@
                 <span class="font-bold text-slate-900">${escapeHtml(job.company)}</span>
                 <span class="text-slate-400">• ${escapeHtml(job.location || job.city || 'RS')}</span>
                 <span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] text-slate-600 border border-slate-200">${escapeHtml(job.source)}</span>
+                <span class="px-2 py-0.5 rounded bg-slate-50 text-[10px] text-slate-500 border border-slate-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
+                  ${dateStr}
+                </span>
               </div>
               <h3 class="font-bold text-sm text-slate-900">${escapeHtml(job.title)}</h3>
               <div class="flex items-center gap-2 text-xs font-mono text-emerald-700 font-semibold">
@@ -740,6 +787,7 @@
       if (!job) return;
 
       const isDiscarded = job.status === 'descartada';
+      const dateStr = formatJobDate(job);
 
       document.getElementById('inspectorTitle').innerText = job.title;
       document.getElementById('inspectorCompany').innerText = job.company;
@@ -748,6 +796,7 @@
       document.getElementById('inspectorWorkModel').innerText = job.work_model || 'Presencial';
       document.getElementById('inspectorSalary').innerText = job.salary || 'A combinar';
       document.getElementById('inspectorScore').innerText = `${job.match_score}% Match`;
+      document.getElementById('inspectorDate').innerText = dateStr;
       document.getElementById('inspectorDescription').innerText = job.description || 'Sem descrição detalhada fornecida.';
       document.getElementById('inspectorNotes').value = job.notes || '';
       document.getElementById('inspectorApplyBtn').href = job.url;
@@ -786,6 +835,10 @@
         </span>
         <span class="px-2.5 py-0.5 rounded-md bg-brand-50 text-brand-700 font-mono text-xs font-semibold border border-brand-100">
           ${escapeHtml(job.source)}
+        </span>
+        <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono text-xs font-medium border border-slate-200 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[13px] text-slate-400">calendar_today</span>
+          Publicada: ${dateStr}
         </span>
       `;
     }
@@ -869,6 +922,7 @@
       allLoadedJobs.forEach(job => {
         const st = job.status || 'nova';
         if (counts[st] !== undefined) counts[st]++;
+        const dateStr = formatJobDate(job);
 
         if (cols[st]) {
           const card = document.createElement('div');
@@ -885,7 +939,7 @@
             <h4 class="font-bold text-xs text-slate-800 line-clamp-2">${escapeHtml(job.title)}</h4>
             <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1.5 border-t border-slate-100">
               <span>📍 ${escapeHtml(job.city || 'RS')}</span>
-              <a href="${job.url}" target="_blank" onclick="event.stopPropagation();" class="text-brand-600 font-bold hover:underline">Vaga ↗</a>
+              <span class="flex items-center gap-0.5 text-slate-500"><span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>${dateStr}</span>
             </div>
           `;
           cols[st].appendChild(card);
@@ -1012,9 +1066,9 @@
         showToast("Nenhuma vaga para exportar.", "error");
         return;
       }
-      let csv = "ID,Título,Empresa,Cidade,Modalidade,Categoria,Salário,Fonte,Status,Link\n";
+      let csv = "ID,Título,Empresa,Cidade,Modalidade,Categoria,Salário,Fonte,Status,Publicação,Link\n";
       currentFilteredJobs.forEach(j => {
-        csv += `"${j.id}","${(j.title||'').replace(/"/g, '""')}","${(j.company||'').replace(/"/g, '""')}","${j.city||''}","${j.work_model||''}","${j.category||''}","${(j.salary||'').replace(/"/g, '""')}","${j.source||''}","${j.status||''}","${j.url||''}"\n`;
+        csv += `"${j.id}","${(j.title||'').replace(/"/g, '""')}","${(j.company||'').replace(/"/g, '""')}","${j.city||''}","${j.work_model||''}","${j.category||''}","${(j.salary||'').replace(/"/g, '""')}","${j.source||''}","${j.status||''}","${formatJobDate(j)}","${j.url||''}"\n`;
       });
       const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
