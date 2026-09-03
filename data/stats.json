@@ -8,13 +8,12 @@
     },
     "by_category": {
       "gestao_projetos": 2,
-      "industrial_eletrica": 33,
-      "tecnologia_jr": 2
+      "industrial_eletrica": 34,
+      "tecnologia_jr": 1
     },
     "by_city": {
       "Pelotas": 14,
-      "Remoto": 1,
-      "Rio Grande": 22
+      "Rio Grande": 23
     },
     "by_source": {
       "LinkedIn": 6,
