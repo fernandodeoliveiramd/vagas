@@ -1,370 +1,543 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-slate-50 text-slate-900">
+<html lang="pt-BR" class="h-full bg-[#faf8ff] text-[#131b2e]">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buscador do Fernando | Pelotas & Rio Grande</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Buscador de Vagas | Pelotas & Rio Grande / RS</title>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
+      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#eef2ff',
-              100: '#e0e7ff',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-            },
-            linkedin: '#0a66c2',
+            "primary": "#3525cd",
+            "primary-container": "#4f46e5",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#e2dfff",
+            "on-primary-fixed": "#0f0069",
+            "secondary": "#006591",
+            "secondary-container": "#39b8fd",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#c9e6ff",
+            "on-secondary-fixed": "#001e2f",
+            "tertiary": "#005338",
+            "tertiary-container": "#006e4b",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#6ffbbe",
+            "on-tertiary-fixed": "#002113",
+            "surface": "#faf8ff",
+            "surface-dim": "#d2d9f4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "surface-container": "#eaedff",
+            "surface-container-high": "#e2e7ff",
+            "surface-container-highest": "#dae2fd",
+            "on-surface": "#131b2e",
+            "on-surface-variant": "#464555",
+            "outline": "#777587",
+            "outline-variant": "#c7c4d8",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          fontFamily: {
+            sans: ["Geist", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
           }
         }
       }
-    }
+    };
   </script>
   <style>
-    /* Custom Minimalist Scrollbar */
+    /* Custom Scrollbars */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    ::-webkit-scrollbar-track { background: #f2f3ff; }
+    ::-webkit-scrollbar-thumb { background: #c7c4d8; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #777587; }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
-<body class="h-full flex flex-col font-sans antialiased bg-slate-50 text-slate-800 selection:bg-brand-500 selection:text-white">
+<body class="h-full flex flex-col font-sans bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-white">
 
-  <!-- TOP NAVIGATION BAR -->
-  <header class="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <!-- FIXED APP HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/40">
+    <div class="h-12 w-full px-4 sm:px-6 flex items-center justify-between gap-3">
       <!-- Logo & Title -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-md shadow-brand-500/20">
-          <i data-lucide="compass" class="w-5 h-5 text-white"></i>
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-primary-container flex items-center justify-center text-white shadow-sm">
+          <span class="material-symbols-outlined text-[20px]">explore</span>
         </div>
-        <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 flex items-center gap-2">
-            Buscador do Fernando <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-brand-50 text-brand-700 font-semibold border border-brand-200/60">Pelotas & Rio Grande</span>
-          </h1>
-          <p class="text-xs text-slate-500">LinkedIn • Polo Regional • Gupy • Oportunidades Verificadas</p>
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-sm sm:text-base text-on-surface tracking-tight">Buscador do Fernando</span>
+          <span class="text-[10px] uppercase font-mono font-semibold bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded">Pelotas &amp; Rio Grande / RS</span>
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2.5">
-        <button id="btnScrape" onclick="triggerScrape()" class="flex items-center gap-2 px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl shadow-sm transition-all transform active:scale-95">
-          <i data-lucide="refresh-cw" id="scrapeIcon" class="w-3.5 h-3.5"></i>
+      <!-- Main Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-1 text-xs font-semibold">
+        <button id="navTab_vagas" onclick="switchMainTab('vagas')" class="nav-tab px-3 py-1.5 transition-colors bg-primary-container text-on-primary rounded">
+          Todas as Vagas
+        </button>
+        <button id="navTab_candidaturas" onclick="switchMainTab('candidaturas')" class="nav-tab px-3 py-1.5 transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded">
+          Minhas Candidaturas
+        </button>
+        <button id="navTab_telegram" onclick="switchMainTab('telegram')" class="nav-tab px-3 py-1.5 transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded">
+          Métricas &amp; Alertas Telegram
+        </button>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="hidden xl:flex items-center gap-2 text-on-surface-variant text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+          <span>Varredura ativa • LinkedIn, Gupy, Polo Regional</span>
+        </div>
+        <button id="btnScrape" onclick="triggerScrape()" class="flex items-center gap-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface px-3 py-1.5 rounded transition-colors text-xs font-mono font-semibold" type="button">
+          <span id="scrapeIcon" class="material-symbols-outlined text-[16px]">sync</span>
           <span id="scrapeText">Atualizar Vagas</span>
         </button>
+      </div>
+    </div>
 
-        <button onclick="openConfigModal()" class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl border border-slate-200 transition" title="Configurações & Telegram">
-          <i data-lucide="settings" class="w-4 h-4"></i>
-        </button>
-
-        <button onclick="exportCSV()" class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl border border-slate-200 transition" title="Exportar CSV">
-          <i data-lucide="download" class="w-4 h-4"></i>
-        </button>
+    <!-- Live KPI Summary Strip -->
+    <div class="h-8 w-full px-4 sm:px-6 bg-surface-container-low/90 border-t border-outline-variant/30 flex items-center overflow-x-auto gap-2.5 text-xs font-mono">
+      <span class="text-[10px] uppercase font-bold text-on-surface-variant shrink-0">Sumário do Feed:</span>
+      <div class="flex items-center gap-2 shrink-0">
+        <span onclick="resetFilters()" class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-xs hover:border-primary border border-transparent transition">
+          <span class="text-[10px] text-outline font-semibold">TOTAL ATIVAS</span>
+          <span id="statTotal" class="font-bold text-primary">0</span>
+        </span>
+        <span onclick="setCategoryFilter('industrial_eletrica')" class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-xs hover:border-secondary border border-transparent transition">
+          <span class="text-[10px] text-outline font-semibold">INDUSTRIAL/ELÉTRICA</span>
+          <span id="statIndustrial" class="font-bold text-secondary">0</span>
+        </span>
+        <span onclick="setCategoryFilter('tecnologia_jr')" class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-xs hover:border-primary-container border border-transparent transition">
+          <span class="text-[10px] text-outline font-semibold">TECNOLOGIA JR</span>
+          <span id="statTech" class="font-bold text-primary-container">0</span>
+        </span>
+        <span onclick="setCategoryFilter('gestao_projetos')" class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-xs hover:border-tertiary border border-transparent transition">
+          <span class="text-[10px] text-outline font-semibold">GESTÃO/PROJETOS</span>
+          <span id="statProjects" class="font-bold text-tertiary">0</span>
+        </span>
+        <span onclick="setCityFilter('Pelotas')" class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+          <span class="text-[10px] text-on-surface-variant font-semibold">PELOTAS</span>
+          <span id="statPelotas" class="font-bold text-on-surface">0</span>
+        </span>
+        <span onclick="setCityFilter('Rio Grande')" class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+          <span class="text-[10px] text-on-surface-variant font-semibold">RIO GRANDE</span>
+          <span id="statRioGrande" class="font-bold text-on-surface">0</span>
+        </span>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="w-full pt-[80px] bg-surface min-h-screen flex-1 flex flex-col">
 
-    <!-- KPI STATS CARDS -->
-    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-      <!-- Total Vagas -->
-      <div class="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:shadow transition">
-        <div class="flex justify-between items-start">
-          <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Ativas</span>
-          <i data-lucide="briefcase" class="w-4 h-4 text-brand-600"></i>
-        </div>
-        <div class="mt-2 flex items-baseline gap-2">
-          <span id="statTotal" class="text-2xl font-bold text-slate-900">0</span>
-          <span id="statTodayBadge" class="text-xs text-emerald-600 font-semibold">+0 hoje</span>
-        </div>
-      </div>
+    <!-- ========================================== -->
+    <!-- TAB 1: TODAS AS VAGAS (SPLIT VIEW & LISTA) -->
+    <!-- ========================================== -->
+    <div id="view_vagas" class="tab-view flex flex-col flex-1 w-full">
+      
+      <!-- Command Bar & Global Filter Strip -->
+      <section class="w-full bg-surface-container-lowest px-4 sm:px-6 py-3 shadow-xs flex flex-col gap-2.5 border-b border-outline-variant/30">
+        <!-- Top Row: Command Search Input & View Toggle -->
+        <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          <!-- Search Input -->
+          <div class="relative flex-1 flex items-center">
+            <span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-[18px] pointer-events-none">search</span>
+            <input 
+              class="w-full h-9 pl-9 pr-14 bg-surface-container-low rounded font-sans text-xs sm:text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/25 transition-all" 
+              id="commandSearch" 
+              oninput="handleSearch(this.value)"
+              placeholder="Buscar por cargo, empresa, tecnologia ou palavra-chave... (Pressione /)" 
+              type="text"
+            />
+            <div class="absolute right-2 flex items-center pointer-events-none">
+              <kbd class="px-1.5 py-0.5 rounded bg-surface-container font-mono text-[10px] text-on-surface-variant shadow-xs">/</kbd>
+            </div>
+          </div>
 
-      <!-- Industrial & Elétrica -->
-      <div onclick="setCategoryFilter('industrial_eletrica')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-blue-300 hover:shadow transition">
-        <div class="flex justify-between items-start">
-          <span class="text-[11px] font-semibold text-blue-700 uppercase tracking-wider">Industrial/Elétrica</span>
-          <i data-lucide="zap" class="w-4 h-4 text-blue-600"></i>
-        </div>
-        <div class="mt-2">
-          <span id="statIndustrial" class="text-2xl font-bold text-slate-900">0</span>
-        </div>
-      </div>
-
-      <!-- Tecnologia Jr -->
-      <div onclick="setCategoryFilter('tecnologia_jr')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-emerald-300 hover:shadow transition">
-        <div class="flex justify-between items-start">
-          <span class="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">Tecnologia Jr</span>
-          <i data-lucide="code" class="w-4 h-4 text-emerald-600"></i>
-        </div>
-        <div class="mt-2">
-          <span id="statTech" class="text-2xl font-bold text-slate-900">0</span>
-        </div>
-      </div>
-
-      <!-- Gestão & Projetos -->
-      <div onclick="setCategoryFilter('gestao_projetos')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-purple-300 hover:shadow transition">
-        <div class="flex justify-between items-start">
-          <span class="text-[11px] font-semibold text-purple-700 uppercase tracking-wider">Projetos</span>
-          <i data-lucide="layout-grid" class="w-4 h-4 text-purple-600"></i>
-        </div>
-        <div class="mt-2">
-          <span id="statProjects" class="text-2xl font-bold text-slate-900">0</span>
-        </div>
-      </div>
-
-      <!-- Pelotas -->
-      <div onclick="setCityFilter('Pelotas')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-amber-300 hover:shadow transition">
-        <div class="flex justify-between items-start">
-          <span class="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">Pelotas/RS</span>
-          <i data-lucide="map-pin" class="w-4 h-4 text-amber-600"></i>
-        </div>
-        <div class="mt-2">
-          <span id="statPelotas" class="text-2xl font-bold text-slate-900">0</span>
-        </div>
-      </div>
-
-      <!-- Rio Grande -->
-      <div onclick="setCityFilter('Rio Grande')" class="cursor-pointer bg-white border border-slate-200/80 p-4 rounded-2xl shadow-sm hover:border-cyan-300 hover:shadow transition">
-        <div class="flex justify-between items-start">
-          <span class="text-[11px] font-semibold text-cyan-700 uppercase tracking-wider">Rio Grande/RS</span>
-          <i data-lucide="anchor" class="w-4 h-4 text-cyan-600"></i>
-        </div>
-        <div class="mt-2">
-          <span id="statRioGrande" class="text-2xl font-bold text-slate-900">0</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- SEARCH & FILTER TOOLBAR -->
-    <section class="bg-white border border-slate-200/80 p-4 sm:p-5 rounded-2xl space-y-4 shadow-sm">
-      <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
-        
-        <!-- Search Input -->
-        <div class="relative w-full md:w-96">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input 
-            type="text" 
-            id="searchInput"
-            oninput="handleSearch(this.value)"
-            placeholder="Buscar por cargo, empresa, tecnologia..." 
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
-          />
+          <!-- Quick Action Controls -->
+          <div class="flex items-center gap-2 shrink-0">
+            <div class="hidden sm:flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded text-xs font-mono">
+              <span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span>
+              <span class="text-on-surface-variant">Hub Regional: <strong class="text-tertiary font-semibold">Pelotas &amp; Rio Grande</strong></span>
+            </div>
+            <!-- View Mode Switch -->
+            <div class="flex items-center bg-surface-container-low p-0.5 rounded text-xs font-semibold">
+              <button id="btnViewSplit" onclick="setViewMode('split')" class="px-3 py-1 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center gap-1 transition" type="button">
+                <span class="material-symbols-outlined text-[16px]">splitscreen</span>
+                <span>Split-View</span>
+              </button>
+              <button id="btnViewList" onclick="setViewMode('list')" class="px-3 py-1 rounded text-on-surface-variant hover:text-on-surface flex items-center gap-1 transition" type="button">
+                <span class="material-symbols-outlined text-[16px]">table_rows</span>
+                <span>Lista</span>
+              </button>
+            </div>
+          </div>
         </div>
 
-        <!-- Filter Dropdowns -->
-        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-          <!-- Cidade -->
-          <select id="filterCity" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
-            <option value="todas">📍 Todas as Cidades</option>
-            <option value="Pelotas">Pelotas, RS</option>
-            <option value="Rio Grande">Rio Grande, RS</option>
-            <option value="Remoto">Remoto / Home Office</option>
-          </select>
+        <!-- Bottom Row: Filter Dropdowns and Quick Area Pills -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Filter Cidade -->
+            <select id="filterCity" onchange="applyFilters()" class="h-7 px-2.5 bg-surface-container-low hover:bg-surface-container rounded font-mono text-xs text-on-surface border-none outline-none cursor-pointer">
+              <option value="todas">📍 Todas as Cidades</option>
+              <option value="Pelotas">Pelotas, RS</option>
+              <option value="Rio Grande">Rio Grande, RS</option>
+              <option value="Remoto">Remoto / RS</option>
+            </select>
 
-          <!-- Modalidade -->
-          <select id="filterWorkModel" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
-            <option value="todos">🏢 Todas Modalidades</option>
-            <option value="Presencial">Presencial</option>
-            <option value="Híbrido">Híbrido</option>
-            <option value="Remoto">100% Remoto</option>
-          </select>
+            <!-- Filter Modalidade -->
+            <select id="filterWorkModel" onchange="applyFilters()" class="h-7 px-2.5 bg-surface-container-low hover:bg-surface-container rounded font-mono text-xs text-on-surface border-none outline-none cursor-pointer">
+              <option value="todos">🏢 Todas Modalidades</option>
+              <option value="Presencial">Presencial</option>
+              <option value="Híbrido">Híbrido</option>
+              <option value="Remoto">100% Remoto</option>
+            </select>
 
-          <!-- Status -->
-          <select id="filterStatus" onchange="applyFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
-            <option value="todas">🎯 Todos os Status</option>
-            <option value="nova">Novas Vagas</option>
-            <option value="interesse">Tenho Interesse</option>
-            <option value="candidatado">Candidatado</option>
-            <option value="entrevista">Em Entrevista</option>
-            <option value="descartada">Descartadas</option>
-          </select>
+            <!-- Filter Status -->
+            <select id="filterStatus" onchange="applyFilters()" class="h-7 px-2.5 bg-surface-container-low hover:bg-surface-container rounded font-mono text-xs text-on-surface border-none outline-none cursor-pointer">
+              <option value="todas">🎯 Todos os Status</option>
+              <option value="nova">Novas Vagas</option>
+              <option value="interesse">Tenho Interesse</option>
+              <option value="candidatado">Candidatado</option>
+              <option value="entrevista">Em Entrevista</option>
+              <option value="descartada">Descartadas</option>
+            </select>
+          </div>
 
-          <!-- View Mode Toggle (Cards vs Lista) -->
-          <div class="flex items-center bg-slate-100 p-1 border border-slate-200 rounded-xl ml-auto">
-            <button id="btnViewCards" onclick="setViewMode('cards')" class="px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5">
-              <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-brand-600"></i>
-              <span>Cards</span>
+          <!-- Quick Area Switches -->
+          <div class="flex items-center gap-1.5 overflow-x-auto text-xs font-mono font-medium">
+            <button onclick="setCategoryFilter('todas')" id="catTab_todas" class="cat-pill h-7 px-3 rounded-full bg-primary-container text-on-primary flex items-center gap-1 transition">
+              <span>Todas</span>
             </button>
-            <button id="btnViewList" onclick="setViewMode('list')" class="px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
-              <i data-lucide="list" class="w-3.5 h-3.5"></i>
-              <span>Lista</span>
+            <button onclick="setCategoryFilter('industrial_eletrica')" id="catTab_industrial_eletrica" class="cat-pill h-7 px-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center gap-1 transition">
+              <span>⚡ Elétrica &amp; Indústria</span>
+            </button>
+            <button onclick="setCategoryFilter('tecnologia_jr')" id="catTab_tecnologia_jr" class="cat-pill h-7 px-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center gap-1 transition">
+              <span>💻 Tech &amp; Dados Jr</span>
+            </button>
+            <button onclick="setCategoryFilter('gestao_projetos')" id="catTab_gestao_projetos" class="cat-pill h-7 px-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center gap-1 transition">
+              <span>📊 Gestão &amp; Projetos</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SPLIT VIEW WORKSPACE -->
+      <div id="splitWorkspace" class="w-full flex-1 flex flex-col lg:flex-row min-h-[calc(100vh-160px)]">
+        
+        <!-- Left Column: Master Feed (42% Width) -->
+        <section class="w-full lg:w-[42%] lg:max-w-[460px] lg:min-w-[360px] bg-surface flex flex-col shrink-0 border-r border-outline-variant/30">
+          <!-- Master Feed Header -->
+          <div class="px-4 sm:px-5 py-2.5 bg-surface flex items-center justify-between shadow-xs sticky top-[80px] z-10 text-xs">
+            <div class="flex items-center gap-2">
+              <span id="feedCountLabel" class="font-bold text-on-surface">0 oportunidades</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              <span class="font-mono text-on-surface-variant">Polo Sul RS</span>
+            </div>
+            <button onclick="resetFilters()" class="text-xs font-mono text-primary hover:underline">Limpar Filtros</button>
+          </div>
+
+          <!-- Scrollable Job Cards List -->
+          <div class="p-3 sm:p-4 flex flex-col gap-2.5 overflow-y-auto max-h-[calc(100vh-210px)]" id="cardsList">
+            <!-- Inserted dynamically via JavaScript -->
+          </div>
+        </section>
+
+        <!-- Right Column: Detail Inspector & Applicant Operations (58% Width) -->
+        <main id="inspectorPane" class="w-full lg:w-[58%] bg-surface-container-lowest flex flex-col overflow-y-auto min-h-[500px]">
+          <!-- Top Action Bar (Sticky inside inspector) -->
+          <div class="px-5 sm:px-6 py-3 bg-surface-container-lowest/90 backdrop-blur-md sticky top-[80px] z-20 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-outline-variant/30">
+            <!-- Pipeline Status Selector -->
+            <div class="flex flex-wrap items-center gap-1 bg-surface-container-low p-1 rounded text-xs font-mono font-medium">
+              <span class="text-[10px] uppercase font-bold text-on-surface-variant px-1.5 hidden sm:inline">STATUS:</span>
+              <button onclick="setInspectorStatus('nova')" id="btnStatus_nova" class="status-btn px-2.5 py-1 rounded hover:bg-surface-container-lowest transition" type="button">
+                Nova
+              </button>
+              <button onclick="setInspectorStatus('interesse')" id="btnStatus_interesse" class="status-btn px-2.5 py-1 rounded hover:bg-surface-container-lowest transition" type="button">
+                ⭐ Interesse
+              </button>
+              <button onclick="setInspectorStatus('candidatado')" id="btnStatus_candidatado" class="status-btn px-2.5 py-1 rounded hover:bg-surface-container-lowest transition" type="button">
+                🚀 Candidatado
+              </button>
+              <button onclick="setInspectorStatus('entrevista')" id="btnStatus_entrevista" class="status-btn px-2.5 py-1 rounded hover:bg-surface-container-lowest transition" type="button">
+                🎯 Entrevista
+              </button>
+              <button onclick="toggleInspectorDiscard()" id="btnStatus_descartar" class="status-btn px-2.5 py-1 rounded text-error hover:bg-error-container/40 transition font-semibold" type="button">
+                ✕ Descartar
+              </button>
+            </div>
+
+            <!-- Primary CTAs -->
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="saveInspectorNotes()" class="px-3 py-1.5 rounded bg-surface-container text-on-surface hover:bg-surface-container-high font-semibold text-xs flex items-center gap-1.5 transition" type="button">
+                <span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+                <span>Salvar Notas</span>
+              </button>
+              <a id="inspectorApplyBtn" class="px-4 py-1.5 rounded bg-primary-container text-on-primary hover:bg-primary font-semibold text-xs flex items-center gap-1.5 shadow-xs transition" href="#" target="_blank">
+                <span>Ir para Vaga</span>
+                <span class="material-symbols-outlined text-[16px]">north_east</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Detail Body Content Container -->
+          <div class="p-5 sm:p-7 flex flex-col gap-6 max-w-4xl">
+            
+            <!-- Header Profile & Title -->
+            <div class="flex flex-col gap-2.5">
+              <div class="flex flex-wrap items-center gap-2" id="inspectorBadges">
+                <!-- Badges inserted via JS -->
+              </div>
+
+              <div>
+                <h1 id="inspectorTitle" class="text-lg sm:text-2xl font-bold text-on-surface tracking-tight leading-snug">
+                  Selecione uma vaga no feed
+                </h1>
+                <div class="flex items-center gap-2 mt-1 text-xs sm:text-sm">
+                  <span id="inspectorCompany" class="font-semibold text-primary">Empresa</span>
+                  <span class="text-on-surface-variant">•</span>
+                  <span id="inspectorSource" class="text-on-surface-variant font-mono">Fonte</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric KPI Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-mono">
+              <div class="bg-surface-container-low p-3 rounded-lg">
+                <span class="text-[10px] uppercase text-on-surface-variant flex items-center gap-1 font-semibold">
+                  <span class="material-symbols-outlined text-[14px] text-secondary">location_on</span> Localização
+                </span>
+                <p id="inspectorLocation" class="mt-1 font-bold text-on-surface truncate">Pelotas, RS</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3 rounded-lg">
+                <span class="text-[10px] uppercase text-on-surface-variant flex items-center gap-1 font-semibold">
+                  <span class="material-symbols-outlined text-[14px] text-primary">work</span> Modalidade
+                </span>
+                <p id="inspectorWorkModel" class="mt-1 font-bold text-on-surface">Presencial</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3 rounded-lg">
+                <span class="text-[10px] uppercase text-on-surface-variant flex items-center gap-1 font-semibold">
+                  <span class="material-symbols-outlined text-[14px] text-tertiary">payments</span> Faixa Salarial
+                </span>
+                <p id="inspectorSalary" class="mt-1 font-bold text-tertiary truncate">A combinar</p>
+              </div>
+
+              <div class="bg-surface-container-low p-3 rounded-lg">
+                <span class="text-[10px] uppercase text-on-surface-variant flex items-center gap-1 font-semibold">
+                  <span class="material-symbols-outlined text-[14px] text-on-surface-variant">verified</span> Compatibilidade
+                </span>
+                <p id="inspectorScore" class="mt-1 font-bold text-primary">100% Match</p>
+              </div>
+            </div>
+
+            <!-- Private Notes Box -->
+            <div class="bg-surface-container-low/60 rounded-xl p-4 shadow-xs flex flex-col gap-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 font-semibold text-xs text-on-surface">
+                  <span class="material-symbols-outlined text-[18px] text-primary">edit_note</span>
+                  <span>Minhas Anotações Privadas (Fernando)</span>
+                </div>
+                <span class="text-xs font-mono text-tertiary flex items-center gap-1 opacity-0 transition-opacity" id="saveBadge">
+                  <span class="material-symbols-outlined text-[14px]">done</span> Salvo automaticamente
+                </span>
+              </div>
+              <textarea 
+                class="w-full p-3 bg-surface-container-lowest rounded-lg font-sans text-xs text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-xs resize-y" 
+                id="inspectorNotes" 
+                placeholder="Adicione pontos fortes, contatos do RH, pretensão salarial ou anotações para entrevista..." 
+                rows="3"
+              ></textarea>
+            </div>
+
+            <!-- Structured Job Description -->
+            <div class="flex flex-col gap-2">
+              <h2 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                <span class="w-1.5 h-4 bg-primary rounded-full"></span>
+                Descrição da Oportunidade
+              </h2>
+              <div id="inspectorDescription" class="text-xs sm:text-sm text-on-surface-variant leading-relaxed bg-surface-container-low/40 p-4 rounded-xl border border-outline-variant/30 whitespace-pre-line">
+                Selecione uma vaga para visualizar a descrição completa.
+              </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+
+      <!-- FULL TABLE / LIST VIEW (ALTERNATIVE TO SPLIT) -->
+      <div id="tableWorkspace" class="hidden p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-3">
+        <div id="tableListContainer" class="space-y-2.5">
+          <!-- Inserted dynamically via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: MINHAS CANDIDATURAS (PIPELINE)     -->
+    <!-- ========================================== -->
+    <div id="view_candidaturas" class="tab-view hidden flex flex-col flex-1 w-full p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+      
+      <!-- Pipeline Header & Overview -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-outline-variant/30 pb-4">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">Pipeline de Candidaturas</h1>
+          <p class="text-xs text-on-surface-variant font-mono mt-0.5">Acompanhamento de processos seletivos ativos em Pelotas e Rio Grande</p>
+        </div>
+      </div>
+
+      <!-- Pipeline Status Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <!-- Col 1: Tenho Interesse -->
+        <div class="bg-surface-container-low border border-outline-variant/40 rounded-2xl p-4 flex flex-col min-h-[450px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-outline-variant/40 font-mono text-xs font-bold text-secondary">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">star</span>
+              Tenho Interesse (<span id="pipeCount_interesse">0</span>)
+            </span>
+          </div>
+          <div id="pipeCol_interesse" class="space-y-2.5 flex-1"></div>
+        </div>
+
+        <!-- Col 2: Candidatado -->
+        <div class="bg-surface-container-low border border-outline-variant/40 rounded-2xl p-4 flex flex-col min-h-[450px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-outline-variant/40 font-mono text-xs font-bold text-primary">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">send</span>
+              Candidatado (<span id="pipeCount_candidatado">0</span>)
+            </span>
+          </div>
+          <div id="pipeCol_candidatado" class="space-y-2.5 flex-1"></div>
+        </div>
+
+        <!-- Col 3: Entrevista -->
+        <div class="bg-surface-container-low border border-outline-variant/40 rounded-2xl p-4 flex flex-col min-h-[450px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-outline-variant/40 font-mono text-xs font-bold text-tertiary">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">event_available</span>
+              Em Entrevista (<span id="pipeCount_entrevista">0</span>)
+            </span>
+          </div>
+          <div id="pipeCol_entrevista" class="space-y-2.5 flex-1"></div>
+        </div>
+
+        <!-- Col 4: Descartadas -->
+        <div class="bg-surface-container-low/50 border border-outline-variant/30 rounded-2xl p-4 flex flex-col min-h-[450px] opacity-75">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-outline-variant/30 font-mono text-xs font-bold text-outline">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">delete</span>
+              Descartadas (<span id="pipeCount_descartada">0</span>)
+            </span>
+          </div>
+          <div id="pipeCol_descartada" class="space-y-2.5 flex-1"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: TELEGRAM & MÉTRICAS                -->
+    <!-- ========================================== -->
+    <div id="view_telegram" class="tab-view hidden flex flex-col flex-1 w-full p-4 sm:p-6 max-w-5xl mx-auto space-y-6">
+      <div class="border-b border-outline-variant/30 pb-4">
+        <h1 class="text-xl sm:text-2xl font-bold text-on-surface tracking-tight">Alertas Telegram &amp; Configuração</h1>
+        <p class="text-xs text-on-surface-variant font-mono mt-0.5">Receba alertas instantâneos no seu celular a cada nova vaga indexada</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Form de Configuração -->
+        <div class="md:col-span-7 bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-6 space-y-4 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary">
+              <span class="material-symbols-outlined text-[24px]">send</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-sm text-on-surface">Bot do Telegram</h3>
+              <p class="text-xs text-on-surface-variant font-mono">Notificações automáticas</p>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="block font-mono text-on-surface-variant mb-1 font-semibold">Telegram Bot Token:</label>
+              <input type="password" id="cfgBotToken" placeholder="Ex: 123456789:ABCdefGHIjklMNO..." class="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl p-2.5 font-mono text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-1 focus:ring-primary" />
+            </div>
+
+            <div>
+              <label class="block font-mono text-on-surface-variant mb-1 font-semibold">Telegram Chat ID:</label>
+              <input type="text" id="cfgChatId" placeholder="Ex: 987654321" class="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl p-2.5 font-mono text-on-surface focus:bg-surface-container-lowest focus:outline-none focus:ring-1 focus:ring-primary" />
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-end gap-2">
+            <button onclick="testTelegramAlert()" class="px-4 py-2 bg-primary-container hover:bg-primary text-on-primary text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition">
+              <span class="material-symbols-outlined text-[16px]">notifications_active</span>
+              Testar Notificação
             </button>
           </div>
         </div>
 
-      </div>
+        <!-- Estatísticas da Base -->
+        <div class="md:col-span-5 bg-surface-container-low border border-outline-variant/40 rounded-2xl p-6 space-y-4">
+          <h3 class="font-bold text-sm text-on-surface">Cobertura Regional</h3>
+          <ul class="space-y-2 text-xs font-mono text-on-surface-variant">
+            <li class="flex justify-between py-1 border-b border-outline-variant/20">
+              <span>Pelotas:</span>
+              <strong id="statPelotasSide" class="text-on-surface">0 vagas</strong>
+            </li>
+            <li class="flex justify-between py-1 border-b border-outline-variant/20">
+              <span>Rio Grande:</span>
+              <strong id="statRioGrandeSide" class="text-on-surface">0 vagas</strong>
+            </li>
+            <li class="flex justify-between py-1 border-b border-outline-variant/20">
+              <span>LinkedIn Guest:</span>
+              <span class="text-primary font-semibold">Ativo (&lt; 30 dias)</span>
+            </li>
+            <li class="flex justify-between py-1 border-b border-outline-variant/20">
+              <span>Validador de Links:</span>
+              <span class="text-tertiary font-semibold">HTTP 200 OK</span>
+            </li>
+          </ul>
 
-      <!-- Category Filter Tabs -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 border-t border-slate-100 pt-3 text-xs font-medium">
-        <button onclick="setCategoryFilter('todas')" id="catTab_todas" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-900 text-white font-semibold shadow-xs">
-          Todas as Áreas
-        </button>
-        <button onclick="setCategoryFilter('industrial_eletrica')" id="catTab_industrial_eletrica" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-          ⚡ Elétrica, Eletrônica & Instrumentação
-        </button>
-        <button onclick="setCategoryFilter('tecnologia_jr')" id="catTab_tecnologia_jr" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          💻 Tecnologia & Dados (Júnior)
-        </button>
-        <button onclick="setCategoryFilter('gestao_projetos')" id="catTab_gestao_projetos" class="cat-tab px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-          📊 Gestão & Assistência de Projetos
-        </button>
+          <div class="pt-2">
+            <button onclick="exportCSV()" class="w-full py-2 bg-surface-container-lowest hover:bg-surface-container border border-outline-variant/40 rounded-xl text-xs font-mono font-semibold text-on-surface flex items-center justify-center gap-1.5 transition shadow-xs">
+              <span class="material-symbols-outlined text-[16px]">download</span>
+              Exportar Base CSV
+            </button>
+          </div>
+        </div>
       </div>
-    </section>
-
-    <!-- CONTENT VIEWS -->
-    
-    <!-- 1. CARDS / GRID VIEW -->
-    <div id="cardsView" class="space-y-4">
-      <div id="jobsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Jobs inserted dynamically via JS -->
-      </div>
-    </div>
-
-    <!-- 2. LIST VIEW (COMPACT ROWS) -->
-    <div id="listView" class="hidden space-y-3">
-      <div id="jobsList" class="space-y-2.5">
-        <!-- Jobs list rows inserted dynamically via JS -->
-      </div>
-    </div>
-
-    <!-- Empty State -->
-    <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 bg-white rounded-2xl border border-slate-200 shadow-sm">
-      <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
-        <i data-lucide="search-x" class="w-6 h-6"></i>
-      </div>
-      <h3 class="text-base font-semibold text-slate-800">Nenhuma vaga encontrada com os filtros selecionados</h3>
-      <p class="text-xs text-slate-500 max-w-sm">Tente limpar os filtros ou clique em "Atualizar Vagas" para varrer novas oportunidades.</p>
-      <button onclick="resetFilters()" class="text-xs text-brand-600 font-semibold hover:underline">Limpar Filtros</button>
     </div>
 
   </main>
 
-  <!-- MODAL DE DETALHES & ANOTAÇÕES -->
-  <div id="jobModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-6 sm:p-7 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      <button onclick="closeJobModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-
-      <div class="space-y-1.5">
-        <div id="modalCategoryBadge"></div>
-        <h2 id="modalTitle" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"></h2>
-        <p id="modalCompany" class="text-xs sm:text-sm text-slate-600 font-medium"></p>
-      </div>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
-          <span class="text-slate-500 block mb-0.5">Localização</span>
-          <span id="modalLocation" class="font-semibold text-slate-800"></span>
-        </div>
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
-          <span class="text-slate-500 block mb-0.5">Modalidade</span>
-          <span id="modalWorkModel" class="font-semibold text-slate-800"></span>
-        </div>
-        <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
-          <span class="text-slate-500 block mb-0.5">Salário</span>
-          <span id="modalSalary" class="font-semibold text-emerald-700"></span>
-        </div>
-      </div>
-
-      <div>
-        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Descrição da Oportunidade</h4>
-        <div id="modalDescription" class="text-xs text-slate-700 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 whitespace-pre-line max-h-48 overflow-y-auto leading-relaxed"></div>
-      </div>
-
-      <!-- Anotações do Usuário -->
-      <div>
-        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Minhas Anotações Privadas</label>
-        <textarea id="modalNotes" rows="3" placeholder="Ex: Currículo enviado em 02/09, contato do RH: Fulano..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"></textarea>
-      </div>
-
-      <div class="flex items-center justify-between pt-3 border-t border-slate-100">
-        <div class="flex items-center gap-2">
-          <label class="text-xs text-slate-500 font-medium">Status:</label>
-          <select id="modalStatusSelect" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-800 font-medium">
-            <option value="nova">Nova</option>
-            <option value="interesse">Tenho Interesse</option>
-            <option value="candidatado">Candidatado</option>
-            <option value="entrevista">Entrevista</option>
-          </select>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button id="modalDiscardBtn" onclick="toggleDiscardFromModal()" class="px-3.5 py-2 bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition flex items-center gap-1.5">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-            <span id="modalDiscardText">Descartar</span>
-          </button>
-          <button onclick="saveModalChanges()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition">
-            Salvar
-          </button>
-          <a id="modalApplyBtn" href="#" target="_blank" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition shadow-sm">
-            <span>Ir para Vaga</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONFIG & TELEGRAM MODAL -->
-  <div id="configModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
-      <button onclick="closeConfigModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-
-      <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-        <i data-lucide="send" class="w-5 h-5 text-brand-600"></i>
-        Alertas no Telegram
-      </h3>
-
-      <p class="text-xs text-slate-600 leading-relaxed">
-        Receba notificações instantâneas no seu Telegram assim que novas vagas em Pelotas e Rio Grande forem encontradas.
-      </p>
-
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-slate-600 font-medium mb-1">Telegram Bot Token:</label>
-          <input type="text" id="cfgBotToken" placeholder="Ex: 123456789:ABCdefGHIjklMNO..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:bg-white focus:outline-none focus:border-brand-500" />
-        </div>
-        <div>
-          <label class="block text-slate-600 font-medium mb-1">Telegram Chat ID:</label>
-          <input type="text" id="cfgChatId" placeholder="Ex: 987654321" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 focus:bg-white focus:outline-none focus:border-brand-500" />
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
-        <button onclick="testTelegramAlert()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shadow-sm">
-          <i data-lucide="bell" class="w-3.5 h-3.5"></i>
-          Testar Envio
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
 
-  <!-- APPLICATION LOGIC JAVASCRIPT -->
+  <!-- APPLICATION LOGIC & STITCH INTEGRATION -->
   <script>
     let allLoadedJobs = [];
     let currentFilteredJobs = [];
     let currentCategory = 'todas';
-    let currentView = 'cards';
-    let currentModalJobId = null;
+    let currentActiveJobId = null;
+    let currentViewMode = 'split'; // 'split' or 'list'
+    let currentMainTab = 'vagas';
 
     const STORAGE_KEY = 'vagas_rs_user_data_v1';
 
@@ -384,12 +557,26 @@
       }
     }
 
-    // Initialize
+    // Initialization
     document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
       loadStats();
       loadJobs();
     });
+
+    function switchMainTab(tab) {
+      currentMainTab = tab;
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(t => {
+        t.className = "nav-tab px-3 py-1.5 transition-colors text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded";
+      });
+
+      const activeView = document.getElementById(`view_${tab}`);
+      const activeTabBtn = document.getElementById(`navTab_${tab}`);
+      if (activeView) activeView.classList.remove('hidden');
+      if (activeTabBtn) activeTabBtn.className = "nav-tab px-3 py-1.5 transition-colors bg-primary-container text-on-primary rounded font-bold";
+
+      if (tab === 'candidaturas') renderPipeline();
+    }
 
     async function loadStats() {
       try {
@@ -407,17 +594,19 @@
         if (data && data.success) {
           const stats = data.stats;
           document.getElementById('statTotal').innerText = stats.total_jobs || 0;
-          document.getElementById('statTodayBadge').innerText = `+${stats.today_jobs || 0} hoje`;
-          
           document.getElementById('statIndustrial').innerText = stats.by_category?.industrial_eletrica || 0;
           document.getElementById('statTech').innerText = stats.by_category?.tecnologia_jr || 0;
           document.getElementById('statProjects').innerText = stats.by_category?.gestao_projetos || 0;
           
-          document.getElementById('statPelotas').innerText = stats.by_city?.Pelotas || 0;
-          document.getElementById('statRioGrande').innerText = stats.by_city?.['Rio Grande'] || 0;
+          const pelotas = stats.by_city?.Pelotas || 0;
+          const rg = stats.by_city?.['Rio Grande'] || 0;
+          document.getElementById('statPelotas').innerText = pelotas;
+          document.getElementById('statRioGrande').innerText = rg;
+          if (document.getElementById('statPelotasSide')) document.getElementById('statPelotasSide').innerText = `${pelotas} vagas`;
+          if (document.getElementById('statRioGrandeSide')) document.getElementById('statRioGrandeSide').innerText = `${rg} vagas`;
         }
       } catch (err) {
-        console.error("Erro ao carregar stats:", err);
+        console.error("Erro stats:", err);
       }
     }
 
@@ -455,7 +644,7 @@
       const city = document.getElementById('filterCity').value;
       const workModel = document.getElementById('filterWorkModel').value;
       const status = document.getElementById('filterStatus').value;
-      const search = document.getElementById('searchInput').value.trim().toLowerCase();
+      const search = document.getElementById('commandSearch').value.trim().toLowerCase();
 
       currentFilteredJobs = allLoadedJobs.filter(job => {
         if (currentCategory !== 'todas' && job.category !== currentCategory) return false;
@@ -478,339 +667,222 @@
         return true;
       });
 
-      // Ordenar: Vagas ativas primeiro, vagas descartadas enviadas para o final do feed
+      // Ordenar: Vagas ativas primeiro, descartadas no final
       currentFilteredJobs.sort((a, b) => {
-        const aDiscarded = a.status === 'descartada' ? 1 : 0;
-        const bDiscarded = b.status === 'descartada' ? 1 : 0;
-        if (aDiscarded !== bDiscarded) {
-          return aDiscarded - bDiscarded;
-        }
-        return b.id - a.id;
+        const aDisc = a.status === 'descartada' ? 1 : 0;
+        const bDisc = b.status === 'descartada' ? 1 : 0;
+        if (aDisc !== bDisc) return aDisc - bDisc;
+        return (b.id || 0) - (a.id || 0);
       });
 
-      renderJobs();
+      renderFeed();
+      renderPipeline();
     }
 
-    function renderJobs() {
-      const grid = document.getElementById('jobsGrid');
-      const list = document.getElementById('jobsList');
-      const empty = document.getElementById('emptyState');
+    function renderFeed() {
+      const feedContainer = document.getElementById('cardsList');
+      const tableContainer = document.getElementById('tableListContainer');
+      const countLabel = document.getElementById('feedCountLabel');
+
+      countLabel.innerText = `${currentFilteredJobs.length} oportunidades`;
 
       if (currentFilteredJobs.length === 0) {
-        grid.innerHTML = '';
-        list.innerHTML = '';
-        empty.classList.remove('hidden');
-        empty.classList.add('flex');
+        feedContainer.innerHTML = `
+          <div class="p-8 text-center text-xs text-on-surface-variant font-mono space-y-2 bg-surface-container-low rounded-xl">
+            <span class="material-symbols-outlined text-[32px] text-outline">search_off</span>
+            <p class="font-bold text-on-surface">Nenhuma vaga encontrada</p>
+            <p>Tente ajustar os filtros de busca.</p>
+          </div>
+        `;
+        tableContainer.innerHTML = feedContainer.innerHTML;
         return;
       }
 
-      empty.classList.add('hidden');
-      empty.classList.remove('flex');
+      // Se nenhuma vaga ativa estiver selecionada, seleciona a primeira da lista
+      if (!currentActiveJobId || !currentFilteredJobs.find(j => j.id === currentActiveJobId)) {
+        currentActiveJobId = currentFilteredJobs[0].id;
+      }
 
-      let cardsHtml = '';
-      let listHtml = '';
+      let feedHtml = '';
+      let tableHtml = '';
 
       currentFilteredJobs.forEach(job => {
+        const isSelected = job.id === currentActiveJobId;
         const isDiscarded = job.status === 'descartada';
+        const initial = (job.company || 'V').charAt(0).toUpperCase();
 
-        const categoryBadge = getCategoryBadge(job.category, isDiscarded);
-        const workModelBadge = getWorkModelBadge(job.work_model, isDiscarded);
-        const sourceBadge = getSourceBadge(job.source, isDiscarded);
-        const scoreBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isDiscarded ? 'bg-slate-200 text-slate-600 border border-slate-300' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">${job.match_score}% Match</span>`;
+        // 1. CARD HTML (SPLIT VIEW FEED)
+        const cardClasses = isDiscarded
+          ? `job-card group cursor-pointer bg-surface-container-low/70 p-3 rounded-lg border border-outline-variant/30 shadow-xs transition-all relative opacity-50 grayscale-[70%]`
+          : isSelected
+          ? `job-card group cursor-pointer bg-surface-container-lowest p-3 rounded-lg shadow-sm border border-primary/30 transition-all relative overflow-hidden bg-gradient-to-r from-primary/5 via-transparent to-transparent`
+          : `job-card group cursor-pointer bg-surface-container-lowest hover:bg-surface-container-low p-3 rounded-lg shadow-xs border border-outline-variant/20 transition-all relative overflow-hidden`;
 
-        // Estilos para card ativo vs descartado (inativo / final do feed)
-        const cardContainerClasses = isDiscarded
-          ? "bg-slate-100/70 border border-slate-200/90 rounded-2xl p-5 flex flex-col justify-between opacity-60 grayscale-[60%] hover:opacity-90 hover:grayscale-0 transition-all group"
-          : "bg-white border border-slate-200/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all group";
+        const markerHtml = isSelected && !isDiscarded ? `<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>` : '';
 
-        const listContainerClasses = isDiscarded
-          ? "bg-slate-100/70 border border-slate-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 opacity-60 grayscale-[60%] hover:opacity-90 hover:grayscale-0 transition-all group"
-          : "bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 hover:shadow-md transition-all group";
-
-        // Botão de Descartar / Restaurar
-        const discardButtonHtml = isDiscarded
-          ? `<button onclick="toggleDiscardJob(${job.id})" class="px-2.5 py-1.5 text-xs font-semibold text-red-700 bg-red-100/90 hover:bg-red-200 border border-red-200 rounded-xl transition flex items-center gap-1 shadow-xs" title="Clique para reativar esta vaga">
-               <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-               <span>Restaurar</span>
-             </button>`
-          : `<button onclick="toggleDiscardJob(${job.id})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl border border-transparent hover:border-red-200 transition" title="Descartar vaga">
-               <i data-lucide="trash-2" class="w-4 h-4"></i>
-             </button>`;
-
-        // 1. HTML DO CARD
-        const card = `
-          <div class="${cardContainerClasses}">
-            <div class="space-y-3">
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-1.5">
-                  ${categoryBadge}
-                  ${isDiscarded ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-300 text-slate-700 font-bold">Descartada</span>' : ''}
+        feedHtml += `
+          <article onclick="selectJob(${job.id})" class="${cardClasses}">
+            ${markerHtml}
+            <div class="flex items-start justify-between gap-2 pl-1">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-7 h-7 rounded bg-surface-container-high flex items-center justify-center font-bold text-xs text-primary shrink-0">${initial}</span>
+                <div class="truncate">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-xs text-on-surface truncate">${escapeHtml(job.company)}</span>
+                    <span class="inline-flex items-center px-1.5 py-0.2 rounded bg-surface-container font-mono text-[9px] text-on-surface-variant">${escapeHtml(job.source || 'Web')}</span>
+                  </div>
+                  <p class="text-[11px] text-on-surface-variant font-mono">${escapeHtml(job.location || job.city || 'Pelotas/RG')}</p>
                 </div>
-                ${scoreBadge}
               </div>
-
-              <div>
-                <h3 onclick="openJobModal(${job.id})" class="text-sm font-bold ${isDiscarded ? 'text-slate-700' : 'text-slate-900'} group-hover:text-brand-600 transition cursor-pointer line-clamp-2 leading-snug">
-                  ${escapeHtml(job.title)}
-                </h3>
-                <p class="text-xs text-slate-600 font-medium mt-1">${escapeHtml(job.company)}</p>
-              </div>
-
-              <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
-                <span class="inline-flex items-center gap-1 bg-slate-100/80 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200/60 font-medium">
-                  <i data-lucide="map-pin" class="w-3 h-3 text-slate-500"></i>
-                  ${escapeHtml(job.location || job.city || 'Pelotas/RG')}
+              <div class="flex flex-col items-end shrink-0">
+                <span class="font-mono text-[10px] font-bold ${isDiscarded ? 'text-outline' : 'text-tertiary'} flex items-center gap-0.5">
+                  <span class="material-symbols-outlined text-[12px]">bolt</span> ${job.match_score}% match
                 </span>
-                ${workModelBadge}
-                ${sourceBadge}
+                <span class="text-[9px] font-mono text-outline">${isDiscarded ? 'Descartada' : formatStatusBadge(job.status)}</span>
               </div>
-
-              <div class="text-[11px] ${isDiscarded ? 'text-slate-600' : 'text-emerald-700'} font-semibold flex items-center gap-1">
-                <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
-                ${escapeHtml(job.salary || 'A combinar')}
-              </div>
-
-              <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                ${escapeHtml(job.description || 'Sem descrição adicional.')}
-              </p>
             </div>
 
-            <!-- Footer Actions -->
-            <div class="pt-3.5 mt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
-              <div class="flex items-center gap-1.5">
-                ${!isDiscarded ? `
-                <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
-                  <option value="nova" ${job.status === 'nova' ? 'selected' : ''}>📥 Nova</option>
-                  <option value="interesse" ${job.status === 'interesse' ? 'selected' : ''}>⭐ Interesse</option>
-                  <option value="candidatado" ${job.status === 'candidatado' ? 'selected' : ''}>📤 Candidatado</option>
-                  <option value="entrevista" ${job.status === 'entrevista' ? 'selected' : ''}>🗓️ Entrevista</option>
-                </select>
-                ` : ''}
-                ${discardButtonHtml}
-              </div>
+            <h3 class="pl-1 mt-2 text-xs font-bold ${isSelected ? 'text-primary' : 'text-on-surface'} group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+              ${escapeHtml(job.title)}
+            </h3>
 
-              <div class="flex items-center gap-1.5">
-                <button onclick="openJobModal(${job.id})" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition" title="Ver Detalhes">
-                  <i data-lucide="eye" class="w-4 h-4"></i>
-                </button>
-                <a href="${job.url}" target="_blank" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1 transition shadow-xs">
-                  <span>Vaga</span>
-                  <i data-lucide="external-link" class="w-3 h-3"></i>
-                </a>
+            <div class="pl-1 mt-2 flex flex-wrap items-center gap-1 text-[10px] font-mono">
+              <span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface">${escapeHtml(job.work_model || 'Presencial')}</span>
+              <span class="px-1.5 py-0.5 rounded ${isDiscarded ? 'bg-surface-container' : 'bg-tertiary-fixed text-on-tertiary-fixed font-semibold'}">${escapeHtml(job.category === 'industrial_eletrica' ? 'Elétrica' : job.category === 'tecnologia_jr' ? 'Tech Jr' : 'Projetos')}</span>
+            </div>
+
+            <div class="pl-1 mt-2 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-[10px] font-mono">
+              <span class="font-semibold text-tertiary">${escapeHtml(job.salary || 'A combinar')}</span>
+              <button onclick="event.stopPropagation(); toggleDiscard(${job.id})" class="text-outline hover:text-error transition font-semibold" title="${isDiscarded ? 'Restaurar vaga' : 'Descartar vaga'}">
+                ${isDiscarded ? '↺ Restaurar' : '✕ Descartar'}
+              </button>
+            </div>
+          </article>
+        `;
+
+        // 2. TABLE / LIST ROW HTML
+        tableHtml += `
+          <div onclick="selectJob(${job.id})" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs hover:border-primary transition cursor-pointer ${isDiscarded ? 'opacity-60 grayscale-[60%]' : ''}">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="font-bold text-on-surface">${escapeHtml(job.company)}</span>
+                <span class="text-on-surface-variant font-mono">• ${escapeHtml(job.location || job.city || 'RS')}</span>
+                <span class="px-2 py-0.2 rounded bg-surface-container text-[10px] font-mono">${escapeHtml(job.source)}</span>
               </div>
+              <h3 class="font-bold text-sm text-on-surface">${escapeHtml(job.title)}</h3>
+              <div class="flex items-center gap-2 text-xs font-mono text-tertiary">
+                <span>${escapeHtml(job.salary || 'A combinar')}</span>
+                <span>•</span>
+                <span>${job.match_score}% Match</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-center">
+              <button onclick="event.stopPropagation(); toggleDiscard(${job.id})" class="px-2.5 py-1 text-xs font-mono rounded bg-surface-container text-on-surface-variant hover:text-error transition">
+                ${isDiscarded ? '↺ Restaurar' : '✕ Descartar'}
+              </button>
+              <a href="${job.url}" target="_blank" onclick="event.stopPropagation();" class="px-3 py-1 bg-primary-container text-on-primary rounded text-xs font-bold shadow-xs hover:bg-primary transition">
+                Vaga ↗
+              </a>
             </div>
           </div>
         `;
-        cardsHtml += card;
-
-        // 2. HTML DA LINHA DA LISTA (LIST VIEW)
-        const row = `
-          <div class="${listContainerClasses}">
-            <!-- Info Principal -->
-            <div class="flex-1 space-y-1.5">
-              <div class="flex flex-wrap items-center gap-1.5">
-                ${categoryBadge}
-                ${scoreBadge}
-                ${isDiscarded ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-300 text-slate-700 font-bold">Descartada</span>' : ''}
-                <span class="text-xs text-slate-500 font-medium ml-1">${escapeHtml(job.company)}</span>
-              </div>
-
-              <h3 onclick="openJobModal(${job.id})" class="text-sm sm:text-base font-bold ${isDiscarded ? 'text-slate-700' : 'text-slate-900'} group-hover:text-brand-600 transition cursor-pointer leading-snug">
-                ${escapeHtml(job.title)}
-              </h3>
-
-              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500 pt-0.5">
-                <span class="inline-flex items-center gap-1 font-medium text-slate-600">
-                  <i data-lucide="map-pin" class="w-3 h-3 text-slate-400"></i>
-                  ${escapeHtml(job.location || job.city || 'Pelotas/RG')}
-                </span>
-                <span>•</span>
-                ${workModelBadge}
-                <span>•</span>
-                ${sourceBadge}
-                <span>•</span>
-                <span class="font-semibold ${isDiscarded ? 'text-slate-600' : 'text-emerald-700'}">${escapeHtml(job.salary || 'A combinar')}</span>
-              </div>
-            </div>
-
-            <!-- Ações da Linha -->
-            <div class="flex items-center gap-2 self-start sm:self-center pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 w-full sm:w-auto justify-between sm:justify-end">
-              <div class="flex items-center gap-1.5">
-                ${!isDiscarded ? `
-                <select onchange="updateJobStatus(${job.id}, this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-700 font-medium focus:outline-none focus:border-brand-500 focus:bg-white">
-                  <option value="nova" ${job.status === 'nova' ? 'selected' : ''}>📥 Nova</option>
-                  <option value="interesse" ${job.status === 'interesse' ? 'selected' : ''}>⭐ Interesse</option>
-                  <option value="candidatado" ${job.status === 'candidatado' ? 'selected' : ''}>📤 Candidatado</option>
-                  <option value="entrevista" ${job.status === 'entrevista' ? 'selected' : ''}>🗓️ Entrevista</option>
-                </select>
-                ` : ''}
-                ${discardButtonHtml}
-              </div>
-
-              <div class="flex items-center gap-1.5">
-                <button onclick="openJobModal(${job.id})" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition" title="Ver Detalhes">
-                  <i data-lucide="eye" class="w-4 h-4"></i>
-                </button>
-                <a href="${job.url}" target="_blank" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1 transition shadow-xs">
-                  <span>Vaga</span>
-                  <i data-lucide="external-link" class="w-3 h-3"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        `;
-        listHtml += row;
       });
 
-      grid.innerHTML = cardsHtml;
-      list.innerHTML = listHtml;
+      feedContainer.innerHTML = feedHtml;
+      tableContainer.innerHTML = tableHtml;
 
-      lucide.createIcons();
+      renderInspector();
     }
 
-    function getCategoryBadge(cat, isDiscarded = false) {
-      if (isDiscarded) {
-        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-200 text-slate-600 border border-slate-300">⚡ Área</span>';
-      }
-      if (cat === 'industrial_eletrica') {
-        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/60">⚡ Elétrica & Indústria</span>';
-      } else if (cat === 'tecnologia_jr') {
-        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">💻 Tecnologia Jr</span>';
-      } else if (cat === 'gestao_projetos') {
-        return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200/60">📊 Projetos</span>';
-      }
-      return '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">Geral</span>';
+    function selectJob(jobId) {
+      currentActiveJobId = jobId;
+      renderFeed();
     }
 
-    function getWorkModelBadge(model, isDiscarded = false) {
-      if (isDiscarded) {
-        return '<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-md font-medium">Modalidade</span>';
+    function renderInspector() {
+      const job = allLoadedJobs.find(j => j.id === currentActiveJobId);
+      if (!job) return;
+
+      const isDiscarded = job.status === 'descartada';
+
+      document.getElementById('inspectorTitle').innerText = job.title;
+      document.getElementById('inspectorCompany').innerText = job.company;
+      document.getElementById('inspectorSource').innerText = `Fonte: ${job.source || 'Portal'}`;
+      document.getElementById('inspectorLocation').innerText = job.location || job.city || 'Pelotas / Rio Grande';
+      document.getElementById('inspectorWorkModel').innerText = job.work_model || 'Presencial';
+      document.getElementById('inspectorSalary').innerText = job.salary || 'A combinar';
+      document.getElementById('inspectorScore').innerText = `${job.match_score}% Match`;
+      document.getElementById('inspectorDescription').innerText = job.description || 'Sem descrição detalhada fornecida.';
+      document.getElementById('inspectorNotes').value = job.notes || '';
+      document.getElementById('inspectorApplyBtn').href = job.url;
+
+      // Status selector buttons highlight
+      const statuses = ['nova', 'interesse', 'candidatado', 'entrevista'];
+      statuses.forEach(st => {
+        const btn = document.getElementById(`btnStatus_${st}`);
+        if (btn) {
+          if (job.status === st) {
+            btn.className = "status-btn px-2.5 py-1 rounded bg-surface-container-lowest text-primary shadow-xs font-semibold";
+          } else {
+            btn.className = "status-btn px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container-lowest transition";
+          }
+        }
+      });
+
+      const discardBtn = document.getElementById('btnStatus_descartar');
+      if (discardBtn) {
+        if (isDiscarded) {
+          discardBtn.innerText = "↺ Restaurar Vaga";
+          discardBtn.className = "status-btn px-2.5 py-1 rounded bg-error/10 text-error font-bold";
+        } else {
+          discardBtn.innerText = "✕ Descartar";
+          discardBtn.className = "status-btn px-2.5 py-1 rounded text-error hover:bg-error-container/40 transition font-semibold";
+        }
       }
-      if (model === 'Remoto') {
-        return '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-medium">🏠 Remoto</span>';
-      } else if (model === 'Híbrido') {
-        return '<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-medium">🔄 Híbrido</span>';
-      }
-      return '<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-medium">🏢 Presencial</span>';
+
+      // Badges
+      const badgesContainer = document.getElementById('inspectorBadges');
+      badgesContainer.innerHTML = `
+        <span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-mono text-xs font-semibold flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">verified</span>
+          Match Regional: ${job.match_score}%
+        </span>
+        <span class="px-2 py-0.5 rounded bg-surface-container font-mono text-xs text-on-surface-variant">
+          ${escapeHtml(job.category === 'industrial_eletrica' ? 'Industrial & Elétrica' : job.category === 'tecnologia_jr' ? 'Tecnologia Jr' : 'Gestão & Projetos')}
+        </span>
+        <span class="px-2 py-0.5 rounded bg-surface-container font-mono text-xs text-on-surface-variant">
+          ${escapeHtml(job.source)}
+        </span>
+      `;
     }
 
-    function getSourceBadge(source, isDiscarded = false) {
-      if (isDiscarded) {
-        return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200 font-medium">${escapeHtml(source || 'Web')}</span>`;
-      }
-      if (source === 'LinkedIn') {
-        return '<span class="inline-flex items-center gap-1 bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="linkedin" class="w-3 h-3 text-sky-600"></i> LinkedIn</span>';
-      } else if (source && (source.includes('Trabalha Brasil') || source.includes('SINE'))) {
-        return '<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="building" class="w-3 h-3 text-amber-600"></i> Trabalha Brasil</span>';
-      } else if (source === 'Gupy') {
-        return '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-semibold"><i data-lucide="layers" class="w-3 h-3 text-emerald-600"></i> Gupy</span>';
-      }
-      return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 font-medium"><i data-lucide="tag" class="w-3 h-3 text-slate-500"></i> ${escapeHtml(source || 'Web')}</span>`;
+    function setInspectorStatus(newStatus) {
+      if (!currentActiveJobId) return;
+      updateJobStatus(currentActiveJobId, newStatus);
+      showToast(`Status atualizado para: ${formatStatusBadge(newStatus)}`, "success");
     }
 
-    function toggleDiscardJob(jobId) {
+    function toggleInspectorDiscard() {
+      if (!currentActiveJobId) return;
+      toggleDiscard(currentActiveJobId);
+    }
+
+    function toggleDiscard(jobId) {
       const job = allLoadedJobs.find(j => j.id === jobId);
       if (!job) return;
-      const isCurrentlyDiscarded = job.status === 'descartada';
-      const newStatus = isCurrentlyDiscarded ? 'nova' : 'descartada';
+      const isDiscarded = job.status === 'descartada';
+      const newStatus = isDiscarded ? 'nova' : 'descartada';
       updateJobStatus(jobId, newStatus);
       if (newStatus === 'descartada') {
-        showToast("Vaga descartada e movida para o final do feed.", "info");
+        showToast("Vaga descartada e movida para o final da lista", "info");
       } else {
         showToast("Vaga restaurada com sucesso!", "success");
       }
     }
 
-    function setCategoryFilter(cat) {
-      currentCategory = cat;
-      document.querySelectorAll('.cat-tab').forEach(btn => {
-        btn.classList.remove('bg-slate-900', 'text-white', 'font-semibold', 'shadow-xs');
-        btn.classList.add('bg-slate-100', 'text-slate-700');
-      });
-      const activeBtn = document.getElementById(`catTab_${cat}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
-        activeBtn.classList.add('bg-slate-900', 'text-white', 'font-semibold', 'shadow-xs');
-      }
-      applyFilters();
-    }
-
-    function setCityFilter(city) {
-      document.getElementById('filterCity').value = city;
-      applyFilters();
-    }
-
-    let searchTimeout = null;
-    function handleSearch(val) {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        applyFilters();
-      }, 250);
-    }
-
-    function resetFilters() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('filterCity').value = 'todas';
-      document.getElementById('filterWorkModel').value = 'todos';
-      document.getElementById('filterStatus').value = 'todas';
-      setCategoryFilter('todas');
-    }
-
-    function setViewMode(mode) {
-      currentView = mode;
-      const cardsView = document.getElementById('cardsView');
-      const listView = document.getElementById('listView');
-      const btnCards = document.getElementById('btnViewCards');
-      const btnList = document.getElementById('btnViewList');
-
-      if (mode === 'list') {
-        cardsView.classList.add('hidden');
-        listView.classList.remove('hidden');
-        btnList.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
-        btnCards.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
-      } else {
-        listView.classList.add('hidden');
-        cardsView.classList.remove('hidden');
-        btnCards.className = "px-3 py-1 text-xs rounded-lg font-semibold transition bg-white text-slate-900 shadow-xs flex items-center gap-1.5";
-        btnList.className = "px-3 py-1 text-xs rounded-lg font-medium transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
-      }
-      lucide.createIcons();
-    }
-
-    async function triggerScrape() {
-      const btn = document.getElementById('btnScrape');
-      const icon = document.getElementById('scrapeIcon');
-      const text = document.getElementById('scrapeText');
-
-      icon.classList.add('animate-spin');
-      text.innerText = "Atualizando...";
-      btn.disabled = true;
-
-      try {
-        let res = await fetch('./api/jobs/scrape', { method: 'POST' }).catch(() => null);
-        if (res && res.ok) {
-          const data = await res.json();
-          showToast(`Varredura concluída! ${data.result.new_jobs_inserted} novas vagas salvas.`, "success");
-        } else {
-          showToast("Recarregando base de dados...", "info");
-        }
-        await loadStats();
-        await loadJobs();
-      } catch (err) {
-        showToast("Dados atualizados!", "info");
-        await loadJobs();
-      } finally {
-        icon.classList.remove('animate-spin');
-        text.innerText = "Atualizar Vagas";
-        btn.disabled = false;
-      }
-    }
-
-    async function updateJobStatus(jobId, newStatus) {
+    function updateJobStatus(jobId, newStatus) {
       const job = allLoadedJobs.find(j => j.id === jobId);
-      if (job) {
-        job.status = newStatus;
-      }
+      if (job) job.status = newStatus;
 
       const userData = getUserData();
       if (!userData[jobId]) userData[jobId] = {};
@@ -826,88 +898,153 @@
       applyFilters();
     }
 
-    function openJobModal(jobId) {
-      const job = allLoadedJobs.find(j => j.id === jobId);
-      if (!job) return;
-
-      currentModalJobId = jobId;
-      const isDiscarded = job.status === 'descartada';
-
-      document.getElementById('modalCategoryBadge').innerHTML = getCategoryBadge(job.category, isDiscarded);
-      document.getElementById('modalTitle').innerText = job.title;
-      document.getElementById('modalCompany').innerText = `${job.company} • Fonte: ${job.source}`;
-      document.getElementById('modalLocation').innerText = job.location || job.city || 'Pelotas/Rio Grande';
-      document.getElementById('modalWorkModel').innerText = job.work_model;
-      document.getElementById('modalSalary').innerText = job.salary;
-      document.getElementById('modalDescription').innerText = job.description || 'Nenhum detalhe adicional fornecido.';
-      document.getElementById('modalNotes').value = job.notes || '';
-      document.getElementById('modalStatusSelect').value = isDiscarded ? 'nova' : (job.status || 'nova');
-      document.getElementById('modalApplyBtn').href = job.url;
-
-      const discardBtn = document.getElementById('modalDiscardBtn');
-      const discardText = document.getElementById('modalDiscardText');
-      if (isDiscarded) {
-        discardBtn.className = "px-3.5 py-2 bg-red-100 hover:bg-red-200 text-red-800 text-xs font-semibold rounded-xl border border-red-200 transition flex items-center gap-1.5";
-        discardText.innerText = "Restaurar Vaga";
-      } else {
-        discardBtn.className = "px-3.5 py-2 bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition flex items-center gap-1.5";
-        discardText.innerText = "Descartar";
-      }
-
-      document.getElementById('jobModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function toggleDiscardFromModal() {
-      if (!currentModalJobId) return;
-      toggleDiscardJob(currentModalJobId);
-      closeJobModal();
-    }
-
-    function closeJobModal() {
-      document.getElementById('jobModal').classList.add('hidden');
-      currentModalJobId = null;
-    }
-
-    async function saveModalChanges() {
-      if (!currentModalJobId) return;
-      const notes = document.getElementById('modalNotes').value;
-      const status = document.getElementById('modalStatusSelect').value;
-
-      const job = allLoadedJobs.find(j => j.id === currentModalJobId);
-      if (job) {
-        job.notes = notes;
-        job.status = status;
-      }
+    function saveInspectorNotes() {
+      if (!currentActiveJobId) return;
+      const notes = document.getElementById('inspectorNotes').value;
+      const job = allLoadedJobs.find(j => j.id === currentActiveJobId);
+      if (job) job.notes = notes;
 
       const userData = getUserData();
-      if (!userData[currentModalJobId]) userData[currentModalJobId] = {};
-      userData[currentModalJobId].notes = notes;
-      userData[currentModalJobId].status = status;
+      if (!userData[currentActiveJobId]) userData[currentActiveJobId] = {};
+      userData[currentActiveJobId].notes = notes;
       saveUserData(userData);
 
-      fetch(`./api/jobs/${currentModalJobId}/notes`, {
+      fetch(`./api/jobs/${currentActiveJobId}/notes`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notes: notes })
-      }).catch(() => {});
-      fetch(`./api/jobs/${currentModalJobId}/status`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: status })
+        body: JSON.stringify({ notes })
       }).catch(() => {});
 
-      showToast("Anotações e status salvos!", "success");
-      closeJobModal();
+      const badge = document.getElementById('saveBadge');
+      badge.classList.remove('opacity-0');
+      setTimeout(() => badge.classList.add('opacity-0'), 2500);
+      showToast("Anotações salvas com sucesso!", "success");
+    }
+
+    function renderPipeline() {
+      const counts = { interesse: 0, candidatado: 0, entrevista: 0, descartada: 0 };
+      const cols = {
+        interesse: document.getElementById('pipeCol_interesse'),
+        candidatado: document.getElementById('pipeCol_candidatado'),
+        entrevista: document.getElementById('pipeCol_entrevista'),
+        descartada: document.getElementById('pipeCol_descartada')
+      };
+
+      Object.values(cols).forEach(c => { if (c) c.innerHTML = ''; });
+
+      allLoadedJobs.forEach(job => {
+        const st = job.status || 'nova';
+        if (counts[st] !== undefined) counts[st]++;
+
+        if (cols[st]) {
+          const isDiscarded = st === 'descartada';
+          const card = document.createElement('div');
+          card.className = "bg-surface-container-lowest border border-outline-variant/40 rounded-xl p-3 space-y-2 shadow-xs hover:border-primary transition cursor-pointer";
+          card.onclick = () => {
+            switchMainTab('vagas');
+            selectJob(job.id);
+          };
+          card.innerHTML = `
+            <div class="flex items-center justify-between text-[10px] font-mono text-on-surface-variant">
+              <span class="font-bold text-on-surface truncate">${escapeHtml(job.company)}</span>
+              <span class="text-primary font-semibold">${job.match_score}% Match</span>
+            </div>
+            <h4 class="font-bold text-xs text-on-surface line-clamp-2">${escapeHtml(job.title)}</h4>
+            <div class="flex items-center justify-between text-[10px] font-mono text-outline pt-1.5 border-t border-outline-variant/20">
+              <span>📍 ${escapeHtml(job.city || 'RS')}</span>
+              <a href="${job.url}" target="_blank" onclick="event.stopPropagation();" class="text-primary font-bold hover:underline">Vaga ↗</a>
+            </div>
+          `;
+          cols[st].appendChild(card);
+        }
+      });
+
+      Object.keys(counts).forEach(k => {
+        const el = document.getElementById(`pipeCount_${k}`);
+        if (el) el.innerText = counts[k];
+      });
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const split = document.getElementById('splitWorkspace');
+      const table = document.getElementById('tableWorkspace');
+      const btnSplit = document.getElementById('btnViewSplit');
+      const btnList = document.getElementById('btnViewList');
+
+      if (mode === 'list') {
+        split.classList.add('hidden');
+        table.classList.remove('hidden');
+        btnList.className = "px-3 py-1 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center gap-1 transition font-semibold";
+        btnSplit.className = "px-3 py-1 rounded text-on-surface-variant hover:text-on-surface flex items-center gap-1 transition";
+      } else {
+        table.classList.add('hidden');
+        split.classList.remove('hidden');
+        btnSplit.className = "px-3 py-1 rounded bg-surface-container-lowest text-primary shadow-xs flex items-center gap-1 transition font-semibold";
+        btnList.className = "px-3 py-1 rounded text-on-surface-variant hover:text-on-surface flex items-center gap-1 transition";
+      }
+    }
+
+    function setCategoryFilter(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.className = "cat-pill h-7 px-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center gap-1 transition";
+      });
+      const activeBtn = document.getElementById(`catTab_${cat}`);
+      if (activeBtn) {
+        activeBtn.className = "cat-pill h-7 px-3 rounded-full bg-primary-container text-on-primary flex items-center gap-1 transition font-bold";
+      }
       applyFilters();
     }
 
-    function openConfigModal() {
-      document.getElementById('configModal').classList.remove('hidden');
+    function setCityFilter(city) {
+      document.getElementById('filterCity').value = city;
+      applyFilters();
     }
 
-    function closeConfigModal() {
-      document.getElementById('configModal').classList.add('hidden');
+    let searchTimeout = null;
+    function handleSearch(val) {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        applyFilters();
+      }, 200);
+    }
+
+    function resetFilters() {
+      document.getElementById('commandSearch').value = '';
+      document.getElementById('filterCity').value = 'todas';
+      document.getElementById('filterWorkModel').value = 'todos';
+      document.getElementById('filterStatus').value = 'todas';
+      setCategoryFilter('todas');
+    }
+
+    async function triggerScrape() {
+      const btn = document.getElementById('btnScrape');
+      const icon = document.getElementById('scrapeIcon');
+      const text = document.getElementById('scrapeText');
+
+      icon.classList.add('animate-spin');
+      text.innerText = "Varrendo...";
+      btn.disabled = true;
+
+      try {
+        let res = await fetch('./api/jobs/scrape', { method: 'POST' }).catch(() => null);
+        if (res && res.ok) {
+          const data = await res.json();
+          showToast(`Varredura concluída! ${data.result.new_jobs_inserted} novas vagas.`, "success");
+        } else {
+          showToast("Atualizando dados locais...", "info");
+        }
+        await loadStats();
+        await loadJobs();
+      } catch (err) {
+        showToast("Dados sincronizados!", "info");
+        await loadJobs();
+      } finally {
+        icon.classList.remove('animate-spin');
+        text.innerText = "Atualizar Vagas";
+        btn.disabled = false;
+      }
     }
 
     async function testTelegramAlert() {
@@ -915,11 +1052,11 @@
       const chatId = document.getElementById('cfgChatId').value.trim();
       
       if (!token || !chatId) {
-        showToast("Preencha o Token e o Chat ID para testar.", "error");
+        showToast("Preencha o Token e o Chat ID.", "error");
         return;
       }
 
-      showToast("Enviando mensagem de teste...", "info");
+      showToast("Enviando teste para o Telegram...", "info");
       try {
         const res = await fetch('./api/test-telegram', {
           method: 'POST',
@@ -928,9 +1065,9 @@
         });
         const data = await res.json();
         if (data.success) {
-          showToast("Alerta enviado no Telegram com sucesso!", "success");
+          showToast("Alerta enviado no Telegram!", "success");
         } else {
-          showToast(data.detail || "Falha no envio do Telegram.", "error");
+          showToast(data.detail || "Falha no envio.", "error");
         }
       } catch (err) {
         showToast("O teste do Telegram requer o servidor local.", "info");
@@ -951,25 +1088,30 @@
       link.href = URL.createObjectURL(blob);
       link.download = `vagas_pelotas_rio_grande_${new Date().toISOString().slice(0,10)}.csv`;
       link.click();
-      showToast("Arquivo CSV exportado com sucesso!", "success");
+      showToast("CSV exportado com sucesso!", "success");
+    }
+
+    function formatStatusBadge(status) {
+      if (status === 'interesse') return '⭐ Interesse';
+      if (status === 'candidatado') return '🚀 Candidatado';
+      if (status === 'entrevista') return '🎯 Entrevista';
+      if (status === 'descartada') return '✕ Descartada';
+      return '📥 Nova';
     }
 
     function showToast(msg, type = "info") {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
-      const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-900';
-      toast.className = `${bg} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
+      const bg = type === 'success' ? 'bg-tertiary-container' : type === 'error' ? 'bg-error' : 'bg-on-surface';
+      toast.className = `${bg} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-mono font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
       toast.innerHTML = `<span>${escapeHtml(msg)}</span>`;
       container.appendChild(toast);
 
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      }, 10);
-
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
       setTimeout(() => {
         toast.classList.add('translate-y-2', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
-      }, 4000);
+      }, 3500);
     }
 
     function escapeHtml(text) {

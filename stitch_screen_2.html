@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-error-container":"#93000a","primary-fixed":"#e2dfff","primary-fixed-dim":"#c3c0ff","on-tertiary-fixed":"#002113","on-secondary-container":"#004666","tertiary-fixed":"#6ffbbe","on-primary-fixed":"#0f0069","on-tertiary":"#ffffff","surface-container-lowest":"#ffffff","surface-dim":"#d2d9f4","error":"#ba1a1a","on-tertiary-container":"#67f4b7","inverse-on-surface":"#eef0ff","surface-container":"#eaedff","on-tertiary-fixed-variant":"#005236","outline":"#777587","secondary-container":"#39b8fd","on-secondary":"#ffffff","outline-variant":"#c7c4d8","on-background":"#131b2e","secondary-fixed-dim":"#89ceff","primary":"#3525cd","secondary-fixed":"#c9e6ff","on-primary":"#ffffff","on-surface-variant":"#464555","surface":"#faf8ff","on-error":"#ffffff","surface-container-highest":"#dae2fd","inverse-primary":"#c3c0ff","inverse-surface":"#283044","surface-variant":"#dae2fd","on-primary-fixed-variant":"#3323cc","on-secondary-fixed-variant":"#004c6e","surface-container-high":"#e2e7ff","tertiary-fixed-dim":"#4edea3","on-surface":"#131b2e","on-primary-container":"#dad7ff","surface-container-low":"#f2f3ff","background":"#faf8ff","surface-bright":"#faf8ff","primary-container":"#4f46e5","secondary":"#006591","tertiary":"#005338","on-secondary-fixed":"#001e2f","error-container":"#ffdad6","tertiary-container":"#006e4b","surface-tint":"#4d44e3"},borderRadius:{DEFAULT:"0.125rem",lg:"0.25rem",xl:"0.5rem",full:"0.75rem"},spacing:{"space-8":"2rem","space-5":"1.25rem","space-1":"0.25rem","space-10":"2.5rem","space-6":"1.5rem","feed-width":"420px","space-4":"1rem","space-3":"0.75rem","app-bar-height":"48px","detail-min-width":"540px","space-2":"0.5rem","space-12":"3rem"},fontFamily:{"body-md":["Geist"],"stat-counter":["Geist"],"body-sm":["Geist"],"label-code":["JetBrains Mono"],"headline-sm":["Geist"],"headline-md":["Geist"],"body-lg":["Geist"],"headline-lg":["Geist"],"headline-xl":["Geist"],"label-caps":["Geist"]},fontSize:{"body-md":["13px",{lineHeight:"20px",letterSpacing:"-0.005em",fontWeight:"400"}],"stat-counter":["12px",{lineHeight:"16px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-sm":["12px",{lineHeight:"18px",letterSpacing:"0",fontWeight:"400"}],"label-code":["11px",{lineHeight:"16px",letterSpacing:"-0.01em",fontWeight:"500"}],"headline-sm":["14px",{lineHeight:"20px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["16px",{lineHeight:"24px",letterSpacing:"-0.015em",fontWeight:"600"}],"body-lg":["15px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"400"}],"headline-lg":["20px",{lineHeight:"28px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl":["24px",{lineHeight:"32px",letterSpacing:"-0.025em",fontWeight:"600"}],"label-caps":["10px",{lineHeight:"14px",letterSpacing:"0.06em",fontWeight:"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/40"><div class="h-app-bar-height w-full px-space-6 flex items-center justify-between gap-space-4"><div class="flex items-center gap-space-3 shrink-0"><img alt="Logo Buscador Fernando" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U6SLrw0bxRF0coicV89wEERYo5D1ZL7-7aJLgDWUDkOqSEXpO6uD0jpUnC0qXyiT0IrQyAYwAgiM8OZDAgl2IGgtmLnAlVs37jwqxhz3af0la05iXmSjv_42CG6f1NLBBXL4v2BfhzSTSmv8E7JkXjEGWuAk0pZX7htgHYsIOkj6S3qQ158jdO3L6HkgtRA5X0cNj0HGqbmaIRdG9NpzDC_gBvu7WWmHToWhgxUrNZaClClfwsCycTvaY"/><div class="flex items-center gap-space-2"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Buscador de Vagas</span><span class="font-label-caps text-label-caps uppercase bg-surface-container-high text-on-surface-variant px-space-2 py-0.5 rounded">Pelotas &amp; Rio Grande / RS</span></div></div><nav class="hidden md:flex items-center gap-space-1" data-active-classes="bg-primary-container text-on-primary rounded font-headline-sm"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-space-3 py-1.5 transition-colors" data-path="todas-as-vagas" href="#">Todas as Vagas</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-space-3 py-1.5 transition-colors" data-path="minhas-candidaturas" href="#">Minhas Candidaturas</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low px-space-3 py-1.5 transition-colors" data-path="metricas-e-alertas-telegram" href="#">Métricas &amp; Alertas Telegram</a></nav><div class="flex items-center gap-space-4 shrink-0"><div class="hidden xl:flex items-center gap-space-2 text-on-surface-variant"><span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-code text-label-code text-on-surface-variant">Varredura ativa • LinkedIn, Gupy, Polo Regional</span></div><button class="flex items-center gap-space-1 bg-surface-container text-on-surface hover:bg-surface-container-high px-space-3 py-1.5 rounded transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">sync</span><span class="font-label-code text-label-code">Atualizar Vagas</span></button><div class="flex items-center gap-space-2 pl-space-2 border-l border-outline-variant/40"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-pl8nNbddA38HlAQOwCZqh7fLP2yw7q7vln6RHdt3xVAuj0RwmZXlHHr9TkkZsTvoBCBf7ezA-e4ne2Kpv-hXeOgoxCPdM23tnEv-Sibbtlw2IHwYd3gpvpobdzIfN9ZbLUteWHjrZzSq9EZFg01oUCHcwfe_dtxx3Ap5Jw8n1j_BqLTniyGhdCk1U79ikturP50ohftgfjSDJvlp0v7lQIOKorvAUA4TXkdaAFaTPBYhSPiqxj17"/><span class="hidden sm:inline font-headline-sm text-headline-sm text-on-surface">Fernando</span></div></div></div><div class="h-8 w-full px-space-6 bg-surface-container-low/90 border-t border-outline-variant/30 flex items-center overflow-x-auto gap-space-3"><span class="font-label-caps text-label-caps uppercase text-on-surface-variant shrink-0">Sumário do Feed:</span><div class="flex items-center gap-space-2 shrink-0"><span class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><span class="font-label-caps text-label-caps text-outline">TOTAL ATIVAS</span><span class="font-stat-counter text-stat-counter text-primary">24</span></span><span class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><span class="font-label-caps text-label-caps text-outline">INDUSTRIAL/ELÉTRICA</span><span class="font-stat-counter text-stat-counter text-secondary">8</span></span><span class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><span class="font-label-caps text-label-caps text-outline">TECNOLOGIA JR</span><span class="font-stat-counter text-stat-counter text-primary-container">9</span></span><span class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface shadow-[0_1px_4px_rgba(0,0,0,0.03)]"><span class="font-label-caps text-label-caps text-outline">GESTÃO/PROJETOS</span><span class="font-stat-counter text-stat-counter text-tertiary">7</span></span><span class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-full bg-surface-container-high text-on-surface"><span class="font-label-caps text-label-caps text-on-surface-variant">PELOTAS</span><span class="font-stat-counter text-stat-counter text-on-surface">14</span></span><span class="inline-flex items-center gap-space-1 px-space-2 py-0.5 rounded-full bg-surface-container-high text-on-surface"><span class="font-label-caps text-label-caps text-on-surface-variant">RIO GRANDE</span><span class="font-stat-counter text-stat-counter text-on-surface">10</span></span></div></div></header><main class="w-full pt-[80px] bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Sub-Header & Status Strip -->
+<div class="w-full bg-surface-container-low px-space-6 py-space-4">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-space-4">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-2">
+<span class="font-headline-md text-headline-md text-on-surface">Métricas &amp; Alertas do Telegram</span>
+<span class="inline-flex items-center gap-1.5 px-space-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-code text-label-code">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            Daemon v2.4 Online
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Pipeline contínuo de varredura: Pelotas, Rio Grande e polos industriais adjacentes.
+        </p>
+</div>
+<div class="flex items-center gap-space-3">
+<div class="flex items-center gap-space-2 bg-surface-container-lowest px-space-3 py-1.5 rounded-lg shadow-sm">
+<span class="font-label-caps text-label-caps uppercase text-outline">Latência do Bot</span>
+<span class="font-stat-counter text-stat-counter text-primary font-bold">142ms</span>
+</div>
+<div class="flex items-center gap-space-2 bg-surface-container-lowest px-space-3 py-1.5 rounded-lg shadow-sm">
+<span class="font-label-caps text-label-caps uppercase text-outline">Próxima Varredura</span>
+<span class="font-stat-counter text-stat-counter text-tertiary">08m 24s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="w-full px-space-6 py-space-6">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-6">
+<!-- LEFT COLUMN: Bot Configuration & Dispatch Controls (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-5">
+<!-- Telegram Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-5 flex flex-col gap-space-4 relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-3">
+<div class="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-sm">
+<span class="material-symbols-outlined text-[24px]">send</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Integração Telegram Bot</h2>
+<span class="font-label-code text-label-code text-on-surface-variant">@FernandoJobsRS_Bot</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1.5 px-space-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+              Conectado • Ativo
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Receba notificações em tempo real com links direct-apply assim que oportunidades forem indexadas no LinkedIn, Gupy ou portais industriais locais.
+          </p>
+<!-- Form Fields -->
+<div class="flex flex-col gap-space-4 pt-space-2">
+<!-- Bot Token -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Telegram Bot Token</label>
+<span class="font-label-code text-label-code text-primary cursor-pointer hover:underline" id="token-helper">Gerado via @BotFather</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-low text-on-surface font-label-code text-label-code px-space-3 py-2 rounded-lg pr-10 focus:outline-none focus:bg-surface-container" id="bot-token-input" type="password" value="6194832049:AAFn_Yp09WzK20vNxLe_PelotasRioGr2025"/>
+<button class="absolute right-2.5 text-on-surface-variant hover:text-on-surface flex items-center justify-center" id="toggle-token-visibility" title="Alternar visualização" type="button">
+<span class="material-symbols-outlined text-[18px]" id="eye-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Chat ID -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Telegram Chat ID / Canal ID</label>
+<span class="font-label-code text-label-code text-outline">Privado ou Grupo</span>
+</div>
+<div class="relative flex items-center">
+<span class="absolute left-3 text-on-surface-variant font-label-code text-label-code">#</span>
+<input class="w-full bg-surface-container-low text-on-surface font-label-code text-label-code pl-7 pr-space-3 py-2 rounded-lg focus:outline-none focus:bg-surface-container" type="text" value="98421074"/>
+</div>
+</div>
+<!-- Frequência / Dispatch Cadence -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Frequência de Notificação</label>
+<div class="grid grid-cols-2 gap-space-2">
+<label class="flex items-center gap-space-2 p-space-2 rounded-lg bg-surface-container cursor-pointer">
+<input checked="" class="accent-primary" name="frequency" type="radio" value="realtime"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-on-surface">Tempo Real</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Ao detectar</span>
+</div>
+</label>
+<label class="flex items-center gap-space-2 p-space-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<input class="accent-primary" name="frequency" type="radio" value="daily"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-on-surface">Digest Diário</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Às 09:00 BRT</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Segmented Filter Toggles -->
+<div class="flex flex-col gap-2 pt-space-2">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant tracking-wider">Filtros Ativos para Alerta</label>
+<div class="flex flex-col gap-2">
+<label class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-space-2">
+<span class="text-secondary font-headline-sm text-[14px]">⚡</span>
+<span class="font-body-md text-body-md text-on-surface">Elétrica &amp; Automação Industrial</span>
+</div>
+<input checked="" class="w-4 h-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-space-2">
+<span class="text-primary-container font-headline-sm text-[14px]">💻</span>
+<span class="font-body-md text-body-md text-on-surface">Tecnologia &amp; Dados Jr</span>
+</div>
+<input checked="" class="w-4 h-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-space-2">
+<span class="text-tertiary font-headline-sm text-[14px]">📊</span>
+<span class="font-body-md text-body-md text-on-surface">Gestão de Projetos &amp; Suprimentos</span>
+</div>
+<input checked="" class="w-4 h-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</label>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer">
+<span class="font-label-code text-label-code text-on-surface">Apenas Pelotas</span>
+<input checked="" class="w-4 h-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer">
+<span class="font-label-code text-label-code text-on-surface">Apenas Rio Grande</span>
+<input checked="" class="w-4 h-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-2 pt-space-3">
+<button class="flex-1 bg-primary text-on-primary font-headline-sm text-headline-sm py-2 px-space-3 rounded-lg flex items-center justify-center gap-1.5 shadow-sm hover:opacity-95 transition-opacity active:scale-[0.99]" id="test-telegram-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>Testar Envio</span>
+</button>
+<button class="bg-surface-container text-on-surface hover:bg-surface-container-high font-headline-sm text-headline-sm py-2 px-space-4 rounded-lg flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Salvar</span>
+</button>
+</div>
+<!-- Live Test Feedback Box (Hidden initially, triggered via JS) -->
+<div class="hidden p- space-3 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed flex items-center gap-space-2 p-2.5" id="test-feedback-box">
+<span class="material-symbols-outlined text-[18px] text-tertiary">check_circle</span>
+<span class="font-body-sm text-body-sm">Disparo de teste entregue no chat ID <strong>98421074</strong> com status HTTP 200.</span>
+</div>
+</div>
+</div>
+<!-- Terminal Diagnostic Box -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-4 flex flex-col gap-space-2">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Terminal de Sincronização</span>
+<span class="font-label-code text-[10px] text-tertiary font-medium">Auto-ping: 30s</span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-space-3 font-label-code text-[11px] text-on-surface flex flex-col gap-1 overflow-x-auto">
+<div class="text-on-surface-variant">&gt; GET /api/v2/bot/health-check HTTP/1.1</div>
+<div class="text-tertiary">&lt; 200 OK [Latency: 142ms, Polling: webhook-ready]</div>
+<div class="text-on-surface-variant">&gt; TARGET: Pelotas (Campus Anglo, Distrito Industrial) + RG (Porto)</div>
+<div class="text-primary">&gt; 24 assinaturas de busca sincronizadas.</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Analytics, Yield Charts & Transmission Timeline (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-5">
+<!-- Metrics Overview Bento Row -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-4">
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Alertas Enviados</span>
+<span class="material-symbols-outlined text-[20px] text-secondary">mark_chat_read</span>
+</div>
+<div class="pt-space-2">
+<div class="font-headline-xl text-headline-xl text-on-surface">184</div>
+<div class="font-body-sm text-[11px] text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+18% nesta semana</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Taxa de Entrega</span>
+<span class="material-symbols-outlined text-[20px] text-tertiary">task_alt</span>
+</div>
+<div class="pt-space-2">
+<div class="font-headline-xl text-headline-xl text-on-surface">99.4%</div>
+<div class="font-body-sm text-[11px] text-on-surface-variant">1 falha por timeout API</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-4 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-outline">Fit Regional</span>
+<span class="material-symbols-outlined text-[20px] text-primary">pin_drop</span>
+</div>
+<div class="pt-space-2">
+<div class="font-headline-xl text-headline-xl text-on-surface">86%</div>
+<div class="font-body-sm text-[11px] text-primary">Pelotas / RG Estritos</div>
+</div>
+</div>
+</div>
+<!-- Chart Card: Vagas Encontradas nos Últimos 14 Dias por Fonte -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-5 flex flex-col gap-space-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Vagas Encontradas nos Últimos 14 Dias</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Distribuição quantitativa por provedores de vagas monitorados</p>
+</div>
+<div class="flex items-center gap-space-2 font-label-code text-label-code">
+<span class="inline-flex items-center gap-1 text-on-surface"><span class="w-2 h-2 rounded-full bg-primary"></span>LinkedIn 45%</span>
+<span class="inline-flex items-center gap-1 text-on-surface"><span class="w-2 h-2 rounded-full bg-secondary-container"></span>Gupy 35%</span>
+<span class="inline-flex items-center gap-1 text-on-surface"><span class="w-2 h-2 rounded-full bg-tertiary"></span>Polo Regional 20%</span>
+</div>
+</div>
+<!-- SVG Visual Chart (Data Representation) -->
+<div class="w-full bg-surface-container-low rounded-lg p-space-4 flex flex-col gap-space-3">
+<div class="w-full h-36">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 540 140">
+<!-- Subtle grid background lines -->
+<line stroke="rgba(199,196,216,0.2)" stroke-dasharray="3 3" x1="0" x2="540" y1="20" y2="20"></line>
+<line stroke="rgba(199,196,216,0.2)" stroke-dasharray="3 3" x1="0" x2="540" y1="60" y2="60"></line>
+<line stroke="rgba(199,196,216,0.2)" stroke-dasharray="3 3" x1="0" x2="540" y1="100" y2="100"></line>
+<!-- Day 1 to 14 Stacked Bars -->
+<!-- Day 1 -->
+<rect class="fill-primary" height="40" rx="3" width="18" x="15" y="80"></rect>
+<rect class="fill-secondary-container" height="23" rx="3" width="18" x="15" y="55"></rect>
+<rect class="fill-tertiary" height="11" rx="3" width="18" x="15" y="42"></rect>
+<!-- Day 2 -->
+<rect class="fill-primary" height="50" rx="3" width="18" x="53" y="70"></rect>
+<rect class="fill-secondary-container" height="28" rx="3" width="18" x="53" y="40"></rect>
+<rect class="fill-tertiary" height="13" rx="3" width="18" x="53" y="25"></rect>
+<!-- Day 3 -->
+<rect class="fill-primary" height="35" rx="3" width="18" x="91" y="85"></rect>
+<rect class="fill-secondary-container" height="23" rx="3" width="18" x="91" y="60"></rect>
+<rect class="fill-tertiary" height="8" rx="3" width="18" x="91" y="50"></rect>
+<!-- Day 4 -->
+<rect class="fill-primary" height="55" rx="3" width="18" x="129" y="65"></rect>
+<rect class="fill-secondary-container" height="25" rx="3" width="18" x="129" y="38"></rect>
+<rect class="fill-tertiary" height="12" rx="3" width="18" x="129" y="24"></rect>
+<!-- Day 5 -->
+<rect class="fill-primary" height="45" rx="3" width="18" x="167" y="75"></rect>
+<rect class="fill-secondary-container" height="23" rx="3" width="18" x="167" y="50"></rect>
+<rect class="fill-tertiary" height="10" rx="3" width="18" x="167" y="38"></rect>
+<!-- Day 6 -->
+<rect class="fill-primary" height="30" rx="3" width="18" x="205" y="90"></rect>
+<rect class="fill-secondary-container" height="13" rx="3" width="18" x="205" y="75"></rect>
+<rect class="fill-tertiary" height="8" rx="3" width="18" x="205" y="65"></rect>
+<!-- Day 7 -->
+<rect class="fill-primary" height="28" rx="3" width="18" x="243" y="92"></rect>
+<rect class="fill-secondary-container" height="12" rx="3" width="18" x="243" y="78"></rect>
+<rect class="fill-tertiary" height="6" rx="3" width="18" x="243" y="70"></rect>
+<!-- Day 8 -->
+<rect class="fill-primary" height="52" rx="3" width="18" x="281" y="68"></rect>
+<rect class="fill-secondary-container" height="24" rx="3" width="18" x="281" y="42"></rect>
+<rect class="fill-tertiary" height="12" rx="3" width="18" x="281" y="28"></rect>
+<!-- Day 9 -->
+<rect class="fill-primary" height="60" rx="3" width="18" x="319" y="60"></rect>
+<rect class="fill-secondary-container" height="26" rx="3" width="18" x="319" y="32"></rect>
+<rect class="fill-tertiary" height="14" rx="3" width="18" x="319" y="16"></rect>
+<!-- Day 10 -->
+<rect class="fill-primary" height="48" rx="3" width="18" x="357" y="72"></rect>
+<rect class="fill-secondary-container" height="24" rx="3" width="18" x="357" y="46"></rect>
+<rect class="fill-tertiary" height="10" rx="3" width="18" x="357" y="34"></rect>
+<!-- Day 11 -->
+<rect class="fill-primary" height="42" rx="3" width="18" x="395" y="78"></rect>
+<rect class="fill-secondary-container" height="22" rx="3" width="18" x="395" y="54"></rect>
+<rect class="fill-tertiary" height="10" rx="3" width="18" x="395" y="42"></rect>
+<!-- Day 12 -->
+<rect class="fill-primary" height="56" rx="3" width="18" x="433" y="64"></rect>
+<rect class="fill-secondary-container" height="26" rx="3" width="18" x="433" y="36"></rect>
+<rect class="fill-tertiary" height="12" rx="3" width="18" x="433" y="22"></rect>
+<!-- Day 13 -->
+<rect class="fill-primary" height="62" rx="3" width="18" x="471" y="58"></rect>
+<rect class="fill-secondary-container" height="28" rx="3" width="18" x="471" y="28"></rect>
+<rect class="fill-tertiary" height="14" rx="3" width="18" x="471" y="12"></rect>
+<!-- Day 14 (Hoje) -->
+<rect class="fill-primary" height="70" rx="3" width="18" x="509" y="50"></rect>
+<rect class="fill-secondary-container" height="28" rx="3" width="18" x="509" y="20"></rect>
+<rect class="fill-tertiary" height="12" rx="3" width="18" x="509" y="6"></rect>
+</svg>
+</div>
+<div class="flex items-center justify-between font-label-code text-[10px] text-on-surface-variant px-1">
+<span>14 dias atrás</span>
+<span>7 dias atrás</span>
+<span class="text-primary font-bold">Hoje (+24 vagas)</span>
+</div>
+</div>
+<!-- Proportion breakdown bar -->
+<div class="flex flex-col gap-1.5 pt-1">
+<div class="w-full h-2.5 bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="bg-primary h-full" style="width: 45%;" title="LinkedIn (45%)"></div>
+<div class="bg-secondary-container h-full" style="width: 35%;" title="Gupy (35%)"></div>
+<div class="bg-tertiary h-full" style="width: 20%;" title="Polo Regional (20%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-label-code text-on-surface-variant">
+<span>Total acumulado no período: <strong>214 vagas processadas</strong></span>
+<span>96.2% de precisão de filtros</span>
+</div>
+</div>
+</div>
+<!-- Transmission Log / Delivery Timeline -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-5 flex flex-col gap-space-4">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Log de Últimas Notificações Enviadas</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Disparos executados com sucesso para o Telegram</p>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-container transition-colors" title="Atualizar log" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+<!-- Log Timeline Entries -->
+<div class="flex flex-col gap-space-3">
+<!-- Item 1 -->
+<div class="flex items-start justify-between p-space-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-start gap-space-3">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[15px]">electric_bolt</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-2">
+<span class="font-headline-sm text-body-md text-on-surface">Engenheiro Eletricista Jr - Manutenção Industrial</span>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface">Rio Grande / RS</span>
+</div>
+<div class="flex items-center gap-space-2 text-on-surface-variant font-body-sm text-[12px]">
+<span class="font-medium text-on-surface">Yara Fertilizantes</span>
+<span>•</span>
+<span class="font-label-code text-[11px]">Via Gupy Regional</span>
+<span>•</span>
+<span class="font-label-code text-[11px] text-tertiary">HTTP 200 (Telegram Bot)</span>
+</div>
+</div>
+</div>
+<span class="font-label-code text-label-code text-on-surface-variant shrink-0 pl-2">Há 18 min</span>
+</div>
+<!-- Item 2 -->
+<div class="flex items-start justify-between p-space-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-start gap-space-3">
+<div class="w-7 h-7 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[15px]">code</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-2">
+<span class="font-headline-sm text-body-md text-on-surface">Desenvolvedor Python / Backend Júnior</span>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface">Pelotas / Híbrido</span>
+</div>
+<div class="flex items-center gap-space-2 text-on-surface-variant font-body-sm text-[12px]">
+<span class="font-medium text-on-surface">Pelotas Tech Park</span>
+<span>•</span>
+<span class="font-label-code text-[11px]">Via LinkedIn</span>
+<span>•</span>
+<span class="font-label-code text-[11px] text-tertiary">HTTP 200 (Telegram Bot)</span>
+</div>
+</div>
+</div>
+<span class="font-label-code text-label-code text-on-surface-variant shrink-0 pl-2">Há 1h 04m</span>
+</div>
+<!-- Item 3 -->
+<div class="flex items-start justify-between p-space-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-start gap-space-3">
+<div class="w-7 h-7 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[15px]">assignment_turned_in</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-2">
+<span class="font-headline-sm text-body-md text-on-surface">Assistente de Planejamento de Projetos e Obras</span>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface">Pelotas / RS</span>
+</div>
+<div class="flex items-center gap-space-2 text-on-surface-variant font-body-sm text-[12px]">
+<span class="font-medium text-on-surface">Engenharia Sul Ltda</span>
+<span>•</span>
+<span class="font-label-code text-[11px]">Via Polo Regional</span>
+<span>•</span>
+<span class="font-label-code text-[11px] text-tertiary">HTTP 200 (Telegram Bot)</span>
+</div>
+</div>
+</div>
+<span class="font-label-code text-label-code text-on-surface-variant shrink-0 pl-2">Há 3h 22m</span>
+</div>
+<!-- Item 4 -->
+<div class="flex items-start justify-between p-space-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-start gap-space-3">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[15px]">sensors</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-2">
+<span class="font-headline-sm text-body-md text-on-surface">Técnico em Instrumentação e Automação</span>
+<span class="font-label-caps text-label-caps uppercase px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface">Rio Grande (Porto)</span>
+</div>
+<div class="flex items-center gap-space-2 text-on-surface-variant font-body-sm text-[12px]">
+<span class="font-medium text-on-surface">Tecon Rio Grande</span>
+<span>•</span>
+<span class="font-label-code text-[11px]">Via Gupy Regional</span>
+<span>•</span>
+<span class="font-label-code text-[11px] text-tertiary">HTTP 200 (Telegram Bot)</span>
+</div>
+</div>
+</div>
+<span class="font-label-code text-label-code text-on-surface-variant shrink-0 pl-2">Há 5h 45m</span>
+</div>
+</div>
+<!-- Bottom micro status -->
+<div class="flex items-center justify-between pt-space-2 border-t border-outline-variant/30 text-on-surface-variant font-label-code text-label-code">
+<span class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+              Fila de entrega desimpedida
+            </span>
+<a class="text-primary hover:underline flex items-center gap-1" href="#">
+<span>Exportar logs (.json)</span>
+<span class="material-symbols-outlined text-[14px]">download</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Toggle password mask for Bot Token
+  const toggleBtn = document.getElementById('toggle-token-visibility');
+  const tokenInput = document.getElementById('bot-token-input');
+  const eyeIcon = document.getElementById('eye-icon');
+
+  if (toggleBtn && tokenInput && eyeIcon) {
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = tokenInput.type === 'password';
+      tokenInput.type = isPassword ? 'text' : 'password';
+      eyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+    });
+  }
+
+  // Interactive Test Telegram Dispatch
+  const testBtn = document.getElementById('test-telegram-btn');
+  const feedbackBox = document.getElementById('test-feedback-box');
+
+  if (testBtn && feedbackBox) {
+    testBtn.addEventListener('click', () => {
+      const originalContent = testBtn.innerHTML;
+      testBtn.disabled = true;
+      testBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[18px] animate-spin">sync</span>
+        <span>Enviando Payload...</span>
+      `;
+
+      setTimeout(() => {
+        testBtn.disabled = false;
+        testBtn.innerHTML = originalContent;
+        feedbackBox.classList.remove('hidden');
+        
+        // Auto-dismiss feedback after 6 seconds
+        setTimeout(() => {
+          feedbackBox.classList.add('hidden');
+        }, 6000);
+      }, 950);
+    });
+  }
+</script></main><footer class="w-full bg-surface-container-lowest border-t border-outline-variant/30 py-space-6"><div class="w-full px-space-6 flex flex-col md:flex-row items-center justify-between gap-space-4"><div class="flex items-center gap-space-2"><span class="font-headline-sm text-headline-sm text-on-surface">Buscador Pelotas &amp; Rio Grande</span><span class="font-label-code text-label-code text-on-surface-variant">• Engenharia, Operações &amp; Tech Regional</span></div><div class="font-body-sm text-body-sm text-on-surface-variant">© 2025 Fernando. Painel de inteligência de vagas locais.</div></div></footer></body></html>
