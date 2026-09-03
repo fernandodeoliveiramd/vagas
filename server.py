@@ -127,6 +127,17 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
             asyncio.set_event_loop(loop)
             try:
                 result = loop.run_until_complete(scraper_manager.run_all())
+                
+                # Sincronizar data/jobs.json e data/stats.json
+                jobs_all = get_jobs(limit=500)
+                stats_all = get_stats()
+                data_dir = os.path.join(BASE_DIR, "data")
+                os.makedirs(data_dir, exist_ok=True)
+                with open(os.path.join(data_dir, "jobs.json"), "w", encoding="utf-8") as f:
+                    json.dump({"success": True, "count": len(jobs_all), "jobs": jobs_all}, f, ensure_ascii=False, indent=2)
+                with open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8") as f:
+                    json.dump({"success": True, "stats": stats_all}, f, ensure_ascii=False, indent=2)
+
                 return self._send_json({"success": True, "result": result})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)}, 500)

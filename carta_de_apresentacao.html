@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta de Apresentação - Luiz Fernando de Oliveira</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #111111;
+      background-color: #f0f2f5;
+      line-height: 1.6;
+      font-size: 13.5px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .action-bar {
+      position: sticky;
+      top: 0;
+      background: #000000;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    .btn-print {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      padding: 7px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-print:hover {
+      background: #dddddd;
+    }
+
+    .sheet {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 24px auto 40px auto;
+      background: #ffffff;
+      padding: 24mm 24mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    header {
+      margin-bottom: 22px;
+      border-bottom: 1.5px solid #000000;
+      padding-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      text-transform: uppercase;
+      color: #000000;
+      margin-bottom: 2px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #333333;
+      margin-bottom: 8px;
+    }
+
+    .contact-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px 12px;
+      font-size: 12px;
+      color: #333333;
+    }
+
+    .contact-bar a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted #555;
+    }
+
+    .separator {
+      color: #888888;
+    }
+
+    .recipient {
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #000000;
+    }
+
+    .content p {
+      margin-bottom: 14px;
+      text-align: justify;
+      color: #222222;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .content strong {
+      color: #000000;
+    }
+
+    .closing {
+      margin-top: 24px;
+    }
+
+    .signature-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #000000;
+      margin-bottom: 2px;
+    }
+
+    .signature-details {
+      font-size: 12.5px;
+      color: #444444;
+      line-height: 1.4;
+    }
+
+    .signature-details a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .action-bar {
+        display: none !important;
+      }
+
+      .sheet {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 20mm 22mm 20mm 22mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="action-bar">
+    <span>Carta de Apresentação - Luiz Fernando de Oliveira</span>
+    <button class="btn-print" onclick="window.print()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+      </svg>
+      Salvar como PDF / Imprimir (Ctrl + P)
+    </button>
+  </div>
+
+  <main class="sheet">
+    <div>
+      <header>
+        <h1>Luiz Fernando de Oliveira</h1>
+        <div class="subtitle">Eletricista Industrial &nbsp;|&nbsp; Técnico em Eletrônica &nbsp;|&nbsp; Eletroinstrumentista</div>
+        <div class="contact-bar">
+          <span>Cassino – Rio Grande / RS</span>
+          <span class="separator">•</span>
+          <span>43 Anos</span>
+          <span class="separator">•</span>
+          <a href="https://wa.me/5553999043060" target="_blank">(53) 99904-3060</a>
+          <span class="separator">•</span>
+          <a href="mailto:fernando.xy7@gmail.com">fernando.xy7@gmail.com</a>
+          <span class="separator">•</span>
+          <span>CNH Categoria B</span>
+        </div>
+      </header>
+
+      <div class="recipient">
+        À equipe de Recursos Humanos e Gestão de Manutenção,
+      </div>
+
+      <div class="content">
+        <p>
+          Apresento meu currículo para apreciação às oportunidades nas áreas de <strong>Manutenção Elétrica Industrial, Eletroinstrumentação e Automação</strong>. Com sólida formação técnica pelo <strong>SENAI</strong> (Eletroeletrônica – Formação Integral) e <strong>Colégio Singular</strong> (Técnico em Eletrônica), aliada a experiências em ambientes industriais de processo contínuo e tecnologia, coloco minha bagagem profissional à disposição dos projetos e operações da sua empresa.
+        </p>
+
+        <p>
+          Ao longo da minha trajetória, atuei na manutenção preventiva, preditiva e corretiva de equipamentos elétricos e malhas de instrumentação em plantas industriais de grande porte, como a <strong>Yara Fertilizantes</strong>. Possuo experiência prática com intervenções em painéis de força e comando (CCMs), motores elétricos trifásicos de indução, parametrização de inversores de frequência e soft-starters, além de calibração de instrumentos de campo (pressão, temperatura, vazão, nível e peso em malhas 4-20mA/HART) e atuação em válvulas de controle eletropneumáticas.
+        </p>
+
+        <p>
+          Minha vivência profissional também abrange assistência técnica especializada em campo (<em>Field Service</em>) para analisadores automatizados de alta precisão (<strong>Sertec Automação / Roche</strong>), metrologia e reparo a nível de componente em placas eletrônicas sob padrões da norma ISO 9001 (<strong>Marte Instrumentação Analítica</strong>), suporte técnico de infraestrutura (<strong>Telefônica do Brasil</strong>) e ensaios elétricos laboratoriais de conformidade técnica (<strong>Philips do Brasil</strong>).
+        </p>
+
+        <p>
+          Compromisso com a segurança é um pilar inegociável na minha rotina: possuo treinamentos em <strong>NR-10, NR-35 e NR-33</strong>, com rigorosa aplicação de procedimentos de bloqueio e desenergização (<strong>LOTO</strong>). Como diferencial complementar, possuo vivência internacional de 14 meses no Canadá (fluência prática em língua inglesa para leitura de manuais e suporte) e domínio de ferramentas modernas de produtividade, análise de dados (Power BI) e automação digital com Inteligência Artificial, agregando agilidade ao controle operacional e à gestão de ordens de serviço.
+        </p>
+
+        <p>
+          Resido em <strong>Rio Grande / RS</strong> e tenho total disponibilidade para início imediato, escalas de turno ou viagens, conforme as necessidades da organização.
+        </p>
+
+        <p>
+          Agradeço pela atenção e coloco-me à disposição para uma entrevista, na qual poderei detalhar como minhas competências podem contribuir para a confiabilidade operacional e a segurança da equipe.
+        </p>
+      </div>
+    </div>
+
+    <div class="closing">
+      <p style="margin-bottom: 12px; color: #222222;">Atenciosamente,</p>
+      <div class="signature-title">Luiz Fernando de Oliveira</div>
+      <div class="signature-details">
+        (53) 99904-3060 • <a href="mailto:fernando.xy7@gmail.com">fernando.xy7@gmail.com</a><br>
+        <a href="https://wa.me/5553999043060" style="text-decoration: underline;" target="_blank">Conversar pelo WhatsApp</a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

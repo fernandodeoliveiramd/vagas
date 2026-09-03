@@ -115,7 +115,7 @@ def insert_job(job_data: Dict[str, Any]) -> Optional[int]:
             job_data.get("status", "nova"),
             job_data.get("notes", ""),
             1 if job_data.get("is_favorite") else 0,
-            job_data.get("published_at", now),
+            job_data.get("published_at") or "Recente",
             now,
             now,
             dedup_hash

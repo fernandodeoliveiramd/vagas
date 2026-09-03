@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currículo - Luiz Fernando de Oliveira</title>
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #111111;
+      background-color: #e8ecf1;
+      line-height: 1.32;
+      font-size: 11.5px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Action bar */
+    .action-bar {
+      position: sticky;
+      top: 0;
+      background: #000000;
+      color: #ffffff;
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      z-index: 1000;
+    }
+
+    .action-bar span {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-print {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-print:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* Sheet / Container */
+    .sheet {
+      width: 210mm;
+      margin: 20px auto 40px auto;
+      background: #ffffff;
+      padding: 10mm 15mm;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      text-transform: uppercase;
+      color: #000000;
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #333333;
+      margin-bottom: 6px;
+    }
+
+    .contact-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 10px;
+      font-size: 11px;
+      color: #222222;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #000000;
+    }
+
+    .contact-bar a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted #555;
+    }
+
+    .separator {
+      color: #888888;
+    }
+
+    /* Sections */
+    section {
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #000000;
+      border-bottom: 1px solid #000000;
+      padding-bottom: 1.5px;
+      margin-bottom: 5px;
+    }
+
+    /* Objective */
+    .objective-text {
+      font-size: 11.2px;
+      color: #222222;
+      text-align: justify;
+      line-height: 1.38;
+    }
+
+    /* NRs Badges */
+    .nr-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .nr-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #000000;
+      padding: 2px 7px;
+      font-size: 10.2px;
+      font-weight: 600;
+      color: #000000;
+      background: #ffffff;
+      border-radius: 2px;
+    }
+
+    .nr-badge.bold {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* Experience */
+    .experience-item {
+      margin-bottom: 6px;
+      page-break-inside: avoid;
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1px;
+    }
+
+    .exp-role {
+      font-size: 11.8px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .exp-company {
+      font-size: 11.2px;
+      font-weight: 600;
+      color: #222222;
+    }
+
+    .exp-location {
+      font-size: 10.8px;
+      color: #555555;
+      font-weight: 400;
+    }
+
+    .exp-date {
+      font-size: 10.8px;
+      font-weight: 600;
+      color: #333333;
+      white-space: nowrap;
+    }
+
+    .exp-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1.5px;
+    }
+
+    .exp-list li {
+      position: relative;
+      padding-left: 11px;
+      margin-bottom: 1.5px;
+      font-size: 10.8px;
+      color: #222222;
+      line-height: 1.32;
+      text-align: justify;
+    }
+
+    .exp-list li::before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      top: -0.5px;
+      font-size: 8px;
+      color: #000000;
+    }
+
+    /* Grid 2 */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 12px;
+    }
+
+    .edu-item {
+      margin-bottom: 4px;
+      page-break-inside: avoid;
+    }
+
+    .edu-degree {
+      font-size: 11.2px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .edu-institution {
+      font-size: 10.8px;
+      color: #333333;
+    }
+
+    .edu-details {
+      font-size: 10.2px;
+      color: #555555;
+      font-style: italic;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+      margin-top: 3px;
+    }
+
+    .skill-category {
+      page-break-inside: avoid;
+    }
+
+    .skill-cat-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #000000;
+      margin-bottom: 2px;
+      border-bottom: 1px dashed #888888;
+      padding-bottom: 1px;
+    }
+
+    .skill-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .skill-list li {
+      position: relative;
+      padding-left: 9px;
+      font-size: 10.5px;
+      color: #222222;
+      margin-bottom: 1.5px;
+      line-height: 1.28;
+    }
+
+    .skill-list li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: #444444;
+      font-weight: bold;
+    }
+
+    /* Deliberate Page Break between Page 1 and Page 2 */
+    .page-break-divider {
+      page-break-before: always;
+      break-before: page;
+      padding-top: 6px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff;
+        font-size: 10.8px;
+      }
+
+      .action-bar {
+        display: none !important;
+      }
+
+      .sheet {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 9mm 12mm 9mm 12mm;
+      }
+
+      .experience-item, .skill-category, .edu-item {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating action bar -->
+  <div class="action-bar">
+    <span>Currículo - Luiz Fernando de Oliveira (Design Minimalista P&amp;B — 2 Páginas A4)</span>
+    <button class="btn-print" onclick="window.print()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+      </svg>
+      Salvar como PDF / Imprimir (Ctrl + P)
+    </button>
+  </div>
+
+  <main class="sheet">
+    <!-- Header -->
+    <header>
+      <h1>Luiz Fernando de Oliveira</h1>
+      <div class="subtitle">Eletricista Industrial &nbsp;|&nbsp; Técnico em Eletrônica &nbsp;|&nbsp; Eletroinstrumentista</div>
+      <div class="contact-bar">
+        <span>Cassino – Rio Grande / RS</span>
+        <span class="separator">•</span>
+        <span>43 Anos</span>
+        <span class="separator">•</span>
+        <a href="https://wa.me/5553999043060" target="_blank">(53) 99904-3060</a>
+        <span class="separator">•</span>
+        <a href="mailto:fernando.xy7@gmail.com">fernando.xy7@gmail.com</a>
+        <span class="separator">•</span>
+        <span>CNH B</span>
+      </div>
+    </header>
+
+    <!-- Objetivo -->
+    <section>
+      <div class="section-title">Objetivo Profissional</div>
+      <p class="objective-text">
+        Atuar nas áreas de <strong>Manutenção Elétrica Industrial, Eletroinstrumentação, Eletrônica e Automação</strong>, aplicando sólida experiência em manutenção preventiva, preditiva e corretiva, instalações elétricas industriais, diagnóstico de falhas em malhas de controle, calibração de instrumentos, parametrização de acionamentos e comissionamento de equipamentos e sistemas industriais.
+      </p>
+    </section>
+
+    <!-- Cursos e NRs -->
+    <section>
+      <div class="section-title">Segurança &amp; Normas Regulamentadoras (NRs)</div>
+      <div class="nr-container">
+        <span class="nr-badge bold">NR-10 (Segurança em Instalações e Serviços em Eletricidade)</span>
+        <span class="nr-badge bold">NR-35 (Trabalho em Altura)</span>
+        <span class="nr-badge bold">NR-33 (Espaços Confinados)</span>
+        <span class="nr-badge">Procedimentos LOTO (Lockout &amp; Tagout)</span>
+        <span class="nr-badge">NR-12 (Segurança em Máquinas)</span>
+      </div>
+    </section>
+
+    <!-- Experiência Profissional (Página 1) -->
+    <section>
+      <div class="section-title">Experiência Profissional</div>
+
+      <!-- Yara -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Eletroinstrumentista</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Yara Fertilizantes</span>
+            <span class="exp-location">– Rio Grande/RS</span>
+          </div>
+          <span class="exp-date">1 ano e 3 meses</span>
+        </div>
+        <ul class="exp-list">
+          <li>Atuação na manutenção preventiva, preditiva e corretiva em instalações elétricas e malhas de instrumentação de planta industrial química de processo contínuo.</li>
+          <li>Calibração, parametrização, testes e manutenção de instrumentos de campo (transmissores de pressão, nível, temperatura, vazão e células de carga em malhas 4-20mA/HART).</li>
+          <li>Diagnóstico de falhas e manutenção em válvulas de controle proporcionais, atuadores pneumáticos e posicionadores eletropneumáticos.</li>
+          <li>Inspeção e intervenções em painéis elétricos de comando e distribuição (CCMs), motores elétricos de indução trifásicos, partidas de motores, contatores, inversores de frequência e soft-starters.</li>
+          <li>Interpretação de diagramas elétricos unifilares, funcionais e fluxogramas de engenharia (P&amp;ID), atuando com procedimentos LOTO e normas de segurança (NR-10, NR-12, NR-33 e NR-35).</li>
+        </ul>
+      </article>
+
+      <!-- Sertec -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Assessor Técnico (Field Service)</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Sertec Automação</span>
+            <span class="exp-location">– Ribeirão Pires/SP</span>
+          </div>
+          <span class="exp-date">7 meses</span>
+        </div>
+        <ul class="exp-list">
+          <li>Atendimento técnico e suporte de campo em sistemas automatizados e equipamentos laboratoriais/hospitalares de alta precisão da linha Roche.</li>
+          <li>Execução de start-up (comissionamento), testes operacionais, parametrização e ensaios de aceitação técnica junto a clientes.</li>
+          <li>Realização de manutenção preventiva e corretiva integrando subsistemas eletrônicos, sensores ópticos/indutivos, micromotores de passo, eletroválvulas e placas controladoras microprocessadas.</li>
+          <li>Elaboração de Relatórios de Atendimento Técnico (RAT), laudos de diagnóstico e controle de peças de reposição e sobressalentes.</li>
+        </ul>
+      </article>
+
+      <!-- Marte -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Técnico em Eletrônica</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Marte Instrumentação Analítica</span>
+            <span class="exp-location">– São Paulo/SP</span>
+          </div>
+          <span class="exp-date">1 ano e 3 meses</span>
+        </div>
+        <ul class="exp-list">
+          <li>Manutenção preventiva, corretiva e calibração de equipamentos de instrumentação científica, analítica e de medição industrial de precisão.</li>
+          <li>Diagnóstico e reparo a nível de componente (tecnologias SMD e PTH) em placas de circuito impresso (PCI), fontes chaveadas, circuitos amplificadores e condicionadores de sinal.</li>
+          <li>Utilização de equipamentos de bancada: osciloscópios, multímetros de alta precisão, frequencímetros e fontes reguláveis.</li>
+          <li>Participação ativa na estruturação e cumprimento dos procedimentos da norma de qualidade ISO 9001, com padronização de ordens de serviço e rastreabilidade metrológica.</li>
+        </ul>
+      </article>
+
+      <!-- Telefônica -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Técnico em Eletrônica / Suporte Técnico N2</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Telefônica do Brasil</span>
+            <span class="exp-location">– São Paulo/SP</span>
+          </div>
+          <span class="exp-date">1 ano e 3 meses</span>
+        </div>
+        <ul class="exp-list">
+          <li>Operação, monitoramento e programação remota de centrais de comutação e equipamentos de telecomunicações de grande porte.</li>
+          <li>Suporte técnico especializado de segundo nível (N2) a técnicos de campo e atendimento a demandas operacionais e de infraestrutura.</li>
+          <li>Diagnóstico de falhas em links de comunicação, circuitos de sinalização e sistemas de alimentação elétrica ininterrupta (fontes DC / retificadores).</li>
+          <li>Elaboração de procedimentos operacionais padrão (POP) e aplicação de treinamentos técnicos para equipes operacionais.</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- INÍCIO DA PÁGINA 2 -->
+    <section class="page-break-divider">
+      <div class="section-title">Experiência Profissional (Continuação)</div>
+
+      <!-- Q&D -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Auxiliar Técnico</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Q&amp;D Sistemas Eletrônicos</span>
+            <span class="exp-location">– Mauá/SP</span>
+          </div>
+          <span class="exp-date">1 ano e 7 meses</span>
+        </div>
+        <ul class="exp-list">
+          <li>Montagem, cabeamento e testes de bancada de módulos e placas eletrônicas aplicadas a controle predial e automação.</li>
+          <li>Auxílio à engenharia no desenvolvimento de protótipos, ensaios de funcionamento e confecção de chicotes elétricos.</li>
+          <li>Atuação em campo na montagem de painéis, interligação de sensores/atuadores e suporte no start-up de sistemas automatizados.</li>
+        </ul>
+      </article>
+
+      <!-- Philips -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Estagiário Técnico</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Philips do Brasil</span>
+            <span class="exp-location">– Mauá/SP</span>
+          </div>
+          <span class="exp-date">1 ano</span>
+        </div>
+        <ul class="exp-list">
+          <li>Atuação no laboratório de ensaios elétricos e fotométricos em luminárias, reatores e drivers eletrônicos de iluminação.</li>
+          <li>Medição de grandezas elétricas (tensão, corrente, potência ativa/reativa, fator de potência e distorção harmônica - THD).</li>
+          <li>Redação de relatórios técnicos de conformidade com normas regulamentadoras nacionais e internacionais (ABNT/IEC).</li>
+        </ul>
+      </article>
+
+      <!-- Paisagismo Internacional -->
+      <article class="experience-item">
+        <div class="exp-header">
+          <div>
+            <span class="exp-role">Jardinagem e Paisagismo</span>
+            <span class="separator">|</span>
+            <span class="exp-company">Pura Vida Landscaping</span>
+            <span class="exp-location">– Victoria, BC - Canadá</span>
+          </div>
+          <span class="exp-date">1 ano e 2 meses</span>
+        </div>
+        <ul class="exp-list">
+          <li>Vivência internacional de trabalho com imersão completa e prática da língua inglesa em ambiente multicultural.</li>
+          <li>Execução de projetos, manutenção e operação de ferramentas e maquinários elétricos e mecânicos.</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Formação e Idiomas -->
+    <section>
+      <div class="grid-2">
+        <div>
+          <div class="section-title">Formação Acadêmica</div>
+          <div class="edu-item">
+            <div class="edu-degree">Eletroeletrônica</div>
+            <div class="edu-institution">SENAI A. Jacob Lafer – Santo André / SP</div>
+            <div class="edu-details">2 anos – Formação Integral</div>
+          </div>
+          <div class="edu-item">
+            <div class="edu-degree">Técnico em Eletrônica</div>
+            <div class="edu-institution">Colégio Singular – Santo André / SP</div>
+            <div class="edu-details">3 anos</div>
+          </div>
+          <div class="edu-item">
+            <div class="edu-degree">Bacharelado em Ciências Econômicas</div>
+            <div class="edu-institution">Universidade Federal do Rio Grande (FURG)</div>
+            <div class="edu-details">Em andamento</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title">Idiomas</div>
+          <div class="edu-item">
+            <div class="edu-degree">Inglês – Intermediário</div>
+            <div class="edu-details">Vivência internacional no Canadá e leitura técnica fluente de diagramas e manuais.</div>
+          </div>
+          <div class="edu-item">
+            <div class="edu-degree">Espanhol – Intermediário</div>
+            <div class="edu-details">Comunicação e leitura operacional.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Competências & Habilidades -->
+    <section>
+      <div class="section-title">Competências &amp; Habilidades Técnicas</div>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <div class="skill-cat-title">Elétrica Industrial</div>
+          <ul class="skill-list">
+            <li>Manutenção preventiva, preditiva e corretiva em baixa e média tensão</li>
+            <li>Montagem e manutenção de CCMs, painéis de força e comandos elétricos</li>
+            <li>Fechamento (6 e 12 pontas) e testes de motores trifásicos de indução</li>
+            <li>Parametrização de inversores de frequência e soft-starters</li>
+            <li>Ensaios de campo: megômetro, alicate amperímetro e termografia</li>
+            <li>Leitura de diagramas unifilares, multifilares e fluxogramas P&amp;ID</li>
+          </ul>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-title">Instrumentação &amp; Automação</div>
+          <ul class="skill-list">
+            <li>Calibração de transmissores (pressão, temperatura, nível, vazão e peso)</li>
+            <li>Malhas analógicas (4-20 mA) e digitais (Protocolo HART)</li>
+            <li>Válvulas de controle proporcionais, atuadores e posicionadores</li>
+            <li>Diagnóstico em CLPs (I/Os digitais/analógicas, status e lógica ladder)</li>
+            <li>Sistemas eletropneumáticos, blocos manifolds e preparação de ar (FRL)</li>
+            <li>Acompanhamento de processos via IHMs e sistemas supervisórios (SCADA)</li>
+          </ul>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-title">Eletrônica &amp; Metrologia</div>
+          <ul class="skill-list">
+            <li>Diagnóstico e reparo a nível de componente (SMD e PTH) em PCIs</li>
+            <li>Instrumentação de bancada: osciloscópio, multímetro e geradores</li>
+            <li>Rastreabilidade metrológica e padrões de qualidade (ISO 9001)</li>
+            <li>Fontes chaveadas, condicionadores de sinais e circuitos de comando</li>
+          </ul>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-title">Tecnologia, Automação &amp; IA</div>
+          <ul class="skill-list">
+            <li><strong>Ecossistemas:</strong> Microsoft 365 avançado e Google Workspace</li>
+            <li><strong>Automação Digital:</strong> Automação de rotinas e fluxos operacionais</li>
+            <li><strong>Inteligência Artificial:</strong> Criação de soluções com Claude Code, Codex, Antigravity e Cursor</li>
+            <li><strong>Gestão &amp; Dados:</strong> Análise de indicadores no Power BI e rotinas de Ordens de Serviço (OS)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

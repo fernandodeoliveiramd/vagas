@@ -192,7 +192,8 @@
           <!-- Dropdown Status -->
           <select id="filterStatus" onchange="applyFilters()" class="h-8 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer">
             <option value="todas">🎯 Todos os Status</option>
-            <option value="nova">📥 Novas</option>
+            <option value="nao_visualizadas">✨ Novas (Não lidas)</option>
+            <option value="visualizadas">👀 Já Visualizadas</option>
             <option value="interesse">⭐ Tenho Interesse</option>
             <option value="candidatado">🚀 Candidatado</option>
             <option value="entrevista">🗓️ Entrevista</option>
@@ -325,8 +326,8 @@
                 <span id="inspectorScore" class="font-bold text-brand-600 block">100% Match</span>
               </div>
               <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Publicação</span>
-                <span id="inspectorDate" class="font-bold text-slate-800 block truncate">Hoje</span>
+                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Data Vaga</span>
+                <span id="inspectorDate" class="font-bold text-slate-800 block truncate">Recente</span>
               </div>
             </div>
 
@@ -499,6 +500,7 @@
     let currentMainTab = 'vagas';
 
     const STORAGE_KEY = 'vagas_rs_user_data_v1';
+    const VIEWED_KEY = 'vagas_rs_viewed_jobs_v1';
 
     function getUserData() {
       try {
@@ -514,6 +516,48 @@
       } catch (e) {
         console.error("Erro localStorage", e);
       }
+    }
+
+    function getViewedMap() {
+      try {
+        return JSON.parse(localStorage.getItem(VIEWED_KEY)) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function markJobViewed(job) {
+      if (!job) return;
+      const viewedMap = getViewedMap();
+      const kId = String(job.id);
+      const kHash = job.dedup_hash || '';
+      const kUrl = job.url || '';
+
+      viewedMap[kId] = true;
+      if (kHash) viewedMap[kHash] = true;
+      if (kUrl) viewedMap[kUrl] = true;
+
+      try {
+        localStorage.setItem(VIEWED_KEY, JSON.stringify(viewedMap));
+      } catch (e) {}
+
+      job.viewed = true;
+    }
+
+    function isJobViewed(job) {
+      if (!job) return false;
+      const viewedMap = getViewedMap();
+      if (viewedMap[String(job.id)]) return true;
+      if (job.dedup_hash && viewedMap[job.dedup_hash]) return true;
+      if (job.url && viewedMap[job.url]) return true;
+      return false;
+    }
+
+    function getUserJobState(job, userData) {
+      if (!job || !userData) return {};
+      return userData[String(job.id)] || 
+             (job.dedup_hash && userData[job.dedup_hash]) || 
+             (job.url && userData[job.url]) || {};
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -577,11 +621,13 @@
         if (data && data.success) {
           const userData = getUserData();
           allLoadedJobs = data.jobs.map(job => {
-            const userJob = userData[job.id] || {};
+            const userJob = getUserJobState(job, userData);
+            const viewed = isJobViewed(job) || (userJob.viewed === true);
             return {
               ...job,
               status: userJob.status || job.status || 'nova',
-              notes: userJob.notes !== undefined ? userJob.notes : (job.notes || '')
+              notes: userJob.notes !== undefined ? userJob.notes : (job.notes || ''),
+              viewed: viewed
             };
           });
           applyFilters();
@@ -608,7 +654,14 @@
 
         if (workModel !== 'todos' && job.work_model !== workModel) return false;
 
-        if (status !== 'todas' && job.status !== status) return false;
+        // Filtro refinado de status
+        if (status === 'nao_visualizadas') {
+          if (job.status !== 'nova' || job.viewed) return false;
+        } else if (status === 'visualizadas') {
+          if (job.status === 'descartada' || !job.viewed) return false;
+        } else if (status !== 'todas' && job.status !== status) {
+          return false;
+        }
 
         if (search) {
           const full = `${job.title} ${job.company} ${job.description} ${job.role_matched} ${job.source}`.toLowerCase();
@@ -618,11 +671,17 @@
         return true;
       });
 
-      // Ordenar: Vagas ativas primeiro, descartadas no final
+      // Ordenar: Vagas ativas primeiro (não lidas no topo), descartadas no final
       currentFilteredJobs.sort((a, b) => {
         const aDisc = a.status === 'descartada' ? 1 : 0;
         const bDisc = b.status === 'descartada' ? 1 : 0;
         if (aDisc !== bDisc) return aDisc - bDisc;
+
+        // Se ambas ativas: não visualizadas vêm antes das visualizadas
+        const aViewed = a.viewed ? 1 : 0;
+        const bViewed = b.viewed ? 1 : 0;
+        if (aViewed !== bViewed) return aViewed - bViewed;
+
         return (b.id || 0) - (a.id || 0);
       });
 
@@ -631,7 +690,10 @@
     }
 
     function formatJobDate(job) {
-      if (job.published_at && job.published_at !== 'Recente' && job.published_at !== 'None' && job.published_at !== 'null') {
+      if (!job) return 'Recente';
+
+      // 1. Data explicitamente informada pelo portal (ex: "Há 2 dias", "Ontem", "Há 1 semana")
+      if (job.published_at && typeof job.published_at === 'string' && job.published_at !== 'None' && job.published_at !== 'null' && job.published_at !== 'Recente') {
         if (job.published_at.includes('-')) {
           const parts = job.published_at.split('T')[0].split('-');
           if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
@@ -639,19 +701,11 @@
         return job.published_at;
       }
       
+      // 2. Data de registro no sistema (formatada de forma estável, sem falso "publicado agora")
       if (job.created_at) {
         try {
           const d = new Date(job.created_at);
           if (!isNaN(d.getTime())) {
-            const today = new Date();
-            const diffMs = today.getTime() - d.getTime();
-            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-
-            if (diffHours < 1) return 'Hoje (Agora)';
-            if (diffHours < 24 && today.getDate() === d.getDate()) return 'Hoje';
-            if (diffDays === 1 || (diffHours < 48 && today.getDate() !== d.getDate())) return 'Ontem';
-            if (diffDays > 1 && diffDays < 7) return `Há ${diffDays} dias`;
             return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
           }
         } catch (e) {}
@@ -680,6 +734,7 @@
 
       if (!currentActiveJobId || !currentFilteredJobs.find(j => j.id === currentActiveJobId)) {
         currentActiveJobId = currentFilteredJobs[0].id;
+        markJobViewed(currentFilteredJobs[0]);
       }
 
       let feedHtml = '';
@@ -688,6 +743,7 @@
       currentFilteredJobs.forEach(job => {
         const isSelected = job.id === currentActiveJobId;
         const isDiscarded = job.status === 'descartada';
+        const isUnread = !job.viewed && job.status === 'nova';
         const initial = (job.company || 'V').charAt(0).toUpperCase();
         const dateStr = formatJobDate(job);
 
@@ -695,6 +751,8 @@
           ? "cursor-pointer bg-slate-100/60 p-3 rounded-xl border border-slate-200/80 shadow-2xs transition-all opacity-60 grayscale-[60%]"
           : isSelected
           ? "cursor-pointer bg-white p-3 rounded-xl shadow-xs border-2 border-brand-500 transition-all relative overflow-hidden"
+          : isUnread
+          ? "cursor-pointer bg-white hover:bg-brand-50/30 p-3 rounded-xl shadow-2xs border-2 border-indigo-200 hover:border-brand-400 transition-all"
           : "cursor-pointer bg-white hover:bg-slate-50/80 p-3 rounded-xl shadow-2xs border border-slate-200 hover:border-slate-300 transition-all";
 
         feedHtml += `
@@ -709,10 +767,7 @@
               </div>
               <div class="flex flex-col items-end shrink-0 font-mono text-[10px]">
                 <span class="font-bold ${isDiscarded ? 'text-slate-400' : 'text-emerald-700'}">${job.match_score}% match</span>
-                <span class="text-slate-500 flex items-center gap-0.5 mt-0.5" title="Data de publicação">
-                  <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
-                  ${dateStr}
-                </span>
+                <span class="${isUnread ? 'text-brand-600 font-bold' : 'text-slate-400'} mt-0.5">${formatStatusBadge(job)}</span>
               </div>
             </div>
 
@@ -724,7 +779,7 @@
               <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200/60">${escapeHtml(job.work_model || 'Presencial')}</span>
               <span class="px-2 py-0.5 rounded ${isDiscarded ? 'bg-slate-200 text-slate-600' : 'bg-brand-50 text-brand-700 border border-brand-100 font-semibold'}">${escapeHtml(job.source)}</span>
               <span class="px-2 py-0.5 rounded bg-slate-50 text-slate-500 border border-slate-200/60 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[11px] text-slate-400">schedule</span>
+                <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
                 ${dateStr}
               </span>
             </div>
@@ -750,6 +805,9 @@
                 <span class="px-2 py-0.5 rounded bg-slate-50 text-[10px] text-slate-500 border border-slate-200 flex items-center gap-1">
                   <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
                   ${dateStr}
+                </span>
+                <span class="px-2 py-0.5 rounded ${isUnread ? 'bg-brand-50 text-brand-700 font-bold' : 'bg-slate-100 text-slate-500'} text-[10px]">
+                  ${formatStatusBadge(job)}
                 </span>
               </div>
               <h3 class="font-bold text-sm text-slate-900">${escapeHtml(job.title)}</h3>
@@ -779,6 +837,10 @@
 
     function selectJob(jobId) {
       currentActiveJobId = jobId;
+      const job = allLoadedJobs.find(j => j.id === jobId);
+      if (job) {
+        markJobViewed(job);
+      }
       renderFeed();
     }
 
@@ -787,6 +849,7 @@
       if (!job) return;
 
       const isDiscarded = job.status === 'descartada';
+      const isUnread = !job.viewed && job.status === 'nova';
       const dateStr = formatJobDate(job);
 
       document.getElementById('inspectorTitle').innerText = job.title;
@@ -838,7 +901,10 @@
         </span>
         <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono text-xs font-medium border border-slate-200 flex items-center gap-1">
           <span class="material-symbols-outlined text-[13px] text-slate-400">calendar_today</span>
-          Publicada: ${dateStr}
+          ${dateStr}
+        </span>
+        <span class="px-2.5 py-0.5 rounded-md ${isUnread ? 'bg-indigo-100 text-indigo-800 font-bold' : 'bg-slate-100 text-slate-600'} font-mono text-xs border border-slate-200">
+          ${formatStatusBadge(job)}
         </span>
       `;
     }
@@ -846,7 +912,7 @@
     function setInspectorStatus(newStatus) {
       if (!currentActiveJobId) return;
       updateJobStatus(currentActiveJobId, newStatus);
-      showToast(`Status alterado: ${formatStatusBadge(newStatus)}`, "success");
+      showToast(`Status alterado: ${newStatus.toUpperCase()}`, "success");
     }
 
     function toggleInspectorDiscard() {
@@ -869,11 +935,20 @@
 
     function updateJobStatus(jobId, newStatus) {
       const job = allLoadedJobs.find(j => j.id === jobId);
-      if (job) job.status = newStatus;
+      if (job) {
+        job.status = newStatus;
+        markJobViewed(job);
+      }
 
       const userData = getUserData();
-      if (!userData[jobId]) userData[jobId] = {};
-      userData[jobId].status = newStatus;
+      const kId = String(jobId);
+      const kHash = job?.dedup_hash || '';
+      const kUrl = job?.url || '';
+
+      const stateObj = { status: newStatus, notes: job?.notes || '', viewed: true };
+      userData[kId] = stateObj;
+      if (kHash) userData[kHash] = stateObj;
+      if (kUrl) userData[kUrl] = stateObj;
       saveUserData(userData);
 
       fetch(`./api/jobs/${jobId}/status`, {
@@ -889,11 +964,20 @@
       if (!currentActiveJobId) return;
       const notes = document.getElementById('inspectorNotes').value;
       const job = allLoadedJobs.find(j => j.id === currentActiveJobId);
-      if (job) job.notes = notes;
+      if (job) {
+        job.notes = notes;
+        markJobViewed(job);
+      }
 
       const userData = getUserData();
-      if (!userData[currentActiveJobId]) userData[currentActiveJobId] = {};
-      userData[currentActiveJobId].notes = notes;
+      const kId = String(currentActiveJobId);
+      const kHash = job?.dedup_hash || '';
+      const kUrl = job?.url || '';
+
+      const stateObj = { status: job?.status || 'nova', notes: notes, viewed: true };
+      userData[kId] = stateObj;
+      if (kHash) userData[kHash] = stateObj;
+      if (kUrl) userData[kUrl] = stateObj;
       saveUserData(userData);
 
       fetch(`./api/jobs/${currentActiveJobId}/notes`, {
@@ -1018,7 +1102,12 @@
         let res = await fetch('./api/jobs/scrape', { method: 'POST' }).catch(() => null);
         if (res && res.ok) {
           const data = await res.json();
-          showToast(`Varredura concluída! ${data.result.new_jobs_inserted} novas vagas.`, "success");
+          const newCount = data.result?.new_jobs_inserted || 0;
+          if (newCount > 0) {
+            showToast(`Varredura concluída! ${newCount} novas vagas indexadas.`, "success");
+          } else {
+            showToast("Varredura concluída! Nenhuma nova vaga no momento.", "info");
+          }
         } else {
           showToast("Dados atualizados!", "info");
         }
@@ -1066,9 +1155,9 @@
         showToast("Nenhuma vaga para exportar.", "error");
         return;
       }
-      let csv = "ID,Título,Empresa,Cidade,Modalidade,Categoria,Salário,Fonte,Status,Publicação,Link\n";
+      let csv = "ID,Título,Empresa,Cidade,Modalidade,Categoria,Salário,Fonte,Status,Visualizada,Publicação,Link\n";
       currentFilteredJobs.forEach(j => {
-        csv += `"${j.id}","${(j.title||'').replace(/"/g, '""')}","${(j.company||'').replace(/"/g, '""')}","${j.city||''}","${j.work_model||''}","${j.category||''}","${(j.salary||'').replace(/"/g, '""')}","${j.source||''}","${j.status||''}","${formatJobDate(j)}","${j.url||''}"\n`;
+        csv += `"${j.id}","${(j.title||'').replace(/"/g, '""')}","${(j.company||'').replace(/"/g, '""')}","${j.city||''}","${j.work_model||''}","${j.category||''}","${(j.salary||'').replace(/"/g, '""')}","${j.source||''}","${j.status||''}","${j.viewed?'Sim':'Não'}","${formatJobDate(j)}","${j.url||''}"\n`;
       });
       const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");
@@ -1078,12 +1167,18 @@
       showToast("CSV exportado com sucesso!", "success");
     }
 
-    function formatStatusBadge(status) {
+    function formatStatusBadge(job) {
+      if (!job) return '📥 Nova';
+      const status = job.status || 'nova';
       if (status === 'interesse') return '⭐ Interesse';
       if (status === 'candidatado') return '🚀 Candidatado';
       if (status === 'entrevista') return '🗓️ Entrevista';
       if (status === 'descartada') return '✕ Descartada';
-      return '📥 Nova';
+      
+      if (job.viewed) {
+        return 'Visualizada';
+      }
+      return '✨ Nova';
     }
 
     function showToast(msg, type = "info") {

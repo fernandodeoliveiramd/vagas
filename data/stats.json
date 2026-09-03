@@ -1,25 +1,27 @@
 {
   "success": true,
   "stats": {
-    "total_jobs": 37,
-    "today_jobs": 37,
+    "total_jobs": 44,
+    "today_jobs": 34,
     "by_status": {
-      "nova": 37
+      "interesse": 2,
+      "nova": 42
     },
     "by_category": {
       "gestao_projetos": 2,
-      "industrial_eletrica": 34,
-      "tecnologia_jr": 1
+      "industrial_eletrica": 35,
+      "tecnologia_jr": 7
     },
     "by_city": {
       "Pelotas": 14,
-      "Rio Grande": 23
+      "Remoto": 5,
+      "Rio Grande": 25
     },
     "by_source": {
-      "LinkedIn": 6,
+      "LinkedIn": 13,
+      "Polo Portuário RG": 1,
       "Sicredi Carreiras": 1,
-      "Trabalha Brasil": 29,
-      "Wilson Sons Carreiras": 1
+      "Trabalha Brasil": 29
     }
   }
 }
