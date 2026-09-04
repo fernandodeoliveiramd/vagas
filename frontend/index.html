@@ -11,8 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN & Supabase CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -474,60 +475,42 @@
         </div>
       </div>
 
-      <!-- Cloud Sync Panel (GitHub Gist) -->
+      <!-- Cloud Sync Panel (Supabase) -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
         <div class="flex items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-[24px]">cloud_sync</span>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[24px]">cloud_done</span>
             </div>
             <div>
-              <h3 class="font-bold text-sm text-slate-900">Sincronização em Nuvem (Multi-Dispositivos)</h3>
-              <p class="text-xs text-slate-500 font-mono">Usa um Gist privado no seu GitHub para sincronizar celular e PC</p>
+              <h3 class="font-bold text-sm text-slate-900">Sincronização em Nuvem (Supabase)</h3>
+              <p class="text-xs text-slate-500 font-mono">Conectado ao seu banco de dados PostgreSQL na nuvem</p>
             </div>
           </div>
-          <span id="syncStatusPill" class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-100 text-slate-600">
-            Desconectado
+          <span id="syncStatusPill" class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            🟢 Conectado
           </span>
         </div>
 
-        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs text-slate-600 leading-relaxed">
-          <p class="font-medium text-slate-800 mb-1">Como funciona a sincronização gratuita:</p>
-          <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px]">
-            <li>Gere um Token do GitHub com permissão <strong>gist</strong> (<a href="https://github.com/settings/tokens/new?scopes=gist&description=Vagas+RS+Sync" target="_blank" class="text-brand-600 underline font-semibold">clique aqui para gerar com 1 clique</a>).</li>
-            <li>Cole o Token abaixo e clique em <strong>Conectar Nuvem</strong>. O sistema criará automaticamente um arquivo privado na sua conta.</li>
-            <li>No outro dispositivo (celular ou tablet), basta colar o mesmo Token (ou o ID do Gist). Todas as candidaturas, anotações e vagas vistas serão sincronizadas em tempo real!</li>
-          </ol>
+        <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-3.5 text-xs text-slate-700 leading-relaxed space-y-1.5">
+          <div class="flex items-center gap-1.5 font-bold text-emerald-800">
+            <span class="material-symbols-outlined text-[18px]">verified</span>
+            <span>Sincronização 100% Automática em Tempo Real Ativa!</span>
+          </div>
+          <p class="text-slate-600 text-[11px]">
+            Você <strong>não precisa digitar chave alguma no celular</strong>. Qualquer alteração de status (*Interesse, Candidatado, Descartada*), anotações ou visualizações é sincronizada instantaneamente entre todos os computadores e celulares conectados.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div>
-            <label class="block font-medium text-slate-700 mb-1">GitHub Personal Access Token (PAT):</label>
-            <input type="password" id="cfgGithubToken" placeholder="Ex: ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500" />
-          </div>
-
-          <div>
-            <label class="block font-medium text-slate-700 mb-1">Gist ID (gerado automaticamente ou cole do PC):</label>
-            <input type="text" id="cfgGistId" placeholder="Criado automaticamente ao conectar..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500" />
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100">
           <div class="flex items-center gap-2">
-            <button onclick="saveAndConnectCloudSync()" id="btnConnectSync" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition active:scale-95">
-              <span class="material-symbols-outlined text-[16px]">sync</span>
-              <span>Conectar Nuvem</span>
-            </button>
-            <button onclick="triggerManualSync()" id="btnSyncNow" class="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition active:scale-95">
-              <span class="material-symbols-outlined text-[16px] text-brand-600">cloud_download</span>
+            <button onclick="loadSupabaseData(false)" id="btnSyncNow" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition active:scale-95">
+              <span class="material-symbols-outlined text-[16px]">cloud_sync</span>
               <span>Sincronizar Agora</span>
-            </button>
-            <button onclick="disconnectCloudSync()" id="btnDisconnectSync" class="px-3 py-2 text-red-600 hover:bg-red-50 text-xs font-semibold rounded-xl transition hidden">
-              Desconectar
             </button>
           </div>
           <span id="syncLastTimeLabel" class="text-[11px] font-mono text-slate-400">
-            Nenhuma sincronização recente
+            Supabase conectado
           </span>
         </div>
       </div>
@@ -678,7 +661,7 @@
       } catch (e) {}
 
       job.viewed = true;
-      scheduleCloudPush();
+      saveJobToSupabase(job, job.status, job.notes, true);
     }
 
     function isJobViewed(job) {
@@ -700,357 +683,219 @@
     }
 
     // =========================================================
-    // CLOUD SYNC & BACKUP LOGIC (GITHUB GIST & MULTI-DEVICE)
+    // SUPABASE CLOUD DATABASE & REALTIME SYNC (MULTI-DEVICE)
     // =========================================================
-    const SYNC_CONFIG_KEY = 'vagas_rs_sync_config_v1';
-    const GIST_FILENAME = 'vagas_user_state.json';
-    let cloudPushTimer = null;
-    let isSyncInProgress = false;
+    const SUPABASE_URL = "https://qnqeemnlabzvgdzfejjj.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFucWVlbW5sYWJ6dmdkemZlampqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzIwMjcsImV4cCI6MjEwNDEwODAyN30.3OKJPWAZKD4bJ1XLfRsp-ulYJRPGQ_QV_idLo3dnYr4";
+    
+    let supabaseClient = null;
+    let isSupabaseConnected = false;
+    let supabaseRealtimeChannel = null;
 
-    function getSyncConfig() {
-      try {
-        return JSON.parse(localStorage.getItem(SYNC_CONFIG_KEY)) || {};
-      } catch (e) {
-        return {};
+    function initSupabaseClient() {
+      if (!supabaseClient && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {
+          console.error("Erro ao inicializar Supabase:", e);
+        }
       }
-    }
-
-    function saveSyncConfig(cfg) {
-      try {
-        localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(cfg));
-      } catch (e) {}
-      updateSyncUI();
+      return supabaseClient;
     }
 
     function updateSyncUI(state = null) {
-      const cfg = getSyncConfig();
-      const isConnected = !!(cfg.token && cfg.gistId);
-
       const headerIcon = document.getElementById('cloudSyncIcon');
       const headerText = document.getElementById('cloudSyncText');
       const headerBtn = document.getElementById('btnCloudSyncHeader');
       const badgeHeader = document.getElementById('syncBadgeHeader');
       const statusPill = document.getElementById('syncStatusPill');
       const lastTimeLabel = document.getElementById('syncLastTimeLabel');
-      const disconnectBtn = document.getElementById('btnDisconnectSync');
-      const tokenInput = document.getElementById('cfgGithubToken');
-      const gistInput = document.getElementById('cfgGistId');
-
-      if (tokenInput && cfg.token && !tokenInput.value) tokenInput.value = cfg.token;
-      if (gistInput && cfg.gistId && !gistInput.value) gistInput.value = cfg.gistId;
 
       if (state === 'syncing') {
         if (headerIcon) {
           headerIcon.innerText = 'sync';
-          headerIcon.className = 'material-symbols-outlined text-[16px] text-indigo-600 animate-spin';
+          headerIcon.className = 'material-symbols-outlined text-[16px] text-emerald-600 animate-spin';
         }
         if (headerText) headerText.innerText = 'Sincronizando...';
         if (statusPill) {
           statusPill.innerText = 'Sincronizando...';
-          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200';
+          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
         }
         return;
       }
 
-      if (isConnected) {
+      if (isSupabaseConnected) {
         if (headerIcon) {
           headerIcon.innerText = 'cloud_done';
           headerIcon.className = 'material-symbols-outlined text-[16px] text-emerald-600';
         }
-        if (headerText) headerText.innerText = 'Nuvem Ativa';
-        if (headerBtn) headerBtn.title = `Sincronizado via GitHub Gist. Clique para atualizar.`;
+        if (headerText) headerText.innerText = 'Supabase Ativo';
+        if (headerBtn) headerBtn.title = 'Conectado ao Supabase em tempo real. Clique para sincronizar agora.';
 
         if (badgeHeader) {
           badgeHeader.className = 'self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
-          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Nuvem Conectada</span>';
+          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Supabase em Tempo Real</span>';
         }
         if (statusPill) {
-          statusPill.innerText = 'Conectado';
+          statusPill.innerText = '🟢 Conectado';
           statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
         }
-        if (disconnectBtn) disconnectBtn.classList.remove('hidden');
-
         if (lastTimeLabel) {
-          if (cfg.lastSync) {
-            const d = new Date(cfg.lastSync);
-            lastTimeLabel.innerText = `Última sincronização: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
-          } else {
-            lastTimeLabel.innerText = 'Conectado. Aguardando sincronização.';
-          }
+          const now = new Date();
+          lastTimeLabel.innerText = `Sincronizado: ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
         }
       } else {
         if (headerIcon) {
-          headerIcon.innerText = 'cloud_off';
+          headerIcon.innerText = 'cloud_sync';
           headerIcon.className = 'material-symbols-outlined text-[16px] text-slate-400';
         }
-        if (headerText) headerText.innerText = 'Local';
-        if (headerBtn) headerBtn.title = 'Modo Local. Clique para conectar a sincronização em nuvem.';
-
-        if (badgeHeader) {
-          badgeHeader.className = 'self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 text-slate-600 border border-slate-200';
-          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-400"></span><span>Modo Local (Offline)</span>';
-        }
+        if (headerText) headerText.innerText = 'Conectando...';
         if (statusPill) {
-          statusPill.innerText = 'Desconectado';
+          statusPill.innerText = 'Conectando...';
           statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-100 text-slate-600';
         }
-        if (disconnectBtn) disconnectBtn.classList.add('hidden');
-        if (lastTimeLabel) lastTimeLabel.innerText = 'Nenhuma sincronização recente';
       }
     }
 
     function triggerHeaderCloudSync() {
-      const cfg = getSyncConfig();
-      if (cfg.token && cfg.gistId) {
-        syncWithCloud(true);
-      } else {
-        switchMainTab('telegram');
-        const tokenInput = document.getElementById('cfgGithubToken');
-        if (tokenInput) tokenInput.focus();
-        showToast("Configure seu Token do GitHub para ativar a nuvem", "info");
-      }
+      loadSupabaseData(false);
     }
 
-    async function saveAndConnectCloudSync() {
-      const token = (document.getElementById('cfgGithubToken')?.value || '').trim();
-      let gistId = (document.getElementById('cfgGistId')?.value || '').trim();
+    async function loadSupabaseData(silent = false) {
+      const sb = initSupabaseClient();
+      if (!sb) return;
 
-      if (!token) {
-        showToast("Informe o Personal Access Token (PAT) do GitHub.", "error");
-        return;
-      }
-
-      updateSyncUI('syncing');
-      showToast("Conectando ao GitHub Gist...", "info");
+      if (!silent) updateSyncUI('syncing');
 
       try {
-        if (gistId) {
-          const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-            headers: {
-              'Accept': 'application/vnd.github.v3+json',
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          if (!res.ok) {
-            throw new Error(`Gist não encontrado ou sem permissão (${res.status})`);
-          }
-        } else {
-          const listRes = await fetch('https://api.github.com/gists', {
-            headers: {
-              'Accept': 'application/vnd.github.v3+json',
-              'Authorization': `Bearer ${token}`
-            }
-          });
+        const { data, error } = await sb
+          .from('user_job_interactions')
+          .select('*');
 
-          if (!listRes.ok) {
-            throw new Error(`Token inválido ou sem escopo 'gist' (${listRes.status})`);
-          }
+        if (error) throw error;
 
-          const gists = await listRes.json();
-          const existing = gists.find(g => g.files && g.files[GIST_FILENAME]);
+        isSupabaseConnected = true;
 
-          if (existing) {
-            gistId = existing.id;
-          } else {
-            const initialPayload = {
-              version: 1,
-              created_at: new Date().toISOString(),
-              userData: getUserData(),
-              viewedMap: getViewedMap()
+        if (data && data.length > 0) {
+          const localUserData = getUserData();
+          const localViewed = getViewedMap();
+
+          data.forEach(row => {
+            const item = {
+              status: row.status || 'nova',
+              notes: row.notes || '',
+              viewed: !!row.viewed,
+              updated_at: row.updated_at ? new Date(row.updated_at).getTime() : Date.now()
             };
 
-            const createRes = await fetch('https://api.github.com/gists', {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/vnd.github.v3+json',
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                description: "Vagas RS - Sincronização em Nuvem Multi-Dispositivos",
-                public: false,
-                files: {
-                  [GIST_FILENAME]: {
-                    content: JSON.stringify(initialPayload, null, 2)
-                  }
-                }
-              })
+            if (row.job_key) {
+              localUserData[row.job_key] = item;
+              if (row.viewed) localViewed[row.job_key] = true;
+            }
+            if (row.job_id) {
+              localUserData[row.job_id] = item;
+              if (row.viewed) localViewed[row.job_id] = true;
+            }
+          });
+
+          saveUserData(localUserData);
+          try {
+            localStorage.setItem(VIEWED_KEY, JSON.stringify(localViewed));
+          } catch (e) {}
+
+          if (allLoadedJobs && allLoadedJobs.length > 0) {
+            allLoadedJobs.forEach(job => {
+              const st = getUserJobState(job, localUserData);
+              if (st && st.status) job.status = st.status;
+              if (st && st.notes !== undefined) job.notes = st.notes;
+              if (isJobViewed(job)) job.viewed = true;
+            });
+            applyFilters();
+            if (currentMainTab === 'candidaturas') renderPipeline();
+            renderInspector();
+          }
+        }
+
+        updateSyncUI();
+        setupSupabaseRealtime();
+        if (!silent) showToast("Dados sincronizados com o Supabase!", "success");
+      } catch (err) {
+        console.warn("Falha ao carregar do Supabase:", err);
+        updateSyncUI();
+        if (!silent) showToast(`Erro ao conectar ao Supabase: ${err.message}`, "error");
+      }
+    }
+
+    function setupSupabaseRealtime() {
+      const sb = initSupabaseClient();
+      if (!sb || supabaseRealtimeChannel) return;
+
+      supabaseRealtimeChannel = sb
+        .channel('schema-db-changes')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'user_job_interactions' },
+          (payload) => {
+            const newRow = payload.new;
+            if (!newRow || !newRow.job_key) return;
+
+            const localUserData = getUserData();
+            const localViewed = getViewedMap();
+
+            const item = {
+              status: newRow.status || 'nova',
+              notes: newRow.notes || '',
+              viewed: !!newRow.viewed,
+              updated_at: newRow.updated_at ? new Date(newRow.updated_at).getTime() : Date.now()
+            };
+
+            localUserData[newRow.job_key] = item;
+            if (newRow.job_id) localUserData[newRow.job_id] = item;
+            if (newRow.viewed) {
+              localViewed[newRow.job_key] = true;
+              if (newRow.job_id) localViewed[newRow.job_id] = true;
+            }
+
+            saveUserData(localUserData);
+            try {
+              localStorage.setItem(VIEWED_KEY, JSON.stringify(localViewed));
+            } catch (e) {}
+
+            allLoadedJobs.forEach(job => {
+              const key = job.external_id || job.dedup_hash || String(job.id);
+              if (key === newRow.job_key || String(job.id) === String(newRow.job_id)) {
+                job.status = newRow.status;
+                job.notes = newRow.notes;
+                if (newRow.viewed) job.viewed = true;
+              }
             });
 
-            if (!createRes.ok) {
-              throw new Error(`Falha ao criar Gist (${createRes.status})`);
-            }
+            applyFilters();
+            if (currentMainTab === 'candidaturas') renderPipeline();
+            renderInspector();
 
-            const createdGist = await createRes.json();
-            gistId = createdGist.id;
+            showToast("Alteração sincronizada em tempo real!", "info");
           }
-        }
-
-        const gistInput = document.getElementById('cfgGistId');
-        if (gistInput) gistInput.value = gistId;
-
-        const cfg = { token, gistId, lastSync: new Date().toISOString() };
-        saveSyncConfig(cfg);
-
-        await syncWithCloud(true);
-        showToast("Nuvem conectada e sincronizada com sucesso!", "success");
-      } catch (err) {
-        console.error("Erro na conexão cloud:", err);
-        updateSyncUI();
-        showToast(`Erro ao conectar: ${err.message}`, "error");
-      }
+        )
+        .subscribe();
     }
 
-    async function syncWithCloud(isManual = false) {
-      const cfg = getSyncConfig();
-      if (!cfg.token || !cfg.gistId || isSyncInProgress) return;
+    async function saveJobToSupabase(job, status, notes, viewed = true) {
+      const sb = initSupabaseClient();
+      if (!sb || !job) return;
 
-      isSyncInProgress = true;
-      updateSyncUI('syncing');
-
+      const key = job.external_id || job.dedup_hash || String(job.id);
       try {
-        const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
-          headers: {
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': `Bearer ${cfg.token}`
-          }
+        await sb.from('user_job_interactions').upsert({
+          job_key: key,
+          job_id: String(job.id),
+          status: status || job.status || 'nova',
+          notes: notes !== undefined ? notes : (job.notes || ''),
+          viewed: !!viewed,
+          updated_at: new Date().toISOString()
         });
-
-        if (!res.ok) {
-          throw new Error(`Gist indisponível (${res.status})`);
-        }
-
-        const gistData = await res.json();
-        const fileObj = gistData.files && gistData.files[GIST_FILENAME];
-        let remotePayload = {};
-        if (fileObj && fileObj.content) {
-          try {
-            remotePayload = JSON.parse(fileObj.content);
-          } catch (e) {}
-        }
-
-        const localUserData = getUserData();
-        const remoteUserData = remotePayload.userData || {};
-        const mergedUserData = { ...localUserData };
-        let hadChangesToPush = false;
-
-        for (const [k, rItem] of Object.entries(remoteUserData)) {
-          const lItem = mergedUserData[k];
-          if (!lItem) {
-            mergedUserData[k] = rItem;
-          } else {
-            const rTime = rItem.updated_at || 0;
-            const lTime = lItem.updated_at || 0;
-            if (rTime >= lTime) {
-              mergedUserData[k] = rItem;
-            } else {
-              hadChangesToPush = true;
-            }
-          }
-        }
-
-        for (const k of Object.keys(localUserData)) {
-          if (!remoteUserData[k]) {
-            hadChangesToPush = true;
-          }
-        }
-
-        const localViewed = getViewedMap();
-        const remoteViewed = remotePayload.viewedMap || {};
-        const mergedViewed = { ...localViewed, ...remoteViewed };
-
-        saveUserData(mergedUserData);
-        try {
-          localStorage.setItem(VIEWED_KEY, JSON.stringify(mergedViewed));
-        } catch (e) {}
-
-        if (allLoadedJobs && allLoadedJobs.length > 0) {
-          allLoadedJobs.forEach(job => {
-            const st = getUserJobState(job, mergedUserData);
-            if (st && st.status) job.status = st.status;
-            if (st && st.notes !== undefined) job.notes = st.notes;
-            if (isJobViewed(job)) job.viewed = true;
-          });
-          applyFilters();
-          if (currentMainTab === 'candidaturas') renderPipeline();
-          renderInspector();
-        }
-
-        if (hadChangesToPush) {
-          await pushPayloadToGist(cfg, mergedUserData, mergedViewed);
-        }
-
-        cfg.lastSync = new Date().toISOString();
-        saveSyncConfig(cfg);
-        updateSyncUI();
-
-        if (isManual) {
-          showToast("Dados sincronizados com a nuvem!", "success");
-        }
       } catch (err) {
-        console.error("Erro na sincronização:", err);
-        updateSyncUI();
-        if (isManual) {
-          showToast(`Falha na sincronização: ${err.message}`, "error");
-        }
-      } finally {
-        isSyncInProgress = false;
-      }
-    }
-
-    async function pushPayloadToGist(cfg, userData, viewedMap) {
-      const payload = {
-        version: 1,
-        lastSync: new Date().toISOString(),
-        userData: userData || getUserData(),
-        viewedMap: viewedMap || getViewedMap()
-      };
-
-      await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/vnd.github.v3+json',
-          'Authorization': `Bearer ${cfg.token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          files: {
-            [GIST_FILENAME]: {
-              content: JSON.stringify(payload, null, 2)
-            }
-          }
-        })
-      });
-    }
-
-    function scheduleCloudPush() {
-      const cfg = getSyncConfig();
-      if (!cfg.token || !cfg.gistId) return;
-
-      updateSyncUI('syncing');
-      clearTimeout(cloudPushTimer);
-      cloudPushTimer = setTimeout(async () => {
-        try {
-          await pushPayloadToGist(cfg, getUserData(), getViewedMap());
-          cfg.lastSync = new Date().toISOString();
-          saveSyncConfig(cfg);
-          updateSyncUI();
-        } catch (err) {
-          console.warn("Falha no push para Gist:", err);
-          updateSyncUI();
-        }
-      }, 1000);
-    }
-
-    function disconnectCloudSync() {
-      if (confirm("Deseja desconectar a sincronização em nuvem deste aparelho? Seus dados locais serão mantidos.")) {
-        localStorage.removeItem(SYNC_CONFIG_KEY);
-        const tokenInput = document.getElementById('cfgGithubToken');
-        const gistInput = document.getElementById('cfgGistId');
-        if (tokenInput) tokenInput.value = '';
-        if (gistInput) gistInput.value = '';
-        updateSyncUI();
-        showToast("Nuvem desconectada. Operando no modo local.", "info");
+        console.warn("Erro ao salvar no Supabase:", err);
       }
     }
 
@@ -1109,8 +954,15 @@
           if (currentMainTab === 'candidaturas') renderPipeline();
           renderInspector();
 
-          scheduleCloudPush();
-          showToast("Backup importado e aplicado com sucesso!", "success");
+          // Envia todos os dados importados para o Supabase
+          allLoadedJobs.forEach(job => {
+            const st = getUserJobState(job, mergedUserData);
+            if (st && (st.status || st.notes || st.viewed)) {
+              saveJobToSupabase(job, st.status, st.notes, st.viewed);
+            }
+          });
+
+          showToast("Backup importado e sincronizado no Supabase!", "success");
         } catch (err) {
           showToast(`Erro ao importar backup: ${err.message}`, "error");
         }
@@ -1120,6 +972,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      initSupabaseClient();
       updateSyncUI();
       loadStats();
       loadJobs();
@@ -1209,11 +1062,8 @@
           });
           applyFilters();
 
-          // Sincronizar dados em nuvem se configurado
-          const cfg = getSyncConfig();
-          if (cfg.token && cfg.gistId) {
-            syncWithCloud(false);
-          }
+          // Sincronizar interações em tempo real com o Supabase
+          loadSupabaseData(true);
         }
       } catch (err) {
         showToast("Erro ao carregar lista de vagas", "error");
@@ -1558,7 +1408,7 @@
       if (kHash) userData[kHash] = stateObj;
       if (kUrl) userData[kUrl] = stateObj;
       saveUserData(userData);
-      scheduleCloudPush();
+      if (job) saveJobToSupabase(job, newStatus, job.notes, true);
 
       fetch(`./api/jobs/${jobId}/status`, {
         method: 'PATCH',
@@ -1590,7 +1440,7 @@
       if (kHash) userData[kHash] = stateObj;
       if (kUrl) userData[kUrl] = stateObj;
       saveUserData(userData);
-      scheduleCloudPush();
+      if (job) saveJobToSupabase(job, job.status, notes, true);
 
       fetch(`./api/jobs/${currentActiveJobId}/notes`, {
         method: 'PATCH',
