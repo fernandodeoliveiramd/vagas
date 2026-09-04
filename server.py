@@ -21,13 +21,26 @@ sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, "backend"))
 
 from backend.app.database.db import (
-    init_db, get_jobs, get_job_by_id, update_job, delete_job, get_stats
+    init_db, get_jobs, get_job_by_id, update_job, delete_job, get_stats, sync_jobs_from_json
 )
 from backend.app.scrapers.manager import scraper_manager
 from backend.app.core.config import config
 from backend.app.services.telegram import telegram_notifier
 
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+def sync_static_files():
+    try:
+        jobs_all = get_jobs(limit=500)
+        stats_all = get_stats()
+        data_dir = os.path.join(BASE_DIR, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        with open(os.path.join(data_dir, "jobs.json"), "w", encoding="utf-8") as f:
+            json.dump({"success": True, "count": len(jobs_all), "jobs": jobs_all}, f, ensure_ascii=False, indent=2)
+        with open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8") as f:
+            json.dump({"success": True, "stats": stats_all}, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"[Warning] Falha ao sincronizar arquivos estáticos: {e}")
 
 class JobAggregatorHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -123,21 +136,12 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
 
         # API: Executar varredura
         if path == "/api/jobs/scrape":
+            sync_jobs_from_json()
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             try:
                 result = loop.run_until_complete(scraper_manager.run_all())
-                
-                # Sincronizar data/jobs.json e data/stats.json
-                jobs_all = get_jobs(limit=500)
-                stats_all = get_stats()
-                data_dir = os.path.join(BASE_DIR, "data")
-                os.makedirs(data_dir, exist_ok=True)
-                with open(os.path.join(data_dir, "jobs.json"), "w", encoding="utf-8") as f:
-                    json.dump({"success": True, "count": len(jobs_all), "jobs": jobs_all}, f, ensure_ascii=False, indent=2)
-                with open(os.path.join(data_dir, "stats.json"), "w", encoding="utf-8") as f:
-                    json.dump({"success": True, "stats": stats_all}, f, ensure_ascii=False, indent=2)
-
+                sync_static_files()
                 return self._send_json({"success": True, "result": result})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)}, 500)
@@ -187,6 +191,7 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
                 new_status = data.get("status")
                 if new_status:
                     update_job(job_id, {"status": new_status})
+                    sync_static_files()
                     return self._send_json({"success": True, "status": new_status})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)}, 400)
@@ -196,6 +201,7 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
                 job_id = int(path.split("/api/jobs/")[1].split("/notes")[0])
                 notes = data.get("notes", "")
                 update_job(job_id, {"notes": notes})
+                sync_static_files()
                 return self._send_json({"success": True, "notes": notes})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)}, 400)
@@ -222,6 +228,7 @@ def run_server(port=8000):
     print("=" * 60)
     print("1. Inicializando banco de dados SQLite...")
     init_db()
+    sync_jobs_from_json()
 
     server_address = ("", port)
     httpd = HTTPServer(server_address, JobAggregatorHandler)

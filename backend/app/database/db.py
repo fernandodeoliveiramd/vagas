@@ -1,9 +1,16 @@
 import sqlite3
 import os
+import json
+import logging
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "jobs.db")
+logger = logging.getLogger(__name__)
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+DATA_DIR = os.path.join(ROOT_DIR, "data")
+DB_PATH = os.path.join(DATA_DIR, "jobs.db")
+DEFAULT_JSON_PATH = os.path.join(DATA_DIR, "jobs.json")
 
 def get_db_connection() -> sqlite3.Connection:
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
@@ -61,30 +68,171 @@ def init_db():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_jobs_status ON jobs(status);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_jobs_created_at ON jobs(created_at);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_jobs_dedup_hash ON jobs(dedup_hash);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_jobs_external_id ON jobs(external_id);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_jobs_url ON jobs(url);")
     
     conn.commit()
     conn.close()
 
+def normalize_url(url: str) -> str:
+    if not url:
+        return ""
+    u = url.strip().split('#')[0].split('?')[0].rstrip('/')
+    if u.startswith("http://"):
+        u = "https://" + u[7:]
+    return u
+
 def compute_dedup_hash(title: str, company: str, location: str, url: str) -> str:
     import hashlib
-    norm_title = "".join(e for e in title.lower() if e.isalnum())
-    norm_company = "".join(e for e in company.lower() if e.isalnum())
-    norm_location = "".join(e for e in location.lower() if e.isalnum())
+    norm_title = "".join(e for e in (title or "").lower() if e.isalnum())
+    norm_company = "".join(e for e in (company or "").lower() if e.isalnum())
+    norm_location = "".join(e for e in (location or "").lower() if e.isalnum())
+    norm_url = normalize_url(url)
     raw = f"{norm_title}|{norm_company}|{norm_location}"
-    if not norm_company or norm_company == "empresaconfidencial":
-        raw += f"|{url}"
+    if not norm_company or norm_company in ("empresaconfidencial", "confidencial"):
+        raw += f"|{norm_url}"
     return hashlib.sha256(raw.encode('utf-8')).hexdigest()
+
+def find_existing_job(cursor: sqlite3.Cursor, external_id: Optional[str], url: str, dedup_hash: str) -> Optional[sqlite3.Row]:
+    """
+    Localiza uma vaga já listada usando múltiplos critérios:
+    1. external_id (ex: tb_9090994 no Trabalha Brasil)
+    2. URL limpa normalizada
+    3. Hash de conteúdo (título + empresa + localização)
+    """
+    if external_id:
+        cursor.execute("SELECT * FROM jobs WHERE external_id = ?", (external_id,))
+        row = cursor.fetchone()
+        if row:
+            return row
+
+    norm_u = normalize_url(url)
+    if norm_u:
+        cursor.execute("SELECT * FROM jobs WHERE url = ? OR url = ? OR url LIKE ?", (url, norm_u, f"{norm_u}%"))
+        row = cursor.fetchone()
+        if row:
+            return row
+
+    if dedup_hash:
+        cursor.execute("SELECT * FROM jobs WHERE dedup_hash = ?", (dedup_hash,))
+        row = cursor.fetchone()
+        if row:
+            return row
+
+    return None
+
+def sync_jobs_from_json(json_path: Optional[str] = None) -> int:
+    """
+    Sincroniza o banco SQLite com as vagas já listadas em data/jobs.json.
+    Garante que vagas já existentes mantenham seus IDs originais, datas de criação originais,
+    status e notas, evitando que apareçam como novas repetidamente após execuções do GitHub Actions.
+    Retorna o número de vagas restauradas/sincronizadas.
+    """
+    target_path = json_path or DEFAULT_JSON_PATH
+    if not os.path.exists(target_path):
+        alt_path = os.path.join(ROOT_DIR, "backend", "data", "jobs.json")
+        if os.path.exists(alt_path):
+            target_path = alt_path
+        else:
+            return 0
+
+    try:
+        with open(target_path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except Exception as e:
+        logger.error(f"[DB Sync] Erro ao ler {target_path}: {e}")
+        return 0
+
+    jobs = payload.get("jobs", []) if isinstance(payload, dict) else []
+    if not jobs:
+        return 0
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    restored = 0
+
+    for j in jobs:
+        ext_id = j.get("external_id")
+        url = j.get("url", "")
+        dedup_hash = j.get("dedup_hash") or compute_dedup_hash(
+            j.get("title", ""),
+            j.get("company", ""),
+            j.get("location", ""),
+            url
+        )
+
+        existing = find_existing_job(cursor, ext_id, url, dedup_hash)
+        if existing:
+            # Preserva a data de criação mais antiga
+            orig_created = existing["created_at"]
+            json_created = j.get("created_at")
+            if json_created and json_created < orig_created:
+                cursor.execute("UPDATE jobs SET created_at = ? WHERE id = ?", (json_created, existing["id"]))
+            continue
+
+        now = datetime.now().isoformat()
+        try:
+            cursor.execute("""
+            INSERT INTO jobs (
+                id, external_id, source, title, company, location, city, state,
+                work_model, category, role_matched, description, salary, url,
+                match_score, status, notes, is_favorite, published_at,
+                created_at, updated_at, dedup_hash
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            )
+            """, (
+                j.get("id"),
+                ext_id,
+                j.get("source", "Portal"),
+                j.get("title", "Vaga"),
+                j.get("company", "Empresa não informada"),
+                j.get("location", ""),
+                j.get("city"),
+                j.get("state", "RS"),
+                j.get("work_model", "Não Informado"),
+                j.get("category", "outro"),
+                j.get("role_matched"),
+                j.get("description", ""),
+                j.get("salary", "A combinar / Não informado"),
+                url,
+                j.get("match_score", 50),
+                j.get("status", "nova"),
+                j.get("notes", ""),
+                1 if j.get("is_favorite") else 0,
+                j.get("published_at") or "Recente",
+                j.get("created_at") or now,
+                j.get("updated_at") or now,
+                dedup_hash
+            ))
+            restored += 1
+        except Exception as err:
+            logger.debug(f"[DB Sync] Pulando inserção de vaga: {err}")
+
+    conn.commit()
+    conn.close()
+    if restored > 0:
+        logger.info(f"[DB Sync] {restored} vagas sincronizadas com sucesso a partir de {target_path}")
+    return restored
 
 def insert_job(job_data: Dict[str, Any]) -> Optional[int]:
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    external_id = job_data.get("external_id")
+    url = job_data.get("url", "")
     dedup_hash = job_data.get("dedup_hash") or compute_dedup_hash(
-        job_data["title"],
+        job_data.get("title", ""),
         job_data.get("company", ""),
         job_data.get("location", ""),
-        job_data["url"]
+        url
     )
+    
+    # Verificar se já existe por external_id, url ou dedup_hash
+    existing = find_existing_job(cursor, external_id, url, dedup_hash)
+    if existing:
+        conn.close()
+        return None
     
     now = datetime.now().isoformat()
     try:
@@ -98,7 +246,7 @@ def insert_job(job_data: Dict[str, Any]) -> Optional[int]:
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
         """, (
-            job_data.get("external_id"),
+            external_id,
             job_data["source"],
             job_data["title"],
             job_data.get("company", "Empresa não informada"),
@@ -110,14 +258,14 @@ def insert_job(job_data: Dict[str, Any]) -> Optional[int]:
             job_data.get("role_matched"),
             job_data.get("description", ""),
             job_data.get("salary", "A combinar / Não informado"),
-            job_data["url"],
+            url,
             job_data.get("match_score", 50),
             job_data.get("status", "nova"),
             job_data.get("notes", ""),
             1 if job_data.get("is_favorite") else 0,
             job_data.get("published_at") or "Recente",
-            now,
-            now,
+            job_data.get("created_at") or now,
+            job_data.get("updated_at") or now,
             dedup_hash
         ))
         conn.commit()
@@ -126,6 +274,7 @@ def insert_job(job_data: Dict[str, Any]) -> Optional[int]:
     except sqlite3.IntegrityError:
         return None
     except Exception as e:
+        logger.error(f"[DB] Erro ao inserir vaga: {e}")
         return None
     finally:
         conn.close()

@@ -9,7 +9,7 @@ from .trabalha_brasil import TrabalhaBrasilScraper
 from .linkedin import LinkedInScraper
 from .local_feed import LocalFeedScraper
 from ..core.config import config
-from ..database.db import insert_job, log_scrape, get_stats
+from ..database.db import insert_job, log_scrape, get_stats, normalize_url
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ class ScraperManager:
                     "role_matched": role_matched,
                     "description": description,
                     "salary": item.get("salary", "A combinar / Não informado"),
-                    "url": item.get("url"),
+                    "url": normalize_url(item.get("url", "")),
                     "match_score": match_score,
                     "status": "nova",
                     "notes": "",

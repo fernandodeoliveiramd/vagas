@@ -53,8 +53,15 @@ class TrabalhaBrasilScraper(BaseScraper):
                             # Ignorar vagas sugeridas de outros estados/cidades distantes
                             continue
 
-                        external_id = f"tb_{parts[-1]}"
-                        full_url = href if href.startswith("http") else f"{self.base_url}{href}"
+                        numeric_id = parts[-1]
+                        external_id = f"tb_{numeric_id}"
+                        clean_href = href.split('?')[0].split('#')[0].rstrip('/')
+                        if clean_href.startswith("http"):
+                            full_url = clean_href
+                        else:
+                            if not clean_href.startswith('/'):
+                                clean_href = '/' + clean_href
+                            full_url = f"{self.base_url}{clean_href}"
                         
                         strings = [t.strip() for t in a.stripped_strings if t.strip()]
                         if not strings:

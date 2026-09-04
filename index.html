@@ -2,7 +2,7 @@
 <html lang="pt-BR" class="h-full bg-[#f8f9fc] text-[#0f172a]">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
   <title>Buscador do Fernando | Vagas Pelotas & Rio Grande</title>
 
   <!-- Google Fonts & Material Symbols -->
@@ -48,6 +48,9 @@
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
       display: inline-flex;
@@ -61,44 +64,53 @@
     .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
-<body class="h-full flex flex-col font-sans bg-surface text-slate-800 antialiased selection:bg-brand-600 selection:text-white overflow-hidden">
+<body class="h-full h-[100dvh] flex flex-col font-sans bg-surface text-slate-800 antialiased selection:bg-brand-600 selection:text-white overflow-hidden pb-[env(safe-area-inset-bottom)]">
 
   <!-- ========================================================= -->
   <!-- 1. TOP NAVBAR (56px)                                      -->
   <!-- ========================================================= -->
-  <header class="h-14 bg-white border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between gap-4 shrink-0 z-40">
+  <header class="h-14 bg-white border-b border-slate-200/80 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 shrink-0 z-40">
     <!-- Brand / Title -->
-    <div class="flex items-center gap-3 shrink-0">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-brand-500/20">
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-brand-500/20 shrink-0">
         <span class="material-symbols-outlined text-[18px]">explore</span>
       </div>
-      <div class="flex items-center gap-2">
-        <h1 class="font-bold text-sm sm:text-base text-slate-900 tracking-tight">Buscador do Fernando</h1>
-        <span class="hidden sm:inline-block text-[11px] font-semibold bg-brand-50 text-brand-700 border border-brand-100 px-2 py-0.5 rounded-full font-mono">Pelotas &amp; Rio Grande</span>
+      <div class="flex items-center gap-1.5">
+        <h1 class="font-bold text-xs sm:text-base text-slate-900 tracking-tight whitespace-nowrap">Buscador do Fernando</h1>
+        <span class="hidden md:inline-block text-[11px] font-semibold bg-brand-50 text-brand-700 border border-brand-100 px-2 py-0.5 rounded-full font-mono">Pelotas &amp; Rio Grande</span>
       </div>
     </div>
 
     <!-- Navigation Tabs -->
-    <nav class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
-      <button id="navTab_vagas" onclick="switchMainTab('vagas')" class="nav-tab px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition-all flex items-center gap-1.5">
+    <nav class="flex items-center gap-0.5 sm:gap-1 bg-slate-100 p-0.5 sm:p-1 rounded-xl text-xs font-semibold shrink-0">
+      <button id="navTab_vagas" onclick="switchMainTab('vagas')" class="nav-tab px-2 sm:px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-xs transition-all flex items-center gap-1">
         <span class="material-symbols-outlined text-[16px] text-brand-600">dashboard</span>
-        <span>Todas as Vagas</span>
+        <span class="hidden sm:inline">Todas as Vagas</span>
+        <span class="sm:hidden">Vagas</span>
       </button>
-      <button id="navTab_candidaturas" onclick="switchMainTab('candidaturas')" class="nav-tab px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5">
+      <button id="navTab_candidaturas" onclick="switchMainTab('candidaturas')" class="nav-tab px-2 sm:px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1">
         <span class="material-symbols-outlined text-[16px]">view_kanban</span>
-        <span>Minhas Candidaturas</span>
+        <span class="hidden sm:inline">Minhas Candidaturas</span>
+        <span class="sm:hidden">Pipeline</span>
       </button>
-      <button id="navTab_telegram" onclick="switchMainTab('telegram')" class="nav-tab px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1.5">
-        <span class="material-symbols-outlined text-[16px]">send</span>
-        <span>Métricas &amp; Alertas</span>
+      <button id="navTab_telegram" onclick="switchMainTab('telegram')" class="nav-tab px-2 sm:px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">cloud_sync</span>
+        <span class="hidden sm:inline">Nuvem &amp; Alertas</span>
+        <span class="sm:hidden">Ajustes</span>
       </button>
     </nav>
 
     <!-- Header Actions -->
-    <div class="flex items-center gap-2.5 shrink-0">
-      <button id="btnScrape" onclick="triggerScrape()" class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs hover:shadow transition-all active:scale-95" type="button">
+    <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      <button id="btnCloudSyncHeader" onclick="triggerHeaderCloudSync()" title="Sincronização em Nuvem (GitHub Gist)" class="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition active:scale-95" type="button">
+        <span id="cloudSyncIcon" class="material-symbols-outlined text-[16px] text-slate-400">cloud_off</span>
+        <span id="cloudSyncText" class="hidden md:inline text-[11px] font-mono text-slate-600">Local</span>
+      </button>
+
+      <button id="btnScrape" onclick="triggerScrape()" class="flex items-center gap-1 sm:gap-1.5 bg-brand-600 hover:bg-brand-700 text-white px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs hover:shadow transition-all active:scale-95" type="button">
         <span id="scrapeIcon" class="material-symbols-outlined text-[16px]">sync</span>
-        <span id="scrapeText">Atualizar Vagas</span>
+        <span id="scrapeText" class="hidden sm:inline">Atualizar Vagas</span>
+        <span class="sm:hidden">Atualizar</span>
       </button>
     </div>
   </header>
@@ -106,44 +118,42 @@
   <!-- ========================================================= -->
   <!-- 2. KPI METRICS STRIP (36px)                              -->
   <!-- ========================================================= -->
-  <div class="h-9 bg-slate-100/70 border-b border-slate-200/60 px-4 sm:px-6 flex items-center justify-between overflow-x-auto gap-3 text-xs font-mono shrink-0">
-    <div class="flex items-center gap-2 shrink-0">
-      <span class="text-[10px] uppercase font-bold text-slate-600 tracking-wider">Métricas:</span>
-      
-      <button onclick="resetFilters()" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-brand-500 transition">
-        <span class="text-[10px] text-slate-600 font-semibold">TOTAL</span>
-        <span id="statTotal" class="font-bold text-brand-600">0</span>
-      </button>
+  <div class="h-9 bg-slate-100/70 border-b border-slate-200/60 px-3 sm:px-6 flex items-center gap-2 sm:gap-3 overflow-x-auto text-xs font-mono shrink-0 no-scrollbar whitespace-nowrap">
+    <span class="text-[10px] uppercase font-bold text-slate-600 tracking-wider shrink-0">Métricas:</span>
+    
+    <button onclick="resetFilters()" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-brand-500 transition shrink-0">
+      <span class="text-[10px] text-slate-600 font-semibold">TOTAL</span>
+      <span id="statTotal" class="font-bold text-brand-600">0</span>
+    </button>
 
-      <button onclick="setCategoryFilter('industrial_eletrica')" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-blue-500 transition">
-        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-        <span class="text-[10px] text-slate-600 font-semibold">ELÉTRICA</span>
-        <span id="statIndustrial" class="font-bold text-blue-700">0</span>
-      </button>
+    <button onclick="setCategoryFilter('industrial_eletrica')" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-blue-500 transition shrink-0">
+      <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+      <span class="text-[10px] text-slate-600 font-semibold">ELÉTRICA</span>
+      <span id="statIndustrial" class="font-bold text-blue-700">0</span>
+    </button>
 
-      <button onclick="setCategoryFilter('tecnologia_jr')" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-emerald-500 transition">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-        <span class="text-[10px] text-slate-600 font-semibold">TECH JR</span>
-        <span id="statTech" class="font-bold text-emerald-700">0</span>
-      </button>
+    <button onclick="setCategoryFilter('tecnologia_jr')" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-emerald-500 transition shrink-0">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+      <span class="text-[10px] text-slate-600 font-semibold">TECH JR</span>
+      <span id="statTech" class="font-bold text-emerald-700">0</span>
+    </button>
 
-      <button onclick="setCategoryFilter('gestao_projetos')" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-purple-500 transition">
-        <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-        <span class="text-[10px] text-slate-600 font-semibold">PROJETOS</span>
-        <span id="statProjects" class="font-bold text-purple-700">0</span>
-      </button>
-    </div>
+    <button onclick="setCategoryFilter('gestao_projetos')" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 shadow-2xs hover:border-purple-500 transition shrink-0">
+      <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+      <span class="text-[10px] text-slate-600 font-semibold">PROJETOS</span>
+      <span id="statProjects" class="font-bold text-purple-700">0</span>
+    </button>
 
-    <div class="flex items-center gap-2 shrink-0">
-      <button onclick="setCityFilter('Pelotas')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 hover:bg-slate-300 transition text-[11px]">
-        <span>Pelotas:</span>
-        <strong id="statPelotas" class="text-slate-900">0</strong>
-      </button>
-      <button onclick="setCityFilter('Rio Grande')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 hover:bg-slate-300 transition text-[11px]">
-        <span>Rio Grande:</span>
-        <strong id="statRioGrande" class="text-slate-900">0</strong>
-      </button>
-    </div>
+    <div class="h-3.5 w-px bg-slate-300 shrink-0 mx-0.5 sm:mx-1"></div>
+
+    <button onclick="setCityFilter('Pelotas')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 hover:bg-slate-300 transition text-[11px] shrink-0">
+      <span>Pelotas:</span>
+      <strong id="statPelotas" class="text-slate-900">0</strong>
+    </button>
+    <button onclick="setCityFilter('Rio Grande')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 hover:bg-slate-300 transition text-[11px] shrink-0">
+      <span>Rio Grande:</span>
+      <strong id="statRioGrande" class="text-slate-900">0</strong>
+    </button>
   </div>
 
   <!-- ========================================================= -->
@@ -155,7 +165,7 @@
     <div id="view_vagas" class="tab-view flex flex-col flex-1 min-h-0 w-full">
       
       <!-- Filter & Command Bar -->
-      <section class="bg-white border-b border-slate-200 px-4 sm:px-6 py-2.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0 z-10 shadow-2xs">
+      <section class="bg-white border-b border-slate-200 px-3 sm:px-6 py-2 sm:py-2.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-2.5 shrink-0 z-10 shadow-2xs">
         
         <!-- Search Input -->
         <div class="relative flex-1 max-w-xl flex items-center">
@@ -164,44 +174,44 @@
             type="text" 
             id="commandSearch" 
             oninput="handleSearch(this.value)"
-            placeholder="Buscar por cargo, empresa, tecnologia ou requisito... (/)" 
-            class="w-full h-8 pl-9 pr-10 bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-medium"
+            placeholder="Buscar por cargo, empresa, tecnologia... (/)" 
+            class="w-full h-8 pl-9 pr-8 sm:pr-10 bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 rounded-lg text-sm sm:text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-medium"
           />
-          <kbd class="absolute right-2 px-1.5 py-0.5 bg-slate-200/80 text-slate-600 rounded text-[10px] font-mono pointer-events-none">/</kbd>
+          <kbd class="hidden sm:inline-block absolute right-2 px-1.5 py-0.5 bg-slate-200/80 text-slate-600 rounded text-[10px] font-mono pointer-events-none">/</kbd>
         </div>
 
         <!-- Filter Dropdowns & View Mode -->
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 sm:pb-0">
           
           <!-- Dropdown Cidade -->
-          <select id="filterCity" onchange="applyFilters()" class="h-8 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer">
-            <option value="todas">📍 Todas as Cidades</option>
+          <select id="filterCity" onchange="applyFilters()" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
+            <option value="todas">📍 Cidades</option>
             <option value="Pelotas">Pelotas, RS</option>
             <option value="Rio Grande">Rio Grande, RS</option>
-            <option value="Remoto">Remoto / Home Office</option>
+            <option value="Remoto">Remoto</option>
           </select>
 
           <!-- Dropdown Modalidade -->
-          <select id="filterWorkModel" onchange="applyFilters()" class="h-8 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer">
-            <option value="todos">🏢 Modalidades</option>
+          <select id="filterWorkModel" onchange="applyFilters()" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
+            <option value="todos">🏢 Modalidade</option>
             <option value="Presencial">Presencial</option>
             <option value="Híbrido">Híbrido</option>
-            <option value="Remoto">100% Remoto</option>
+            <option value="Remoto">Remoto</option>
           </select>
 
           <!-- Dropdown Status -->
-          <select id="filterStatus" onchange="applyFilters()" class="h-8 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer">
-            <option value="todas">🎯 Todos os Status</option>
-            <option value="nao_visualizadas">✨ Novas (Não lidas)</option>
-            <option value="visualizadas">👀 Já Visualizadas</option>
-            <option value="interesse">⭐ Tenho Interesse</option>
+          <select id="filterStatus" onchange="applyFilters()" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
+            <option value="todas">🎯 Status</option>
+            <option value="nao_visualizadas">✨ Novas</option>
+            <option value="visualizadas">👀 Já Vistas</option>
+            <option value="interesse">⭐ Interesse</option>
             <option value="candidatado">🚀 Candidatado</option>
             <option value="entrevista">🗓️ Entrevista</option>
             <option value="descartada">✕ Descartadas</option>
           </select>
 
-          <!-- View Mode Toggle -->
-          <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/80 ml-auto">
+          <!-- View Mode Toggle (Desktop only) -->
+          <div class="hidden lg:flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/80 ml-auto shrink-0">
             <button id="btnViewSplit" onclick="setViewMode('split')" class="px-2.5 py-1 rounded-md bg-white text-slate-900 shadow-2xs text-xs font-semibold flex items-center gap-1 transition" title="Modo Split View">
               <span class="material-symbols-outlined text-[15px] text-brand-600">splitscreen</span>
               <span class="hidden md:inline">Split</span>
@@ -217,69 +227,88 @@
       </section>
 
       <!-- Category Filter Pills Bar -->
-      <div class="bg-slate-50 border-b border-slate-200/60 px-4 sm:px-6 py-1.5 flex items-center gap-1.5 overflow-x-auto text-xs font-medium shrink-0">
-        <span class="text-[10px] font-bold text-slate-600 uppercase font-mono mr-1">Filtro:</span>
-        <button onclick="setCategoryFilter('todas')" id="catTab_todas" class="cat-pill px-2.5 py-1 rounded-md bg-slate-900 text-white font-semibold text-[11px] transition shadow-2xs">
+      <div class="bg-slate-50 border-b border-slate-200/60 px-3 sm:px-6 py-1.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs font-medium shrink-0 whitespace-nowrap">
+        <span class="text-[10px] font-bold text-slate-600 uppercase font-mono mr-0.5 shrink-0">Área:</span>
+        <button onclick="setCategoryFilter('todas')" id="catTab_todas" class="cat-pill px-2.5 py-1 rounded-md bg-slate-900 text-white font-semibold text-[11px] transition shadow-2xs shrink-0">
           Todas as Áreas
         </button>
-        <button onclick="setCategoryFilter('industrial_eletrica')" id="catTab_industrial_eletrica" class="cat-pill px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-medium text-[11px] transition flex items-center gap-1">
+        <button onclick="setCategoryFilter('industrial_eletrica')" id="catTab_industrial_eletrica" class="cat-pill px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-medium text-[11px] transition flex items-center gap-1 shrink-0">
           <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
           Elétrica &amp; Indústria
         </button>
-        <button onclick="setCategoryFilter('tecnologia_jr')" id="catTab_tecnologia_jr" class="cat-pill px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-medium text-[11px] transition flex items-center gap-1">
+        <button onclick="setCategoryFilter('tecnologia_jr')" id="catTab_tecnologia_jr" class="cat-pill px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-medium text-[11px] transition flex items-center gap-1 shrink-0">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          Tecnologia &amp; Dados Jr
+          Tech &amp; Dados Jr
         </button>
-        <button onclick="setCategoryFilter('gestao_projetos')" id="catTab_gestao_projetos" class="cat-pill px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-medium text-[11px] transition flex items-center gap-1">
+        <button onclick="setCategoryFilter('gestao_projetos')" id="catTab_gestao_projetos" class="cat-pill px-2.5 py-1 rounded-md bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-medium text-[11px] transition flex items-center gap-1 shrink-0">
           <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
           Gestão &amp; Projetos
         </button>
       </div>
 
-      <!-- SPLIT VIEW CONTENT (PERFECT SCROLL LOCK) -->
-      <div id="splitWorkspace" class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
+      <!-- SPLIT VIEW CONTENT -->
+      <div id="splitWorkspace" class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden relative">
         
-        <!-- Left Pane: Job List Feed (40% - 420px max) -->
-        <aside class="w-full lg:w-[420px] lg:min-w-[360px] bg-slate-50 border-r border-slate-200/80 flex flex-col min-h-0 shrink-0">
+        <!-- Left Pane: Job List Feed -->
+        <aside id="feedAside" class="w-full lg:w-[400px] lg:min-w-[360px] bg-slate-50 lg:border-r border-slate-200/80 flex flex-col min-h-0 flex-1">
           
           <!-- Feed Header Summary -->
-          <div class="px-4 py-2 bg-slate-100/60 border-b border-slate-200/60 flex items-center justify-between text-xs text-slate-500 font-mono shrink-0">
+          <div class="px-3 sm:px-4 py-2 bg-slate-100/60 border-b border-slate-200/60 flex items-center justify-between text-xs text-slate-500 font-mono shrink-0">
             <span id="feedCountLabel" class="font-bold text-slate-700">0 vagas</span>
             <button onclick="resetFilters()" class="text-brand-600 hover:underline text-[11px]">Limpar Filtros</button>
           </div>
 
           <!-- Cards Scroll Container -->
-          <div class="flex-1 overflow-y-auto p-3 space-y-2.5" id="cardsList">
+          <div class="flex-1 overflow-y-auto p-2.5 sm:p-3 space-y-2.5" id="cardsList">
             <!-- Dynamically populated via JS -->
           </div>
         </aside>
 
-        <!-- Right Pane: Detail Inspector (Flex 1) -->
-        <section id="inspectorPane" class="flex-1 flex flex-col min-h-0 bg-white overflow-hidden">
+        <!-- Right Pane: Detail Inspector -->
+        <section id="inspectorPane" class="fixed inset-0 z-50 lg:static lg:z-auto bg-white flex flex-col min-h-0 overflow-hidden hidden lg:flex">
           
-          <!-- Inspector Header Actions (Sticky) -->
-          <div class="px-5 py-3 bg-white border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3 shrink-0">
-            <!-- Pipeline Buttons -->
-            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs font-semibold">
-              <button onclick="setInspectorStatus('nova')" id="btnStatus_nova" class="status-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">
+          <!-- Inspector Header Actions -->
+          <div class="px-4 sm:px-6 py-2.5 sm:py-3 bg-white border-b border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shrink-0 shadow-2xs">
+            
+            <!-- Mobile Top Bar with Back Button -->
+            <div class="flex items-center justify-between w-full lg:w-auto gap-2">
+              <button onclick="closeMobileInspector()" class="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition active:scale-95">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                <span>Voltar às Vagas</span>
+              </button>
+
+              <div class="flex items-center gap-1.5 lg:hidden">
+                <button onclick="saveInspectorNotes()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Salvar Notas">
+                  <span class="material-symbols-outlined text-[18px] text-emerald-600">save</span>
+                </button>
+                <a id="inspectorApplyBtnMobile" href="#" target="_blank" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center gap-1 shadow-xs transition">
+                  <span>Candidatar</span>
+                  <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Pipeline Status Buttons (Scrollable on mobile) -->
+            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold overflow-x-auto no-scrollbar max-w-full">
+              <button onclick="setInspectorStatus('nova')" id="btnStatus_nova" class="status-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap shrink-0">
                 Nova
               </button>
-              <button onclick="setInspectorStatus('interesse')" id="btnStatus_interesse" class="status-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">
+              <button onclick="setInspectorStatus('interesse')" id="btnStatus_interesse" class="status-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap shrink-0">
                 ⭐ Interesse
               </button>
-              <button onclick="setInspectorStatus('candidatado')" id="btnStatus_candidatado" class="status-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">
+              <button onclick="setInspectorStatus('candidatado')" id="btnStatus_candidatado" class="status-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap shrink-0">
                 🚀 Candidatado
               </button>
-              <button onclick="setInspectorStatus('entrevista')" id="btnStatus_entrevista" class="status-btn px-2.5 py-1 rounded-md text-slate-600 hover:text-slate-900 transition">
+              <button onclick="setInspectorStatus('entrevista')" id="btnStatus_entrevista" class="status-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap shrink-0">
                 🗓️ Entrevista
               </button>
-              <button onclick="toggleInspectorDiscard()" id="btnStatus_descartar" class="status-btn px-2.5 py-1 rounded-md text-red-600 hover:bg-red-50 transition">
+              <button onclick="toggleInspectorDiscard()" id="btnStatus_descartar" class="status-btn px-2.5 py-1 rounded-lg text-red-600 hover:bg-red-50 transition whitespace-nowrap shrink-0">
                 ✕ Descartar
               </button>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex items-center gap-2">
+            <!-- Desktop Action Buttons -->
+            <div class="hidden lg:flex items-center gap-2 shrink-0">
               <button onclick="saveInspectorNotes()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 transition">
                 <span class="material-symbols-outlined text-[16px] text-emerald-600">save</span>
                 <span>Salvar Notas</span>
@@ -292,15 +321,15 @@
           </div>
 
           <!-- Inspector Scrollable Body -->
-          <div class="flex-1 overflow-y-auto p-5 sm:p-7 space-y-6 max-w-4xl">
+          <div class="flex-1 overflow-y-auto p-4 sm:p-7 space-y-5 sm:space-y-6 max-w-4xl pb-20 sm:pb-8">
             
             <!-- Job Title & Badges -->
             <div class="space-y-2">
-              <div id="inspectorBadges" class="flex flex-wrap items-center gap-2"></div>
-              <h2 id="inspectorTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
+              <div id="inspectorBadges" class="flex flex-wrap items-center gap-1.5 sm:gap-2"></div>
+              <h2 id="inspectorTitle" class="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
                 Selecione uma vaga no feed
               </h2>
-              <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
+              <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-600 flex-wrap">
                 <span id="inspectorCompany" class="font-bold text-slate-900">Empresa</span>
                 <span>•</span>
                 <span id="inspectorSource" class="font-mono text-slate-500">Fonte</span>
@@ -308,45 +337,45 @@
             </div>
 
             <!-- KPI Mini Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
-              <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Localização</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5 text-xs">
+              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Localização</span>
                 <span id="inspectorLocation" class="font-bold text-slate-900 block truncate">Pelotas, RS</span>
               </div>
-              <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Modalidade</span>
-                <span id="inspectorWorkModel" class="font-bold text-slate-900 block">Presencial</span>
+              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Modalidade</span>
+                <span id="inspectorWorkModel" class="font-bold text-slate-900 block truncate">Presencial</span>
               </div>
-              <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Faixa Salarial</span>
+              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Faixa Salarial</span>
                 <span id="inspectorSalary" class="font-bold text-emerald-700 block truncate">A combinar</span>
               </div>
-              <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Match</span>
-                <span id="inspectorScore" class="font-bold text-brand-600 block">100% Match</span>
+              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl">
+                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Match</span>
+                <span id="inspectorScore" class="font-bold text-brand-600 block truncate">100% Match</span>
               </div>
-              <div class="bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-600 uppercase font-mono block mb-0.5">Data Vaga</span>
+              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl col-span-2 sm:col-span-1">
+                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Data Vaga</span>
                 <span id="inspectorDate" class="font-bold text-slate-800 block truncate">Recente</span>
               </div>
             </div>
 
             <!-- Notes Area -->
-            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 space-y-2">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 sm:p-4 space-y-2">
               <div class="flex items-center justify-between">
                 <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                   <span class="material-symbols-outlined text-[16px] text-brand-600">edit_note</span>
                   <span>Minhas Anotações Privadas</span>
                 </label>
                 <span id="saveBadge" class="text-[11px] font-mono text-emerald-600 font-semibold opacity-0 transition-opacity">
-                  ✓ Salvo automaticamente
+                  ✓ Salvo
                 </span>
               </div>
               <textarea 
                 id="inspectorNotes" 
                 rows="3" 
                 placeholder="Ex: Currículo enviado em 03/09, contato do RH: Fulano..."
-                class="w-full bg-white border border-slate-200 rounded-lg p-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+                class="w-full bg-white border border-slate-200 rounded-lg p-2.5 sm:p-3 text-sm sm:text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
               ></textarea>
             </div>
 
@@ -355,14 +384,13 @@
               <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider font-mono">
                 Detalhes da Oportunidade
               </h3>
-              <div id="inspectorDescription" class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+              <div id="inspectorDescription" class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 sm:p-4 text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line break-words">
                 Selecione uma vaga para visualizar os detalhes completos.
               </div>
             </div>
 
           </div>
         </section>
-
       </div>
 
       <!-- FULL LIST / TABLE VIEW -->
@@ -375,19 +403,19 @@
     </div>
 
     <!-- TAB 2: MINHAS CANDIDATURAS (PIPELINE) -->
-    <div id="view_candidaturas" class="tab-view hidden flex-1 overflow-y-auto p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
+    <div id="view_candidaturas" class="tab-view hidden flex-1 overflow-y-auto p-3.5 sm:p-6 max-w-7xl mx-auto w-full space-y-4 sm:space-y-6">
       
-      <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="border-b border-slate-200 pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
         <div>
-          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Pipeline de Candidaturas</h2>
-          <p class="text-xs text-slate-500 font-mono mt-0.5">Gestão das suas vagas em andamento no polo regional</p>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Pipeline de Candidaturas</h2>
+          <p class="text-[11px] sm:text-xs text-slate-500 font-mono mt-0.5">Gestão das suas vagas em andamento no polo regional (deslize horizontalmente no celular)</p>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="flex overflow-x-auto snap-x snap-mandatory gap-3 sm:gap-4 pb-4 md:grid md:grid-cols-4 md:overflow-visible no-scrollbar">
         
         <!-- Col 1: Tenho Interesse -->
-        <div class="bg-slate-100/70 border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[450px]">
+        <div class="w-[82vw] sm:w-[320px] md:w-auto shrink-0 snap-center bg-slate-100/70 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-col min-h-[420px] sm:min-h-[450px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 text-xs font-bold text-amber-700 font-mono">
             <span class="flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px]">star</span>
@@ -398,7 +426,7 @@
         </div>
 
         <!-- Col 2: Candidatado -->
-        <div class="bg-slate-100/70 border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[450px]">
+        <div class="w-[82vw] sm:w-[320px] md:w-auto shrink-0 snap-center bg-slate-100/70 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-col min-h-[420px] sm:min-h-[450px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 text-xs font-bold text-blue-700 font-mono">
             <span class="flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px]">send</span>
@@ -409,7 +437,7 @@
         </div>
 
         <!-- Col 3: Entrevista -->
-        <div class="bg-slate-100/70 border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[450px]">
+        <div class="w-[82vw] sm:w-[320px] md:w-auto shrink-0 snap-center bg-slate-100/70 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-col min-h-[420px] sm:min-h-[450px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 text-xs font-bold text-purple-700 font-mono">
             <span class="flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px]">event_available</span>
@@ -420,7 +448,7 @@
         </div>
 
         <!-- Col 4: Descartadas -->
-        <div class="bg-slate-100/40 border border-slate-200 rounded-2xl p-4 flex flex-col min-h-[450px] opacity-75">
+        <div class="w-[82vw] sm:w-[320px] md:w-auto shrink-0 snap-center bg-slate-100/40 border border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-col min-h-[420px] sm:min-h-[450px] opacity-75">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 text-xs font-bold text-slate-500 font-mono">
             <span class="flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px]">delete</span>
@@ -433,53 +461,159 @@
       </div>
     </div>
 
-    <!-- TAB 3: TELEGRAM & CONFIGURAÇÕES -->
-    <div id="view_telegram" class="tab-view hidden flex-1 overflow-y-auto p-4 sm:p-6 max-w-4xl mx-auto w-full space-y-6">
-      <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-xl font-bold text-slate-900 tracking-tight">Alertas &amp; Métricas</h2>
-        <p class="text-xs text-slate-500 font-mono mt-0.5">Configure as notificações automáticas no Telegram</p>
+    <!-- TAB 3: SINCRONIZAÇÃO EM NUVEM, BACKUP & ALERTAS -->
+    <div id="view_telegram" class="tab-view hidden flex-1 overflow-y-auto p-3.5 sm:p-6 max-w-4xl mx-auto w-full space-y-4 sm:space-y-6">
+      <div class="border-b border-slate-200 pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Sincronização &amp; Alertas</h2>
+          <p class="text-[11px] sm:text-xs text-slate-500 font-mono mt-0.5">Sincronize status e anotações entre celular e computador</p>
+        </div>
+        <div id="syncBadgeHeader" class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+          <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+          <span>Modo Local (Offline)</span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div class="md:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+      <!-- Cloud Sync Panel (GitHub Gist) -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
+        <div class="flex items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
-              <span class="material-symbols-outlined text-[24px]">send</span>
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[24px]">cloud_sync</span>
             </div>
             <div>
-              <h3 class="font-bold text-sm text-slate-900">Configuração Telegram</h3>
-              <p class="text-xs text-slate-500 font-mono">Alertas em tempo real</p>
+              <h3 class="font-bold text-sm text-slate-900">Sincronização em Nuvem (Multi-Dispositivos)</h3>
+              <p class="text-xs text-slate-500 font-mono">Usa um Gist privado no seu GitHub para sincronizar celular e PC</p>
             </div>
           </div>
+          <span id="syncStatusPill" class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-100 text-slate-600">
+            Desconectado
+          </span>
+        </div>
 
-          <div class="space-y-3 text-xs">
-            <div>
-              <label class="block font-medium text-slate-700 mb-1">Telegram Bot Token:</label>
-              <input type="password" id="cfgBotToken" placeholder="Ex: 123456789:ABCdefGHIjklMNO..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono focus:bg-white focus:outline-none focus:border-brand-500" />
-            </div>
+        <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs text-slate-600 leading-relaxed">
+          <p class="font-medium text-slate-800 mb-1">Como funciona a sincronização gratuita:</p>
+          <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px]">
+            <li>Gere um Token do GitHub com permissão <strong>gist</strong> (<a href="https://github.com/settings/tokens/new?scopes=gist&description=Vagas+RS+Sync" target="_blank" class="text-brand-600 underline font-semibold">clique aqui para gerar com 1 clique</a>).</li>
+            <li>Cole o Token abaixo e clique em <strong>Conectar Nuvem</strong>. O sistema criará automaticamente um arquivo privado na sua conta.</li>
+            <li>No outro dispositivo (celular ou tablet), basta colar o mesmo Token (ou o ID do Gist). Todas as candidaturas, anotações e vagas vistas serão sincronizadas em tempo real!</li>
+          </ol>
+        </div>
 
-            <div>
-              <label class="block font-medium text-slate-700 mb-1">Telegram Chat ID:</label>
-              <input type="text" id="cfgChatId" placeholder="Ex: 987654321" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono focus:bg-white focus:outline-none focus:border-brand-500" />
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">GitHub Personal Access Token (PAT):</label>
+            <input type="password" id="cfgGithubToken" placeholder="Ex: ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500" />
           </div>
 
-          <div class="pt-2 flex justify-end">
-            <button onclick="testTelegramAlert()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition">
-              <span class="material-symbols-outlined text-[16px]">notifications_active</span>
-              Testar Envio
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Gist ID (gerado automaticamente ou cole do PC):</label>
+            <input type="text" id="cfgGistId" placeholder="Criado automaticamente ao conectar..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500" />
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+          <div class="flex items-center gap-2">
+            <button onclick="saveAndConnectCloudSync()" id="btnConnectSync" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition active:scale-95">
+              <span class="material-symbols-outlined text-[16px]">sync</span>
+              <span>Conectar Nuvem</span>
+            </button>
+            <button onclick="triggerManualSync()" id="btnSyncNow" class="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition active:scale-95">
+              <span class="material-symbols-outlined text-[16px] text-brand-600">cloud_download</span>
+              <span>Sincronizar Agora</span>
+            </button>
+            <button onclick="disconnectCloudSync()" id="btnDisconnectSync" class="px-3 py-2 text-red-600 hover:bg-red-50 text-xs font-semibold rounded-xl transition hidden">
+              Desconectar
+            </button>
+          </div>
+          <span id="syncLastTimeLabel" class="text-[11px] font-mono text-slate-400">
+            Nenhuma sincronização recente
+          </span>
+        </div>
+      </div>
+
+      <!-- Backup Manual & Migração Rápida + Exportação CSV -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
+        
+        <!-- Backup JSON -->
+        <div class="md:col-span-6 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3 shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[20px]">swap_horiz</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-sm text-slate-900">Backup &amp; Migração Manual</h3>
+              <p class="text-[11px] text-slate-500 font-mono">Transferência direta de status e notas (JSON)</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">
+            Exporte suas candidaturas, notas e histórico de visualizações para um arquivo leve ou importe em outro aparelho.
+          </p>
+          <div class="flex items-center gap-2 pt-1">
+            <button onclick="exportUserDataBackup()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition">
+              <span class="material-symbols-outlined text-[16px]">file_download</span>
+              <span>Exportar Backup</span>
+            </button>
+            <label class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 transition cursor-pointer">
+              <span class="material-symbols-outlined text-[16px]">file_upload</span>
+              <span>Importar Backup</span>
+              <input type="file" id="importBackupFile" accept=".json" onchange="importUserDataBackup(event)" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Export CSV -->
+        <div class="md:col-span-6 bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3 shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[20px]">table_view</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-sm text-slate-900">Exportação de Vagas</h3>
+              <p class="text-[11px] text-slate-500 font-mono">Relatório completo em planilha</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">
+            Baixe a relação de todas as oportunidades filtradas com links, salários e contatos em formato CSV compatível com Excel.
+          </p>
+          <div class="pt-1">
+            <button onclick="exportCSV()" class="w-full py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition shadow-2xs">
+              <span class="material-symbols-outlined text-[16px]">download</span>
+              <span>Exportar CSV</span>
             </button>
           </div>
         </div>
 
-        <div class="md:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
-          <h3 class="font-bold text-sm text-slate-900">Exportação</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Baixe a base completa das oportunidades indexadas com links, contatos e salários para Excel ou CSV.
-          </p>
-          <button onclick="exportCSV()" class="w-full py-2.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition shadow-2xs">
-            <span class="material-symbols-outlined text-[18px]">download</span>
-            Exportar CSV
+      </div>
+
+      <!-- Telegram Config -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[24px]">send</span>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">Configuração Telegram</h3>
+            <p class="text-xs text-slate-500 font-mono">Alertas em tempo real quando novas vagas forem encontradas</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Telegram Bot Token:</label>
+            <input type="password" id="cfgBotToken" placeholder="Ex: 123456789:ABCdefGHIjklMNO..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500" />
+          </div>
+
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Telegram Chat ID:</label>
+            <input type="text" id="cfgChatId" placeholder="Ex: 987654321" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500" />
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="testTelegramAlert()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition">
+            <span class="material-symbols-outlined text-[16px]">notifications_active</span>
+            <span>Testar Envio</span>
           </button>
         </div>
       </div>
@@ -530,10 +664,12 @@
       if (!job) return;
       const viewedMap = getViewedMap();
       const kId = String(job.id);
+      const kExtId = job.external_id || '';
       const kHash = job.dedup_hash || '';
       const kUrl = job.url || '';
 
       viewedMap[kId] = true;
+      if (kExtId) viewedMap[kExtId] = true;
       if (kHash) viewedMap[kHash] = true;
       if (kUrl) viewedMap[kUrl] = true;
 
@@ -542,12 +678,14 @@
       } catch (e) {}
 
       job.viewed = true;
+      scheduleCloudPush();
     }
 
     function isJobViewed(job) {
       if (!job) return false;
       const viewedMap = getViewedMap();
       if (viewedMap[String(job.id)]) return true;
+      if (job.external_id && viewedMap[job.external_id]) return true;
       if (job.dedup_hash && viewedMap[job.dedup_hash]) return true;
       if (job.url && viewedMap[job.url]) return true;
       return false;
@@ -556,16 +694,455 @@
     function getUserJobState(job, userData) {
       if (!job || !userData) return {};
       return userData[String(job.id)] || 
+             (job.external_id && userData[job.external_id]) ||
              (job.dedup_hash && userData[job.dedup_hash]) || 
              (job.url && userData[job.url]) || {};
     }
 
+    // =========================================================
+    // CLOUD SYNC & BACKUP LOGIC (GITHUB GIST & MULTI-DEVICE)
+    // =========================================================
+    const SYNC_CONFIG_KEY = 'vagas_rs_sync_config_v1';
+    const GIST_FILENAME = 'vagas_user_state.json';
+    let cloudPushTimer = null;
+    let isSyncInProgress = false;
+
+    function getSyncConfig() {
+      try {
+        return JSON.parse(localStorage.getItem(SYNC_CONFIG_KEY)) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveSyncConfig(cfg) {
+      try {
+        localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(cfg));
+      } catch (e) {}
+      updateSyncUI();
+    }
+
+    function updateSyncUI(state = null) {
+      const cfg = getSyncConfig();
+      const isConnected = !!(cfg.token && cfg.gistId);
+
+      const headerIcon = document.getElementById('cloudSyncIcon');
+      const headerText = document.getElementById('cloudSyncText');
+      const headerBtn = document.getElementById('btnCloudSyncHeader');
+      const badgeHeader = document.getElementById('syncBadgeHeader');
+      const statusPill = document.getElementById('syncStatusPill');
+      const lastTimeLabel = document.getElementById('syncLastTimeLabel');
+      const disconnectBtn = document.getElementById('btnDisconnectSync');
+      const tokenInput = document.getElementById('cfgGithubToken');
+      const gistInput = document.getElementById('cfgGistId');
+
+      if (tokenInput && cfg.token && !tokenInput.value) tokenInput.value = cfg.token;
+      if (gistInput && cfg.gistId && !gistInput.value) gistInput.value = cfg.gistId;
+
+      if (state === 'syncing') {
+        if (headerIcon) {
+          headerIcon.innerText = 'sync';
+          headerIcon.className = 'material-symbols-outlined text-[16px] text-indigo-600 animate-spin';
+        }
+        if (headerText) headerText.innerText = 'Sincronizando...';
+        if (statusPill) {
+          statusPill.innerText = 'Sincronizando...';
+          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200';
+        }
+        return;
+      }
+
+      if (isConnected) {
+        if (headerIcon) {
+          headerIcon.innerText = 'cloud_done';
+          headerIcon.className = 'material-symbols-outlined text-[16px] text-emerald-600';
+        }
+        if (headerText) headerText.innerText = 'Nuvem Ativa';
+        if (headerBtn) headerBtn.title = `Sincronizado via GitHub Gist. Clique para atualizar.`;
+
+        if (badgeHeader) {
+          badgeHeader.className = 'self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Nuvem Conectada</span>';
+        }
+        if (statusPill) {
+          statusPill.innerText = 'Conectado';
+          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+        }
+        if (disconnectBtn) disconnectBtn.classList.remove('hidden');
+
+        if (lastTimeLabel) {
+          if (cfg.lastSync) {
+            const d = new Date(cfg.lastSync);
+            lastTimeLabel.innerText = `Última sincronização: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+          } else {
+            lastTimeLabel.innerText = 'Conectado. Aguardando sincronização.';
+          }
+        }
+      } else {
+        if (headerIcon) {
+          headerIcon.innerText = 'cloud_off';
+          headerIcon.className = 'material-symbols-outlined text-[16px] text-slate-400';
+        }
+        if (headerText) headerText.innerText = 'Local';
+        if (headerBtn) headerBtn.title = 'Modo Local. Clique para conectar a sincronização em nuvem.';
+
+        if (badgeHeader) {
+          badgeHeader.className = 'self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 text-slate-600 border border-slate-200';
+          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-400"></span><span>Modo Local (Offline)</span>';
+        }
+        if (statusPill) {
+          statusPill.innerText = 'Desconectado';
+          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-100 text-slate-600';
+        }
+        if (disconnectBtn) disconnectBtn.classList.add('hidden');
+        if (lastTimeLabel) lastTimeLabel.innerText = 'Nenhuma sincronização recente';
+      }
+    }
+
+    function triggerHeaderCloudSync() {
+      const cfg = getSyncConfig();
+      if (cfg.token && cfg.gistId) {
+        syncWithCloud(true);
+      } else {
+        switchMainTab('telegram');
+        const tokenInput = document.getElementById('cfgGithubToken');
+        if (tokenInput) tokenInput.focus();
+        showToast("Configure seu Token do GitHub para ativar a nuvem", "info");
+      }
+    }
+
+    async function saveAndConnectCloudSync() {
+      const token = (document.getElementById('cfgGithubToken')?.value || '').trim();
+      let gistId = (document.getElementById('cfgGistId')?.value || '').trim();
+
+      if (!token) {
+        showToast("Informe o Personal Access Token (PAT) do GitHub.", "error");
+        return;
+      }
+
+      updateSyncUI('syncing');
+      showToast("Conectando ao GitHub Gist...", "info");
+
+      try {
+        if (gistId) {
+          const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (!res.ok) {
+            throw new Error(`Gist não encontrado ou sem permissão (${res.status})`);
+          }
+        } else {
+          const listRes = await fetch('https://api.github.com/gists', {
+            headers: {
+              'Accept': 'application/vnd.github.v3+json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!listRes.ok) {
+            throw new Error(`Token inválido ou sem escopo 'gist' (${listRes.status})`);
+          }
+
+          const gists = await listRes.json();
+          const existing = gists.find(g => g.files && g.files[GIST_FILENAME]);
+
+          if (existing) {
+            gistId = existing.id;
+          } else {
+            const initialPayload = {
+              version: 1,
+              created_at: new Date().toISOString(),
+              userData: getUserData(),
+              viewedMap: getViewedMap()
+            };
+
+            const createRes = await fetch('https://api.github.com/gists', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                description: "Vagas RS - Sincronização em Nuvem Multi-Dispositivos",
+                public: false,
+                files: {
+                  [GIST_FILENAME]: {
+                    content: JSON.stringify(initialPayload, null, 2)
+                  }
+                }
+              })
+            });
+
+            if (!createRes.ok) {
+              throw new Error(`Falha ao criar Gist (${createRes.status})`);
+            }
+
+            const createdGist = await createRes.json();
+            gistId = createdGist.id;
+          }
+        }
+
+        const gistInput = document.getElementById('cfgGistId');
+        if (gistInput) gistInput.value = gistId;
+
+        const cfg = { token, gistId, lastSync: new Date().toISOString() };
+        saveSyncConfig(cfg);
+
+        await syncWithCloud(true);
+        showToast("Nuvem conectada e sincronizada com sucesso!", "success");
+      } catch (err) {
+        console.error("Erro na conexão cloud:", err);
+        updateSyncUI();
+        showToast(`Erro ao conectar: ${err.message}`, "error");
+      }
+    }
+
+    async function syncWithCloud(isManual = false) {
+      const cfg = getSyncConfig();
+      if (!cfg.token || !cfg.gistId || isSyncInProgress) return;
+
+      isSyncInProgress = true;
+      updateSyncUI('syncing');
+
+      try {
+        const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
+          headers: {
+            'Accept': 'application/vnd.github.v3+json',
+            'Authorization': `Bearer ${cfg.token}`
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error(`Gist indisponível (${res.status})`);
+        }
+
+        const gistData = await res.json();
+        const fileObj = gistData.files && gistData.files[GIST_FILENAME];
+        let remotePayload = {};
+        if (fileObj && fileObj.content) {
+          try {
+            remotePayload = JSON.parse(fileObj.content);
+          } catch (e) {}
+        }
+
+        const localUserData = getUserData();
+        const remoteUserData = remotePayload.userData || {};
+        const mergedUserData = { ...localUserData };
+        let hadChangesToPush = false;
+
+        for (const [k, rItem] of Object.entries(remoteUserData)) {
+          const lItem = mergedUserData[k];
+          if (!lItem) {
+            mergedUserData[k] = rItem;
+          } else {
+            const rTime = rItem.updated_at || 0;
+            const lTime = lItem.updated_at || 0;
+            if (rTime >= lTime) {
+              mergedUserData[k] = rItem;
+            } else {
+              hadChangesToPush = true;
+            }
+          }
+        }
+
+        for (const k of Object.keys(localUserData)) {
+          if (!remoteUserData[k]) {
+            hadChangesToPush = true;
+          }
+        }
+
+        const localViewed = getViewedMap();
+        const remoteViewed = remotePayload.viewedMap || {};
+        const mergedViewed = { ...localViewed, ...remoteViewed };
+
+        saveUserData(mergedUserData);
+        try {
+          localStorage.setItem(VIEWED_KEY, JSON.stringify(mergedViewed));
+        } catch (e) {}
+
+        if (allLoadedJobs && allLoadedJobs.length > 0) {
+          allLoadedJobs.forEach(job => {
+            const st = getUserJobState(job, mergedUserData);
+            if (st && st.status) job.status = st.status;
+            if (st && st.notes !== undefined) job.notes = st.notes;
+            if (isJobViewed(job)) job.viewed = true;
+          });
+          applyFilters();
+          if (currentMainTab === 'candidaturas') renderPipeline();
+          renderInspector();
+        }
+
+        if (hadChangesToPush) {
+          await pushPayloadToGist(cfg, mergedUserData, mergedViewed);
+        }
+
+        cfg.lastSync = new Date().toISOString();
+        saveSyncConfig(cfg);
+        updateSyncUI();
+
+        if (isManual) {
+          showToast("Dados sincronizados com a nuvem!", "success");
+        }
+      } catch (err) {
+        console.error("Erro na sincronização:", err);
+        updateSyncUI();
+        if (isManual) {
+          showToast(`Falha na sincronização: ${err.message}`, "error");
+        }
+      } finally {
+        isSyncInProgress = false;
+      }
+    }
+
+    async function pushPayloadToGist(cfg, userData, viewedMap) {
+      const payload = {
+        version: 1,
+        lastSync: new Date().toISOString(),
+        userData: userData || getUserData(),
+        viewedMap: viewedMap || getViewedMap()
+      };
+
+      await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `Bearer ${cfg.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          files: {
+            [GIST_FILENAME]: {
+              content: JSON.stringify(payload, null, 2)
+            }
+          }
+        })
+      });
+    }
+
+    function scheduleCloudPush() {
+      const cfg = getSyncConfig();
+      if (!cfg.token || !cfg.gistId) return;
+
+      updateSyncUI('syncing');
+      clearTimeout(cloudPushTimer);
+      cloudPushTimer = setTimeout(async () => {
+        try {
+          await pushPayloadToGist(cfg, getUserData(), getViewedMap());
+          cfg.lastSync = new Date().toISOString();
+          saveSyncConfig(cfg);
+          updateSyncUI();
+        } catch (err) {
+          console.warn("Falha no push para Gist:", err);
+          updateSyncUI();
+        }
+      }, 1000);
+    }
+
+    function disconnectCloudSync() {
+      if (confirm("Deseja desconectar a sincronização em nuvem deste aparelho? Seus dados locais serão mantidos.")) {
+        localStorage.removeItem(SYNC_CONFIG_KEY);
+        const tokenInput = document.getElementById('cfgGithubToken');
+        const gistInput = document.getElementById('cfgGistId');
+        if (tokenInput) tokenInput.value = '';
+        if (gistInput) gistInput.value = '';
+        updateSyncUI();
+        showToast("Nuvem desconectada. Operando no modo local.", "info");
+      }
+    }
+
+    // =========================================================
+    // MANUAL BACKUP & RESTORE (JSON)
+    // =========================================================
+    function exportUserDataBackup() {
+      const backup = {
+        app: "Vagas RS",
+        version: 1,
+        exported_at: new Date().toISOString(),
+        userData: getUserData(),
+        viewedMap: getViewedMap()
+      };
+
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vagas_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("Arquivo de backup baixado com sucesso!", "success");
+    }
+
+    function importUserDataBackup(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported.userData && !imported.viewedMap) {
+            throw new Error("Arquivo de backup inválido.");
+          }
+
+          const localUserData = getUserData();
+          const mergedUserData = { ...localUserData, ...(imported.userData || {}) };
+          const localViewed = getViewedMap();
+          const mergedViewed = { ...localViewed, ...(imported.viewedMap || {}) };
+
+          saveUserData(mergedUserData);
+          try {
+            localStorage.setItem(VIEWED_KEY, JSON.stringify(mergedViewed));
+          } catch (err) {}
+
+          allLoadedJobs.forEach(job => {
+            const st = getUserJobState(job, mergedUserData);
+            if (st && st.status) job.status = st.status;
+            if (st && st.notes !== undefined) job.notes = st.notes;
+            if (isJobViewed(job)) job.viewed = true;
+          });
+
+          applyFilters();
+          if (currentMainTab === 'candidaturas') renderPipeline();
+          renderInspector();
+
+          scheduleCloudPush();
+          showToast("Backup importado e aplicado com sucesso!", "success");
+        } catch (err) {
+          showToast(`Erro ao importar backup: ${err.message}`, "error");
+        }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      updateSyncUI();
       loadStats();
       loadJobs();
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeMobileInspector();
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+          const pane = document.getElementById('inspectorPane');
+          if (pane) {
+            pane.classList.remove('hidden');
+            pane.classList.add('flex');
+          }
+        }
+      });
     });
 
     function switchMainTab(tab) {
+      closeMobileInspector();
       currentMainTab = tab;
       document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
       document.querySelectorAll('.nav-tab').forEach(t => {
@@ -631,6 +1208,12 @@
             };
           });
           applyFilters();
+
+          // Sincronizar dados em nuvem se configurado
+          const cfg = getSyncConfig();
+          if (cfg.token && cfg.gistId) {
+            syncWithCloud(false);
+          }
         }
       } catch (err) {
         showToast("Erro ao carregar lista de vagas", "error");
@@ -842,6 +1425,27 @@
         markJobViewed(job);
       }
       renderFeed();
+      if (window.innerWidth < 1024) {
+        openMobileInspector();
+      }
+    }
+
+    function openMobileInspector() {
+      const pane = document.getElementById('inspectorPane');
+      if (pane) {
+        pane.classList.remove('hidden');
+        pane.classList.add('flex');
+        const scrollArea = pane.querySelector('.overflow-y-auto');
+        if (scrollArea) scrollArea.scrollTop = 0;
+      }
+    }
+
+    function closeMobileInspector() {
+      const pane = document.getElementById('inspectorPane');
+      if (pane) {
+        pane.classList.add('hidden');
+        pane.classList.remove('flex');
+      }
     }
 
     function renderInspector() {
@@ -863,6 +1467,8 @@
       document.getElementById('inspectorDescription').innerText = job.description || 'Sem descrição detalhada fornecida.';
       document.getElementById('inspectorNotes').value = job.notes || '';
       document.getElementById('inspectorApplyBtn').href = job.url;
+      const mobileApplyBtn = document.getElementById('inspectorApplyBtnMobile');
+      if (mobileApplyBtn) mobileApplyBtn.href = job.url;
 
       const statuses = ['nova', 'interesse', 'candidatado', 'entrevista'];
       statuses.forEach(st => {
@@ -942,14 +1548,17 @@
 
       const userData = getUserData();
       const kId = String(jobId);
+      const kExtId = job?.external_id || '';
       const kHash = job?.dedup_hash || '';
       const kUrl = job?.url || '';
 
-      const stateObj = { status: newStatus, notes: job?.notes || '', viewed: true };
+      const stateObj = { status: newStatus, notes: job?.notes || '', viewed: true, updated_at: Date.now() };
       userData[kId] = stateObj;
+      if (kExtId) userData[kExtId] = stateObj;
       if (kHash) userData[kHash] = stateObj;
       if (kUrl) userData[kUrl] = stateObj;
       saveUserData(userData);
+      scheduleCloudPush();
 
       fetch(`./api/jobs/${jobId}/status`, {
         method: 'PATCH',
@@ -971,14 +1580,17 @@
 
       const userData = getUserData();
       const kId = String(currentActiveJobId);
+      const kExtId = job?.external_id || '';
       const kHash = job?.dedup_hash || '';
       const kUrl = job?.url || '';
 
-      const stateObj = { status: job?.status || 'nova', notes: notes, viewed: true };
+      const stateObj = { status: job?.status || 'nova', notes: notes, viewed: true, updated_at: Date.now() };
       userData[kId] = stateObj;
+      if (kExtId) userData[kExtId] = stateObj;
       if (kHash) userData[kHash] = stateObj;
       if (kUrl) userData[kUrl] = stateObj;
       saveUserData(userData);
+      scheduleCloudPush();
 
       fetch(`./api/jobs/${currentActiveJobId}/notes`, {
         method: 'PATCH',

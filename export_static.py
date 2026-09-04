@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, "backend"))
 
-from backend.app.database.db import init_db, get_jobs, get_stats
+from backend.app.database.db import init_db, get_jobs, get_stats, sync_jobs_from_json
 from backend.app.scrapers.manager import scraper_manager
 from backend.app.services.verifier import verify_and_clean_all_jobs
 
@@ -23,8 +23,12 @@ async def main():
     print("   ATUALIZANDO E VALIDANDO VAGAS PARA GITHUB PAGES")
     print("=" * 60)
 
-    # 1. Inicializar banco
+    # 1. Inicializar banco e carregar vagas já listadas
     init_db()
+    existing_json = os.path.join(BASE_DIR, "data", "jobs.json")
+    synced = sync_jobs_from_json(existing_json)
+    if synced > 0:
+        print(f"      -> {synced} vagas existentes restauradas do histórico data/jobs.json.")
 
     # 2. Executar varredura
     print("[1/3] Executando varredura nos portais (LinkedIn, Trabalha Brasil, Gupy, Polos)...")
