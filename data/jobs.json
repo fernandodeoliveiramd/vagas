@@ -1,7 +1,31 @@
 {
   "success": true,
-  "count": 44,
+  "count": 45,
   "jobs": [
+    {
+      "id": 46,
+      "external_id": "linkedin_4458537853",
+      "source": "LinkedIn",
+      "title": "500.6284683 - PESSOA ANALISTA DE PLANEJAMENTO E CONTROLE DE PROJETOS PLENO",
+      "company": "MCA Auditoria e Gerenciamento Ltda",
+      "location": "Rio Grande - RS",
+      "city": "Rio Grande",
+      "state": "RS",
+      "work_model": "Presencial",
+      "category": "gestao_projetos",
+      "role_matched": "Analista de Projetos",
+      "description": "Vaga recente de 500.6284683 - PESSOA ANALISTA DE PLANEJAMENTO E CONTROLE DE PROJETOS PLENO na empresa MCA Auditoria e Gerenciamento Ltda em Rio Grande. Publicada no LinkedIn.",
+      "salary": "A combinar / Não informado",
+      "url": "https://br.linkedin.com/jobs/view/500-6284683-pessoa-analista-de-planejamento-e-controle-de-projetos-pleno-at-mca-auditoria-e-gerenciamento-ltda-4458537853",
+      "match_score": 75,
+      "status": "nova",
+      "notes": "",
+      "is_favorite": 0,
+      "published_at": "Há 1 semana",
+      "created_at": "2026-09-05T18:02:13.727119",
+      "updated_at": "2026-09-05T18:02:13.727119",
+      "dedup_hash": "9699f4b913ede6b42e345b419aecdda9b60347c2d57b1f49cff4022b4834db9e"
+    },
     {
       "id": 45,
       "external_id": "linkedin_4449771630",
