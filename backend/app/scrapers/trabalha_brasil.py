@@ -4,6 +4,7 @@ import ssl
 import logging
 import re
 import asyncio
+import hashlib
 from typing import List, Dict, Any
 from bs4 import BeautifulSoup
 from .base import BaseScraper
@@ -53,8 +54,6 @@ class TrabalhaBrasilScraper(BaseScraper):
                             # Ignorar vagas sugeridas de outros estados/cidades distantes
                             continue
 
-                        numeric_id = parts[-1]
-                        external_id = f"tb_{numeric_id}"
                         clean_href = href.split('?')[0].split('#')[0].rstrip('/')
                         if clean_href.startswith("http"):
                             full_url = clean_href
@@ -73,13 +72,25 @@ class TrabalhaBrasilScraper(BaseScraper):
                             title = cargo.replace('-', ' ').title()
 
                         company = strings[1] if len(strings) > 1 else "Empresa Confidencial"
-                        
+
                         work_model = "Presencial"
                         if len(strings) > 3:
                             if "remoto" in strings[3].lower() or "home" in strings[3].lower():
                                 work_model = "Remoto"
                             elif "hibrid" in strings[3].lower():
                                 work_model = "Híbrido"
+
+                        # O site reposta o mesmo anuncio repetidamente com um novo ID numerico
+                        # a cada execucao (mesmo dentro de uma unica varredura). Por isso o
+                        # external_id usa um hash do conteudo normalizado (titulo+empresa+cidade),
+                        # e nao o ID numerico da URL, para nao tratar a mesma vaga como nova todo dia.
+                        content_key = "|".join([
+                            normalize_text(title),
+                            normalize_text(company),
+                            city_name.lower(),
+                            state.lower(),
+                        ])
+                        external_id = f"tb_{hashlib.sha1(content_key.encode('utf-8')).hexdigest()[:16]}"
 
                         job_dict = {
                             "external_id": external_id,
@@ -131,5 +142,18 @@ class TrabalhaBrasilScraper(BaseScraper):
             if isinstance(r, list):
                 all_jobs.extend(r)
 
-        logger.info(f"[TrabalhaBrasil] Total de vagas regionais coletadas: {len(all_jobs)}")
-        return all_jobs
+        raw_count = len(all_jobs)
+
+        # O site retorna repetidamente o mesmo anuncio (mesmo titulo/empresa/cidade) sob
+        # IDs numericos diferentes na mesma pagina de busca. Deduplicar aqui evita salvar
+        # varias copias da mesma vaga em uma unica varredura.
+        deduped: Dict[str, Dict[str, Any]] = {}
+        for job in all_jobs:
+            deduped.setdefault(job["external_id"], job)
+        unique_jobs = list(deduped.values())
+
+        logger.info(
+            f"[TrabalhaBrasil] Total de vagas regionais coletadas: {raw_count} "
+            f"({raw_count - len(unique_jobs)} repetidas descartadas, {len(unique_jobs)} unicas)"
+        )
+        return unique_jobs

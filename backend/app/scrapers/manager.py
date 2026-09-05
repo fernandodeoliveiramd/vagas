@@ -8,6 +8,7 @@ from .gupy import GupyScraper
 from .trabalha_brasil import TrabalhaBrasilScraper
 from .linkedin import LinkedInScraper
 from .local_feed import LocalFeedScraper
+from .catho import CathoScraper
 from ..core.config import config
 from ..database.db import insert_job, log_scrape, get_stats, normalize_url
 
@@ -19,12 +20,13 @@ class ScraperManager:
             LinkedInScraper(),
             TrabalhaBrasilScraper(),
             GupyScraper(),
+            CathoScraper(),
             LocalFeedScraper()
         ]
 
     async def run_all(self) -> Dict[str, Any]:
         start_time = time.time()
-        logger.info("Iniciando coleta em todos os portais de vagas (LinkedIn, Trabalha Brasil, Gupy, Polo Regional)...")
+        logger.info("Iniciando coleta em todos os portais de vagas (LinkedIn, Trabalha Brasil, Gupy, Catho, Polo Regional)...")
         
         # Executar scrapers em paralelo
         tasks = [scraper.scrape() for scraper in self.scrapers]

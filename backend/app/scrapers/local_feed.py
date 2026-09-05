@@ -39,7 +39,7 @@ class LocalFeedScraper(BaseScraper):
                 "work_model": "Presencial",
                 "description": "Calibração e manutenção de instrumentos industriais de pressão, temperatura e vazão, malhas de controle e controladores lógicos programáveis (CLP).",
                 "salary": "R$ 4.200,00 + 30% Periculosidade + Benefícios",
-                "url": "https://sagres.gupy.io/",
+                "url": "https://sagres.pandape.com.br/",
                 "source": "Sagres Logística",
                 "published_at": "Recente"
             },
@@ -67,7 +67,7 @@ class LocalFeedScraper(BaseScraper):
                 "work_model": "Presencial",
                 "description": "Manutenção em redes de distribuição de energia elétrica, subestações e leitura de diagramas unifilares. NR-10 e NR-35 obrigatórios.",
                 "salary": "R$ 3.100,00 + 30% Periculosidade + Vale Alimentação",
-                "url": "https://equatorial.gupy.io/",
+                "url": "https://equatorialenergia.gupy.io/",
                 "source": "Equatorial Energia",
                 "published_at": "Recente"
             }
