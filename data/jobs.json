@@ -1,31 +1,7 @@
 {
   "success": true,
-  "count": 45,
+  "count": 44,
   "jobs": [
-    {
-      "id": 46,
-      "external_id": "linkedin_4463607678",
-      "source": "LinkedIn",
-      "title": "Data Analyst - Power BI and SQL Expert  (Remote only For US Candidates)",
-      "company": "Torentify",
-      "location": "Remoto (Brasil)",
-      "city": "Remoto",
-      "state": "RS",
-      "work_model": "Remoto",
-      "category": "tecnologia_jr",
-      "role_matched": "Analista de Dados Júnior",
-      "description": "Vaga recente de Data Analyst - Power BI and SQL Expert  (Remote only For US Candidates) na empresa Torentify em Remoto. Publicada no LinkedIn.",
-      "salary": "A combinar / Não informado",
-      "url": "https://www.linkedin.com/jobs/view/data-analyst-power-bi-and-sql-expert-remote-only-for-us-candidates-at-torentify-4463607678",
-      "match_score": 42,
-      "status": "nova",
-      "notes": "",
-      "is_favorite": 0,
-      "published_at": "Há 9 horas",
-      "created_at": "2026-09-05T03:54:14.696846",
-      "updated_at": "2026-09-05T03:54:14.696846",
-      "dedup_hash": "e3fdfd96f93d25ea7c3bc477991bca6e649ee2d46ba096c9bedf065829647233"
-    },
     {
       "id": 45,
       "external_id": "linkedin_4449771630",
