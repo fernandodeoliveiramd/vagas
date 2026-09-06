@@ -652,12 +652,15 @@
     function markJobViewed(job) {
       if (!job) return;
       const viewedMap = getViewedMap();
-      const kId = String(job.id);
+      // Nao usar job.id como chave: e um autoincrement local que pode ser
+      // reatribuido a uma vaga diferente quando o banco e reconstruido
+      // (ex.: scraper), o que faria uma vaga nova "herdar" o status de
+      // uma vaga antiga e ja removida. Usar apenas identificadores de
+      // conteudo, estaveis entre reconstrucoes do banco.
       const kExtId = job.external_id || '';
       const kHash = job.dedup_hash || '';
       const kUrl = job.url || '';
 
-      viewedMap[kId] = true;
       if (kExtId) viewedMap[kExtId] = true;
       if (kHash) viewedMap[kHash] = true;
       if (kUrl) viewedMap[kUrl] = true;
@@ -673,7 +676,6 @@
     function isJobViewed(job) {
       if (!job) return false;
       const viewedMap = getViewedMap();
-      if (viewedMap[String(job.id)]) return true;
       if (job.external_id && viewedMap[job.external_id]) return true;
       if (job.dedup_hash && viewedMap[job.dedup_hash]) return true;
       if (job.url && viewedMap[job.url]) return true;
@@ -682,9 +684,9 @@
 
     function getUserJobState(job, userData) {
       if (!job || !userData) return {};
-      return userData[String(job.id)] || 
-             (job.external_id && userData[job.external_id]) ||
-             (job.dedup_hash && userData[job.dedup_hash]) || 
+      // Idem: nunca usar job.id aqui (ver comentario em markJobViewed).
+      return (job.external_id && userData[job.external_id]) ||
+             (job.dedup_hash && userData[job.dedup_hash]) ||
              (job.url && userData[job.url]) || {};
     }
 
@@ -794,13 +796,13 @@
               updated_at: row.updated_at ? new Date(row.updated_at).getTime() : Date.now()
             };
 
+            // job_id nao e usado aqui: e o autoincrement local da vaga no
+            // momento em que o registro foi salvo, e pode ser reatribuido a
+            // outra vaga depois de uma reconstrucao do banco. job_key (que
+            // vem de external_id/dedup_hash/url) e a unica chave estavel.
             if (row.job_key) {
               localUserData[row.job_key] = item;
               if (row.viewed) localViewed[row.job_key] = true;
-            }
-            if (row.job_id) {
-              localUserData[row.job_id] = item;
-              if (row.viewed) localViewed[row.job_id] = true;
             }
           });
 
@@ -855,11 +857,10 @@
               updated_at: newRow.updated_at ? new Date(newRow.updated_at).getTime() : Date.now()
             };
 
+            // job_id nao e usado para casar vagas (ver comentario em loadSupabaseData).
             localUserData[newRow.job_key] = item;
-            if (newRow.job_id) localUserData[newRow.job_id] = item;
             if (newRow.viewed) {
               localViewed[newRow.job_key] = true;
-              if (newRow.job_id) localViewed[newRow.job_id] = true;
             }
 
             saveUserData(localUserData);
@@ -869,7 +870,7 @@
 
             allLoadedJobs.forEach(job => {
               const key = job.external_id || job.dedup_hash || String(job.id);
-              if (key === newRow.job_key || String(job.id) === String(newRow.job_id)) {
+              if (key === newRow.job_key) {
                 job.status = newRow.status;
                 job.notes = newRow.notes;
                 if (newRow.viewed) job.viewed = true;
@@ -1396,13 +1397,12 @@
       }
 
       const userData = getUserData();
-      const kId = String(jobId);
+      // job.id nao entra como chave (ver comentario em markJobViewed).
       const kExtId = job?.external_id || '';
       const kHash = job?.dedup_hash || '';
       const kUrl = job?.url || '';
 
       const stateObj = { status: newStatus, notes: job?.notes || '', viewed: true, updated_at: Date.now() };
-      userData[kId] = stateObj;
       if (kExtId) userData[kExtId] = stateObj;
       if (kHash) userData[kHash] = stateObj;
       if (kUrl) userData[kUrl] = stateObj;
@@ -1428,13 +1428,12 @@
       }
 
       const userData = getUserData();
-      const kId = String(currentActiveJobId);
+      // job.id nao entra como chave (ver comentario em markJobViewed).
       const kExtId = job?.external_id || '';
       const kHash = job?.dedup_hash || '';
       const kUrl = job?.url || '';
 
       const stateObj = { status: job?.status || 'nova', notes: notes, viewed: true, updated_at: Date.now() };
-      userData[kId] = stateObj;
       if (kExtId) userData[kExtId] = stateObj;
       if (kHash) userData[kHash] = stateObj;
       if (kUrl) userData[kUrl] = stateObj;
@@ -1470,6 +1469,7 @@
         const dateStr = formatJobDate(job);
 
         if (cols[st]) {
+          const isDiscarded = st === 'descartada';
           const card = document.createElement('div');
           card.className = "bg-white border border-slate-200 rounded-xl p-3.5 space-y-2 shadow-2xs hover:border-brand-500 transition cursor-pointer";
           card.onclick = () => {
@@ -1486,7 +1486,17 @@
               <span>📍 ${escapeHtml(job.city || 'RS')}</span>
               <span class="flex items-center gap-0.5 text-slate-500"><span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>${dateStr}</span>
             </div>
+            <div class="flex items-center justify-end pt-1.5 border-t border-slate-100">
+              <button class="pipe-discard-btn text-[10px] font-mono font-semibold text-slate-400 hover:text-red-600 transition">
+                ${isDiscarded ? '↺ Restaurar' : '✕ Descartar'}
+              </button>
+            </div>
           `;
+          const discardBtn = card.querySelector('.pipe-discard-btn');
+          discardBtn.onclick = (event) => {
+            event.stopPropagation();
+            toggleDiscard(job.id);
+          };
           cols[st].appendChild(card);
         }
       });
