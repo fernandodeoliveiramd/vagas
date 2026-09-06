@@ -28,7 +28,7 @@ jobs:
       - name: Instalar Dependências
         run: |
           python -m pip install --upgrade pip
-          pip install beautifulsoup4 pyyaml httpx
+          pip install -r requirements.txt
 
       - name: Executar Varredura e Exportar JSON
         run: |

@@ -61,6 +61,8 @@
       line-height: 1;
     }
 
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
@@ -362,7 +364,7 @@
                 <span id="inspectorScore" class="font-bold text-brand-600 block truncate">100% Match</span>
               </div>
               <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl col-span-2 sm:col-span-1">
-                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Data Vaga</span>
+                <span id="inspectorDateLabel" class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Data</span>
                 <span id="inspectorDate" class="font-bold text-slate-800 block truncate">Recente</span>
               </div>
             </div>
@@ -481,43 +483,91 @@
         </div>
       </div>
 
-      <!-- Cloud Sync Panel (Supabase) -->
+      <!-- Cloud Sync Panel (Supabase Auth + RLS) -->
       <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
         <div class="flex items-start sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-[24px]">cloud_done</span>
+              <span class="material-symbols-outlined text-[24px]">cloud_sync</span>
             </div>
             <div>
-              <h3 class="font-bold text-sm text-slate-900">Sincronização em Nuvem (Supabase)</h3>
-              <p class="text-xs text-slate-500 font-mono">Conectado ao seu banco de dados PostgreSQL na nuvem</p>
+              <h3 class="font-bold text-sm text-slate-900">Sincronização em Nuvem</h3>
+              <p class="text-xs text-slate-500 font-mono">Status e anotações entre celular e computador</p>
             </div>
           </div>
-          <span id="syncStatusPill" class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            🟢 Conectado
+          <span id="syncStatusPill" class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-100 text-slate-600">
+            Offline
           </span>
         </div>
 
-        <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-3.5 text-xs text-slate-700 leading-relaxed space-y-1.5">
-          <div class="flex items-center gap-1.5 font-bold text-emerald-800">
-            <span class="material-symbols-outlined text-[18px]">verified</span>
-            <span>Sincronização 100% Automática em Tempo Real Ativa!</span>
+        <!-- Estado: sem sessão -->
+        <div id="authSignedOut" class="space-y-3">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-700 leading-relaxed space-y-1.5">
+            <div class="flex items-center gap-1.5 font-bold text-slate-800">
+              <span class="material-symbols-outlined text-[18px] text-slate-500">lock</span>
+              <span>Suas anotações são privadas de verdade</span>
+            </div>
+            <p class="text-slate-600 text-[11px]">
+              Sem entrar, o app funciona normalmente, mas guarda tudo só neste aparelho.
+              Ao entrar, seus status e anotações passam a sincronizar entre celular e computador —
+              e ficam legíveis apenas pela sua conta.
+            </p>
           </div>
-          <p class="text-slate-600 text-[11px]">
-            Você <strong>não precisa digitar chave alguma no celular</strong>. Qualquer alteração de status (*Interesse, Candidatado, Descartada*), anotações ou visualizações é sincronizada instantaneamente entre todos os computadores e celulares conectados.
+
+          <div class="flex flex-col sm:flex-row gap-2">
+            <label for="authEmail" class="sr-only">E-mail para receber o link de acesso</label>
+            <input
+              type="email"
+              id="authEmail"
+              autocomplete="email"
+              placeholder="seu-email@exemplo.com"
+              class="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono text-base sm:text-xs focus:bg-white focus:outline-none focus:border-brand-500"
+            />
+            <button onclick="signInWithEmail()" class="px-4 py-2.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95 shrink-0">
+              <span class="material-symbols-outlined text-[16px]">mail</span>
+              <span>Receber link de acesso</span>
+            </button>
+          </div>
+
+          <p id="authSentHint" class="hidden text-[11px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+            Link enviado. Abra o e-mail neste mesmo aparelho e clique para entrar —
+            a sessão fica salva e você não precisa repetir isso toda vez.
+          </p>
+
+          <p class="text-[11px] text-slate-400 font-mono">
+            Sem senha para criar ou lembrar. O link vale por alguns minutos.
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100">
-          <div class="flex items-center gap-2">
-            <button onclick="loadSupabaseData(false)" id="btnSyncNow" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition active:scale-95">
-              <span class="material-symbols-outlined text-[16px]">cloud_sync</span>
-              <span>Sincronizar Agora</span>
-            </button>
+        <!-- Estado: sessão ativa -->
+        <div id="authSignedIn" class="hidden space-y-3">
+          <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-3.5 text-xs text-slate-700 flex items-start gap-2">
+            <span class="material-symbols-outlined text-[18px] text-emerald-700 shrink-0">verified_user</span>
+            <div class="min-w-0">
+              <p class="font-bold text-emerald-800">Conectado</p>
+              <p class="text-slate-600 text-[11px] font-mono truncate" id="authUserEmail">conta conectada</p>
+              <p class="text-slate-600 text-[11px] mt-1">
+                Alterações de status, anotações e visualizações sincronizam automaticamente.
+                Em caso de conflito entre aparelhos, vence a alteração mais recente.
+              </p>
+            </div>
           </div>
-          <span id="syncLastTimeLabel" class="text-[11px] font-mono text-slate-400">
-            Supabase conectado
-          </span>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100">
+            <div class="flex items-center gap-2">
+              <button onclick="loadSupabaseData(false)" id="btnSyncNow" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 shadow-sm transition active:scale-95">
+                <span class="material-symbols-outlined text-[16px]">cloud_sync</span>
+                <span>Sincronizar Agora</span>
+              </button>
+              <button onclick="signOut()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-[16px]">logout</span>
+                <span>Sair</span>
+              </button>
+            </div>
+            <span id="syncLastTimeLabel" class="text-[11px] font-mono text-slate-400">
+              Sem sincronização em nuvem
+            </span>
+          </div>
         </div>
       </div>
 
@@ -622,88 +672,157 @@
     let currentViewMode = 'split';
     let currentMainTab = 'vagas';
 
-    const STORAGE_KEY = 'vagas_rs_user_data_v1';
-    const VIEWED_KEY = 'vagas_rs_viewed_jobs_v1';
+    const STORAGE_KEY  = 'vagas_rs_user_data_v1';
+    const VIEWED_KEY   = 'vagas_rs_viewed_jobs_v1';   // legado: migrado para STORAGE_KEY
+    const PENDING_KEY  = 'vagas_rs_pending_sync_v1';
+    const MIGRATED_KEY = 'vagas_rs_state_migrated_v2';
 
-    function getUserData() {
+    // =========================================================
+    // CHAVE DE IDENTIDADE DA VAGA
+    //
+    // job.id e um autoincrement local: o banco e reconstruido a cada
+    // varredura e o mesmo id pode cair em outra vaga. Nunca entra em
+    // chave. A ordem abaixo vai do identificador mais estavel para o
+    // menos estavel, e e a mesma no localStorage e no Supabase.
+    // =========================================================
+    function jobKey(job) {
+      if (!job) return '';
+      return job.external_id || job.dedup_hash || job.url || '';
+    }
+
+    // Versoes anteriores gravavam o mesmo estado sob as tres chaves ao
+    // mesmo tempo, e elas divergiam com o tempo. Continuamos lendo todas
+    // para nao perder historico; a escrita usa so a canonica.
+    function jobKeyAliases(job) {
+      if (!job) return [];
+      return [job.external_id, job.dedup_hash, job.url].filter(Boolean);
+    }
+
+    // =========================================================
+    // ESTADO LOCAL
+    // =========================================================
+    function readStore(key) {
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        return JSON.parse(localStorage.getItem(key)) || {};
       } catch (e) {
         return {};
       }
     }
 
-    function saveUserData(data) {
+    function writeStore(key, data) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
       } catch (e) {
-        console.error("Erro localStorage", e);
+        console.error('Falha ao gravar no localStorage', e);
+        return false;
       }
     }
 
-    function getViewedMap() {
-      try {
-        return JSON.parse(localStorage.getItem(VIEWED_KEY)) || {};
-      } catch (e) {
-        return {};
-      }
+    function getUserData()   { return readStore(STORAGE_KEY); }
+    function saveUserData(d) { return writeStore(STORAGE_KEY, d); }
+
+    function normalizeEntry(raw) {
+      if (!raw) return null;
+      return {
+        status: raw.status || 'nova',
+        notes: raw.notes || '',
+        viewed: !!raw.viewed,
+        updated_at: Number(raw.updated_at) || 0
+      };
     }
 
-    function markJobViewed(job) {
-      if (!job) return;
-      const viewedMap = getViewedMap();
-      // Nao usar job.id como chave: e um autoincrement local que pode ser
-      // reatribuido a uma vaga diferente quando o banco e reconstruido
-      // (ex.: scraper), o que faria uma vaga nova "herdar" o status de
-      // uma vaga antiga e ja removida. Usar apenas identificadores de
-      // conteudo, estaveis entre reconstrucoes do banco.
-      const kExtId = job.external_id || '';
-      const kHash = job.dedup_hash || '';
-      const kUrl = job.url || '';
+    // Migra o formato antigo (VIEWED_KEY separado + estado espalhado por
+    // tres chaves) para o atual. Roda uma unica vez por aparelho.
+    function migrateLegacyState() {
+      if (localStorage.getItem(MIGRATED_KEY)) return;
+      const userData = getUserData();
+      const legacyViewed = readStore(VIEWED_KEY);
 
-      if (kExtId) viewedMap[kExtId] = true;
-      if (kHash) viewedMap[kHash] = true;
-      if (kUrl) viewedMap[kUrl] = true;
+      Object.keys(legacyViewed).forEach(k => {
+        if (!legacyViewed[k]) return;
+        const existing = normalizeEntry(userData[k]);
+        if (existing) {
+          existing.viewed = true;
+          userData[k] = existing;
+        } else {
+          // updated_at 0: qualquer alteracao real, local ou remota, vence.
+          userData[k] = { status: 'nova', notes: '', viewed: true, updated_at: 0 };
+        }
+      });
 
-      try {
-        localStorage.setItem(VIEWED_KEY, JSON.stringify(viewedMap));
-      } catch (e) {}
+      Object.keys(userData).forEach(k => { userData[k] = normalizeEntry(userData[k]); });
+      saveUserData(userData);
+      try { localStorage.setItem(MIGRATED_KEY, '1'); } catch (e) {}
+    }
 
-      job.viewed = true;
-      saveJobToSupabase(job, job.status, job.notes, true);
+    // Le o estado de uma vaga considerando os aliases legados e devolve
+    // a versao mais recente entre eles.
+    function getUserJobState(job, userData) {
+      const store = userData || getUserData();
+      let best = null;
+      jobKeyAliases(job).forEach(k => {
+        const entry = normalizeEntry(store[k]);
+        if (entry && (!best || entry.updated_at > best.updated_at)) best = entry;
+      });
+      return best || {};
     }
 
     function isJobViewed(job) {
-      if (!job) return false;
-      const viewedMap = getViewedMap();
-      if (job.external_id && viewedMap[job.external_id]) return true;
-      if (job.dedup_hash && viewedMap[job.dedup_hash]) return true;
-      if (job.url && viewedMap[job.url]) return true;
-      return false;
+      return getUserJobState(job).viewed === true;
     }
 
-    function getUserJobState(job, userData) {
-      if (!job || !userData) return {};
-      // Idem: nunca usar job.id aqui (ver comentario em markJobViewed).
-      return (job.external_id && userData[job.external_id]) ||
-             (job.dedup_hash && userData[job.dedup_hash]) ||
-             (job.url && userData[job.url]) || {};
+    // Ponto unico de escrita do estado local. Recebe um patch parcial e
+    // preserva o resto - e o que impede uma marcacao de "visualizada" de
+    // arrastar junto um status desatualizado que estava so em memoria.
+    function setLocalJobState(job, patch) {
+      const key = jobKey(job);
+      if (!key) return null;
+
+      const userData = getUserData();
+      const current = getUserJobState(job, userData);
+      const merged = {
+        status: patch.status !== undefined ? patch.status : (current.status || 'nova'),
+        notes:  patch.notes  !== undefined ? patch.notes  : (current.notes  || ''),
+        viewed: patch.viewed !== undefined ? !!patch.viewed : !!current.viewed,
+        updated_at: Date.now()
+      };
+
+      userData[key] = merged;
+      // Recolhe as chaves duplicadas do formato antigo.
+      jobKeyAliases(job).forEach(k => { if (k !== key) delete userData[k]; });
+      saveUserData(userData);
+      return merged;
+    }
+
+    function markJobViewed(job) {
+      if (!job || isJobViewed(job)) return;   // idempotente: nao regrava nem re-sincroniza
+      const merged = setLocalJobState(job, { viewed: true });
+      job.viewed = true;
+      if (merged) pushToSupabase(job, merged);
     }
 
     // =========================================================
-    // SUPABASE CLOUD DATABASE & REALTIME SYNC (MULTI-DEVICE)
+    // SUPABASE - AUTENTICACAO
+    //
+    // A chave anon abaixo e publica por natureza e nao concede acesso a
+    // nada sozinha: quem autoriza e o RLS da tabela, que so devolve as
+    // linhas do usuario logado (supabase/migrations/0001_auth_rls.sql).
+    // Sem sessao, o app funciona 100% offline sobre o localStorage.
     // =========================================================
     const SUPABASE_URL = "https://qnqeemnlabzvgdzfejjj.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFucWVlbW5sYWJ6dmdkemZlampqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzIwMjcsImV4cCI6MjEwNDEwODAyN30.3OKJPWAZKD4bJ1XLfRsp-ulYJRPGQ_QV_idLo3dnYr4";
-    
+
     let supabaseClient = null;
-    let isSupabaseConnected = false;
+    let currentUser = null;
     let supabaseRealtimeChannel = null;
 
     function initSupabaseClient() {
       if (!supabaseClient && window.supabase) {
         try {
-          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+          });
         } catch (e) {
           console.error("Erro ao inicializar Supabase:", e);
         }
@@ -711,13 +830,313 @@
       return supabaseClient;
     }
 
+    async function initAuth() {
+      const sb = initSupabaseClient();
+      if (!sb) { updateSyncUI(); return; }
+
+      try {
+        const { data } = await sb.auth.getSession();
+        currentUser = data && data.session ? data.session.user : null;
+      } catch (e) {
+        currentUser = null;
+      }
+
+      sb.auth.onAuthStateChange((event, session) => {
+        const wasLogged = !!currentUser;
+        currentUser = session ? session.user : null;
+        updateSyncUI();
+
+        if (currentUser && !wasLogged) {
+          flushPendingSync().then(() => loadSupabaseData(true));
+          setupSupabaseRealtime();
+        } else if (!currentUser && wasLogged) {
+          teardownRealtime();
+        }
+      });
+
+      updateSyncUI();
+      if (currentUser) {
+        await flushPendingSync();
+        await loadSupabaseData(true);
+        setupSupabaseRealtime();
+      }
+    }
+
+    async function signInWithEmail() {
+      const sb = initSupabaseClient();
+      const input = document.getElementById('authEmail');
+      const email = input ? input.value.trim() : '';
+
+      if (!sb) { showToast("Biblioteca do Supabase indisponivel.", "error"); return; }
+      if (!email || !email.includes('@')) { showToast("Informe um e-mail valido.", "error"); return; }
+
+      showToast("Enviando o link de acesso...", "info");
+      try {
+        const { error } = await sb.auth.signInWithOtp({
+          email,
+          options: { emailRedirectTo: window.location.href.split('#')[0] }
+        });
+        if (error) throw error;
+        showToast("Link enviado! Confira seu e-mail e clique para entrar.", "success");
+        const hint = document.getElementById('authSentHint');
+        if (hint) hint.classList.remove('hidden');
+      } catch (err) {
+        showToast("Nao foi possivel enviar o link: " + err.message, "error");
+      }
+    }
+
+    async function signOut() {
+      const sb = initSupabaseClient();
+      if (!sb) return;
+      teardownRealtime();
+      await sb.auth.signOut();
+      currentUser = null;
+      updateSyncUI();
+      // O estado local permanece: sair da nuvem nao apaga o que e seu neste aparelho.
+      showToast("Sessao encerrada. Seus dados continuam salvos neste aparelho.", "info");
+    }
+
+    // =========================================================
+    // SUPABASE - LEITURA E RESOLUCAO DE CONFLITO
+    // =========================================================
+
+    // Regra unica de merge, usada nos tres caminhos: carga inicial,
+    // realtime e importacao de backup. Vence quem tem updated_at maior;
+    // no empate o estado local permanece - o aparelho em uso nao e
+    // sobrescrito por um eco do proprio dado que acabou de enviar.
+    function mergeRemoteEntry(userData, key, remote) {
+      if (!key) return false;
+      const incoming = normalizeEntry(remote);
+      if (!incoming) return false;
+
+      const current = normalizeEntry(userData[key]);
+      if (current && current.updated_at >= incoming.updated_at) return false;
+
+      userData[key] = incoming;
+      return true;
+    }
+
+    function rowToEntry(row) {
+      return {
+        status: row.status || 'nova',
+        notes: row.notes || '',
+        viewed: !!row.viewed,
+        // O updated_at e escrito pelo cliente que fez a alteracao, entao
+        // a comparacao acontece sempre entre carimbos da mesma natureza.
+        updated_at: row.updated_at ? new Date(row.updated_at).getTime() : 0
+      };
+    }
+
+    // Reaplica o estado persistido sobre a lista em memoria e redesenha.
+    function reapplyStateToJobs() {
+      const userData = getUserData();
+      allLoadedJobs.forEach(job => {
+        const st = getUserJobState(job, userData);
+        job.status = st.status || 'nova';
+        job.notes = st.notes !== undefined ? st.notes : (job.notes || '');
+        job.viewed = !!st.viewed;
+      });
+      applyFilters();
+      if (currentMainTab === 'candidaturas') renderPipeline();
+      renderInspector();
+    }
+
+    async function loadSupabaseData(silent = false) {
+      const sb = initSupabaseClient();
+      if (!sb) return;
+
+      if (!currentUser) {
+        if (!silent) showToast("Entre com seu e-mail para sincronizar na nuvem.", "info");
+        updateSyncUI();
+        return;
+      }
+
+      if (!silent) updateSyncUI('syncing');
+
+      try {
+        await flushPendingSync();
+
+        const { data, error } = await sb
+          .from('user_job_interactions')
+          .select('job_key, status, notes, viewed, updated_at');
+
+        if (error) throw error;
+
+        const userData = getUserData();
+        let changed = 0;
+        (data || []).forEach(row => {
+          if (mergeRemoteEntry(userData, row.job_key, rowToEntry(row))) changed++;
+        });
+
+        if (changed > 0) {
+          saveUserData(userData);
+          reapplyStateToJobs();
+        }
+
+        updateSyncUI();
+        setupSupabaseRealtime();
+        if (!silent) {
+          showToast(changed > 0
+            ? "Sincronizado: " + changed + (changed === 1 ? " vaga atualizada." : " vagas atualizadas.")
+            : "Tudo em dia com a nuvem.", "success");
+        }
+      } catch (err) {
+        console.warn("Falha ao carregar do Supabase:", err);
+        updateSyncUI();
+        showToast("Erro ao sincronizar: " + err.message, "error");
+      }
+    }
+
+    function teardownRealtime() {
+      const sb = initSupabaseClient();
+      if (sb && supabaseRealtimeChannel) {
+        sb.removeChannel(supabaseRealtimeChannel);
+      }
+      supabaseRealtimeChannel = null;
+    }
+
+    function setupSupabaseRealtime() {
+      const sb = initSupabaseClient();
+      if (!sb || !currentUser || supabaseRealtimeChannel) return;
+
+      supabaseRealtimeChannel = sb
+        .channel('user-job-interactions')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_job_interactions',
+            filter: 'user_id=eq.' + currentUser.id
+          },
+          (payload) => {
+            const row = payload.new;
+            if (!row || !row.job_key) return;
+
+            const userData = getUserData();
+            // Mesma regra de conflito da carga inicial: um evento antigo
+            // que chega atrasado nao desfaz uma edicao local mais nova.
+            if (!mergeRemoteEntry(userData, row.job_key, rowToEntry(row))) return;
+
+            saveUserData(userData);
+            reapplyStateToJobs();
+            showToast("Alteracao recebida de outro aparelho.", "info");
+          }
+        )
+        .subscribe();
+    }
+
+    // =========================================================
+    // SUPABASE - ESCRITA COM FILA DE PENDENCIAS
+    //
+    // Sem a fila, uma alteracao feita no celular offline (ou deslogado)
+    // some: grava no localStorage, falha no upsert e nunca mais e tentada.
+    // =========================================================
+    function getPendingSync() { return readStore(PENDING_KEY); }
+
+    function enqueuePendingSync(key, entry) {
+      const pending = getPendingSync();
+      const current = pending[key];
+      if (current && Number(current.updated_at) >= entry.updated_at) return;
+      pending[key] = entry;
+      writeStore(PENDING_KEY, pending);
+    }
+
+    function dequeuePendingSync(key, syncedAt) {
+      const pending = getPendingSync();
+      // So remove se nada mais novo entrou na fila enquanto o upsert corria.
+      if (pending[key] && Number(pending[key].updated_at) <= syncedAt) {
+        delete pending[key];
+        writeStore(PENDING_KEY, pending);
+      }
+    }
+
+    async function upsertEntry(key, entry) {
+      const sb = initSupabaseClient();
+      if (!sb || !currentUser || !key) return false;
+
+      const { error } = await sb.from('user_job_interactions').upsert({
+        job_key: key,
+        user_id: currentUser.id,
+        status: entry.status,
+        notes: entry.notes,
+        viewed: entry.viewed,
+        updated_at: new Date(entry.updated_at).toISOString()
+      }, { onConflict: 'user_id,job_key' });
+
+      if (error) throw error;
+      return true;
+    }
+
+    // Envia o estado ja consolidado no localStorage - nunca o objeto em
+    // memoria, que pode carregar um status desatualizado.
+    async function pushToSupabase(job, entry) {
+      const key = jobKey(job);
+      if (!key) return;
+
+      const payload = entry || getUserJobState(job);
+      if (!payload || !payload.updated_at) return;
+
+      if (!currentUser) { enqueuePendingSync(key, payload); updateSyncUI(); return; }
+
+      try {
+        await upsertEntry(key, payload);
+        dequeuePendingSync(key, payload.updated_at);
+      } catch (err) {
+        console.warn("Erro ao salvar no Supabase, enfileirando:", err);
+        enqueuePendingSync(key, payload);
+        updateSyncUI();
+      }
+    }
+
+    async function flushPendingSync() {
+      const sb = initSupabaseClient();
+      if (!sb || !currentUser) return;
+
+      const pending = getPendingSync();
+      const keys = Object.keys(pending);
+      if (keys.length === 0) return;
+
+      for (const key of keys) {
+        const entry = normalizeEntry(pending[key]);
+        try {
+          await upsertEntry(key, entry);
+          dequeuePendingSync(key, entry.updated_at);
+        } catch (err) {
+          console.warn("Pendencia mantida na fila:", key, err);
+          break;   // rede provavelmente caiu; tenta tudo de novo na proxima
+        }
+      }
+      updateSyncUI();
+    }
+
+    // =========================================================
+    // INTERFACE DE SINCRONIZACAO
+    // =========================================================
     function updateSyncUI(state = null) {
-      const headerIcon = document.getElementById('cloudSyncIcon');
-      const headerText = document.getElementById('cloudSyncText');
-      const headerBtn = document.getElementById('btnCloudSyncHeader');
-      const badgeHeader = document.getElementById('syncBadgeHeader');
-      const statusPill = document.getElementById('syncStatusPill');
+      const headerIcon    = document.getElementById('cloudSyncIcon');
+      const headerText    = document.getElementById('cloudSyncText');
+      const headerBtn     = document.getElementById('btnCloudSyncHeader');
+      const badgeHeader   = document.getElementById('syncBadgeHeader');
+      const statusPill    = document.getElementById('syncStatusPill');
       const lastTimeLabel = document.getElementById('syncLastTimeLabel');
+      const signedOutBox  = document.getElementById('authSignedOut');
+      const signedInBox   = document.getElementById('authSignedIn');
+      const emailLabel    = document.getElementById('authUserEmail');
+
+      const pendingCount = Object.keys(getPendingSync()).length;
+
+      if (signedOutBox && signedInBox) {
+        signedOutBox.classList.toggle('hidden', !!currentUser);
+        signedInBox.classList.toggle('hidden', !currentUser);
+      }
+      if (emailLabel && currentUser) emailLabel.innerText = currentUser.email || 'conta conectada';
+
+      const setPill = (text, cls) => {
+        if (!statusPill) return;
+        statusPill.innerText = text;
+        statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold ' + cls;
+      };
 
       if (state === 'syncing') {
         if (headerIcon) {
@@ -725,204 +1144,73 @@
           headerIcon.className = 'material-symbols-outlined text-[16px] text-emerald-600 animate-spin';
         }
         if (headerText) headerText.innerText = 'Sincronizando...';
-        if (statusPill) {
-          statusPill.innerText = 'Sincronizando...';
-          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
-        }
+        setPill('Sincronizando...', 'bg-emerald-50 text-emerald-700 border border-emerald-200');
         return;
       }
 
-      if (isSupabaseConnected) {
+      if (currentUser) {
         if (headerIcon) {
-          headerIcon.innerText = 'cloud_done';
-          headerIcon.className = 'material-symbols-outlined text-[16px] text-emerald-600';
+          headerIcon.innerText = pendingCount > 0 ? 'cloud_upload' : 'cloud_done';
+          headerIcon.className = 'material-symbols-outlined text-[16px] ' + (pendingCount > 0 ? 'text-amber-600' : 'text-emerald-600');
         }
-        if (headerText) headerText.innerText = 'Supabase Ativo';
-        if (headerBtn) headerBtn.title = 'Conectado ao Supabase em tempo real. Clique para sincronizar agora.';
-
+        if (headerText) headerText.innerText = pendingCount > 0 ? 'Pendente' : 'Na nuvem';
+        if (headerBtn) headerBtn.title = 'Conectado como ' + currentUser.email + '. Clique para sincronizar agora.';
         if (badgeHeader) {
           badgeHeader.className = 'self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
-          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Supabase em Tempo Real</span>';
+          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>Sincronizado</span>';
         }
-        if (statusPill) {
-          statusPill.innerText = '🟢 Conectado';
-          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
-        }
+        setPill(pendingCount > 0 ? 'Fila: ' + pendingCount : 'Conectado',
+                pendingCount > 0 ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                 : 'bg-emerald-50 text-emerald-700 border border-emerald-200');
         if (lastTimeLabel) {
           const now = new Date();
-          lastTimeLabel.innerText = `Sincronizado: ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+          lastTimeLabel.innerText = 'Sincronizado as ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
       } else {
         if (headerIcon) {
-          headerIcon.innerText = 'cloud_sync';
+          headerIcon.innerText = 'cloud_off';
           headerIcon.className = 'material-symbols-outlined text-[16px] text-slate-400';
         }
-        if (headerText) headerText.innerText = 'Conectando...';
-        if (statusPill) {
-          statusPill.innerText = 'Conectando...';
-          statusPill.className = 'hidden sm:inline-flex px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-slate-100 text-slate-600';
+        if (headerText) headerText.innerText = 'Local';
+        if (headerBtn) headerBtn.title = 'Somente neste aparelho. Clique para entrar e sincronizar.';
+        if (badgeHeader) {
+          badgeHeader.className = 'self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 text-slate-600 border border-slate-200';
+          badgeHeader.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-400"></span><span>Somente neste aparelho</span>';
+        }
+        setPill('Offline', 'bg-slate-100 text-slate-600');
+        if (lastTimeLabel) {
+          lastTimeLabel.innerText = pendingCount > 0
+            ? pendingCount + ' alteracao(oes) aguardando login'
+            : 'Sem sincronizacao em nuvem';
         }
       }
     }
 
     function triggerHeaderCloudSync() {
+      if (!currentUser) {
+        switchMainTab('telegram');
+        showToast("Entre com seu e-mail para ligar a sincronizacao.", "info");
+        return;
+      }
       loadSupabaseData(false);
     }
 
-    async function loadSupabaseData(silent = false) {
-      const sb = initSupabaseClient();
-      if (!sb) return;
-
-      if (!silent) updateSyncUI('syncing');
-
-      try {
-        const { data, error } = await sb
-          .from('user_job_interactions')
-          .select('*');
-
-        if (error) throw error;
-
-        isSupabaseConnected = true;
-
-        if (data && data.length > 0) {
-          const localUserData = getUserData();
-          const localViewed = getViewedMap();
-
-          data.forEach(row => {
-            const item = {
-              status: row.status || 'nova',
-              notes: row.notes || '',
-              viewed: !!row.viewed,
-              updated_at: row.updated_at ? new Date(row.updated_at).getTime() : Date.now()
-            };
-
-            // job_id nao e usado aqui: e o autoincrement local da vaga no
-            // momento em que o registro foi salvo, e pode ser reatribuido a
-            // outra vaga depois de uma reconstrucao do banco. job_key (que
-            // vem de external_id/dedup_hash/url) e a unica chave estavel.
-            if (row.job_key) {
-              localUserData[row.job_key] = item;
-              if (row.viewed) localViewed[row.job_key] = true;
-            }
-          });
-
-          saveUserData(localUserData);
-          try {
-            localStorage.setItem(VIEWED_KEY, JSON.stringify(localViewed));
-          } catch (e) {}
-
-          if (allLoadedJobs && allLoadedJobs.length > 0) {
-            allLoadedJobs.forEach(job => {
-              const st = getUserJobState(job, localUserData);
-              if (st && st.status) job.status = st.status;
-              if (st && st.notes !== undefined) job.notes = st.notes;
-              if (isJobViewed(job)) job.viewed = true;
-            });
-            applyFilters();
-            if (currentMainTab === 'candidaturas') renderPipeline();
-            renderInspector();
-          }
-        }
-
-        updateSyncUI();
-        setupSupabaseRealtime();
-        if (!silent) showToast("Dados sincronizados com o Supabase!", "success");
-      } catch (err) {
-        console.warn("Falha ao carregar do Supabase:", err);
-        updateSyncUI();
-        if (!silent) showToast(`Erro ao conectar ao Supabase: ${err.message}`, "error");
-      }
-    }
-
-    function setupSupabaseRealtime() {
-      const sb = initSupabaseClient();
-      if (!sb || supabaseRealtimeChannel) return;
-
-      supabaseRealtimeChannel = sb
-        .channel('schema-db-changes')
-        .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'user_job_interactions' },
-          (payload) => {
-            const newRow = payload.new;
-            if (!newRow || !newRow.job_key) return;
-
-            const localUserData = getUserData();
-            const localViewed = getViewedMap();
-
-            const item = {
-              status: newRow.status || 'nova',
-              notes: newRow.notes || '',
-              viewed: !!newRow.viewed,
-              updated_at: newRow.updated_at ? new Date(newRow.updated_at).getTime() : Date.now()
-            };
-
-            // job_id nao e usado para casar vagas (ver comentario em loadSupabaseData).
-            localUserData[newRow.job_key] = item;
-            if (newRow.viewed) {
-              localViewed[newRow.job_key] = true;
-            }
-
-            saveUserData(localUserData);
-            try {
-              localStorage.setItem(VIEWED_KEY, JSON.stringify(localViewed));
-            } catch (e) {}
-
-            allLoadedJobs.forEach(job => {
-              const key = job.external_id || job.dedup_hash || String(job.id);
-              if (key === newRow.job_key) {
-                job.status = newRow.status;
-                job.notes = newRow.notes;
-                if (newRow.viewed) job.viewed = true;
-              }
-            });
-
-            applyFilters();
-            if (currentMainTab === 'candidaturas') renderPipeline();
-            renderInspector();
-
-            showToast("Alteração sincronizada em tempo real!", "info");
-          }
-        )
-        .subscribe();
-    }
-
-    async function saveJobToSupabase(job, status, notes, viewed = true) {
-      const sb = initSupabaseClient();
-      if (!sb || !job) return;
-
-      const key = job.external_id || job.dedup_hash || String(job.id);
-      try {
-        await sb.from('user_job_interactions').upsert({
-          job_key: key,
-          job_id: String(job.id),
-          status: status || job.status || 'nova',
-          notes: notes !== undefined ? notes : (job.notes || ''),
-          viewed: !!viewed,
-          updated_at: new Date().toISOString()
-        });
-      } catch (err) {
-        console.warn("Erro ao salvar no Supabase:", err);
-      }
-    }
-
     // =========================================================
-    // MANUAL BACKUP & RESTORE (JSON)
+    // BACKUP MANUAL (JSON)
     // =========================================================
     function exportUserDataBackup() {
       const backup = {
         app: "Vagas RS",
-        version: 1,
+        version: 2,
         exported_at: new Date().toISOString(),
-        userData: getUserData(),
-        viewedMap: getViewedMap()
+        userData: getUserData()
       };
 
       const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `vagas_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = 'vagas_backup_' + new Date().toISOString().slice(0, 10) + '.json';
       a.click();
       URL.revokeObjectURL(url);
       showToast("Arquivo de backup baixado com sucesso!", "success");
@@ -933,45 +1221,48 @@
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         try {
           const imported = JSON.parse(e.target.result);
           if (!imported.userData && !imported.viewedMap) {
-            throw new Error("Arquivo de backup inválido.");
+            throw new Error("Arquivo de backup invalido.");
           }
 
-          const localUserData = getUserData();
-          const mergedUserData = { ...localUserData, ...(imported.userData || {}) };
-          const localViewed = getViewedMap();
-          const mergedViewed = { ...localViewed, ...(imported.viewedMap || {}) };
+          const userData = getUserData();
+          let applied = 0, skipped = 0;
 
-          saveUserData(mergedUserData);
-          try {
-            localStorage.setItem(VIEWED_KEY, JSON.stringify(mergedViewed));
-          } catch (err) {}
-
-          allLoadedJobs.forEach(job => {
-            const st = getUserJobState(job, mergedUserData);
-            if (st && st.status) job.status = st.status;
-            if (st && st.notes !== undefined) job.notes = st.notes;
-            if (isJobViewed(job)) job.viewed = true;
-          });
-
-          applyFilters();
-          if (currentMainTab === 'candidaturas') renderPipeline();
-          renderInspector();
-
-          // Envia todos os dados importados para o Supabase
-          allLoadedJobs.forEach(job => {
-            const st = getUserJobState(job, mergedUserData);
-            if (st && (st.status || st.notes || st.viewed)) {
-              saveJobToSupabase(job, st.status, st.notes, st.viewed);
+          // Backup v1 guardava o viewedMap separado; entra com updated_at 0
+          // para nunca sobrescrever um estado local mais novo.
+          Object.keys(imported.viewedMap || {}).forEach(k => {
+            if (imported.viewedMap[k]) {
+              if (mergeRemoteEntry(userData, k, { status: 'nova', notes: '', viewed: true, updated_at: 0 })) applied++;
             }
           });
 
-          showToast("Backup importado e sincronizado no Supabase!", "success");
+          // Mesma regra de conflito do realtime: o backup nao e autoridade
+          // absoluta, e so mais uma origem datada.
+          Object.keys(imported.userData || {}).forEach(k => {
+            if (mergeRemoteEntry(userData, k, imported.userData[k])) applied++;
+            else skipped++;
+          });
+
+          saveUserData(userData);
+          reapplyStateToJobs();
+
+          if (currentUser) {
+            for (const key of Object.keys(imported.userData || {})) {
+              const entry = normalizeEntry(userData[key]);
+              if (entry) {
+                try { await upsertEntry(key, entry); }
+                catch (err) { enqueuePendingSync(key, entry); }
+              }
+            }
+            updateSyncUI();
+          }
+
+          showToast("Backup importado: " + applied + " aplicada(s), " + skipped + " ignorada(s) por serem mais antigas.", "success");
         } catch (err) {
-          showToast(`Erro ao importar backup: ${err.message}`, "error");
+          showToast("Erro ao importar backup: " + err.message, "error");
         }
         event.target.value = '';
       };
@@ -979,9 +1270,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      initSupabaseClient();
-      updateSyncUI();
+      migrateLegacyState();
       loadJobs();
+      initAuth();
 
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -1122,28 +1413,41 @@
       renderPipeline();
     }
 
-    function formatJobDate(job) {
-      if (!job) return 'Recente';
+    // Uma vaga tem duas datas distintas e ate agora o app mostrava as duas
+    // sob o rotulo "Data Vaga": a data em que o portal publicou (nem sempre
+    // informada) e a data em que a varredura encontrou. Sao coisas diferentes
+    // e a segunda nao serve para decidir se ainda vale se candidatar.
+    function hasPublishedDate(job) {
+      return !!(job && job.published_at && /^\d{4}-\d{2}-\d{2}/.test(String(job.published_at)));
+    }
 
-      // 1. Data explicitamente informada pelo portal (ex: "Há 2 dias", "Ontem", "Há 1 semana")
-      if (job.published_at && typeof job.published_at === 'string' && job.published_at !== 'None' && job.published_at !== 'null' && job.published_at !== 'Recente') {
-        if (job.published_at.includes('-')) {
-          const parts = job.published_at.split('T')[0].split('-');
-          if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
-        return job.published_at;
+    function formatIsoDate(iso) {
+      const parts = String(iso).split('T')[0].split('-');
+      if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+      return null;
+    }
+
+    function formatJobDate(job) {
+      if (!job) return '--';
+      if (hasPublishedDate(job)) {
+        return formatIsoDate(job.published_at) || '--';
       }
-      
-      // 2. Data de registro no sistema (formatada de forma estável, sem falso "publicado agora")
       if (job.created_at) {
-        try {
-          const d = new Date(job.created_at);
-          if (!isNaN(d.getTime())) {
-            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-          }
-        } catch (e) {}
+        const d = new Date(job.created_at);
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
       }
-      return 'Recente';
+      return '--';
+    }
+
+    function jobDateLabel(job)      { return hasPublishedDate(job) ? 'Publicada em' : 'Encontrada em'; }
+    function jobDateShortLabel(job) { return hasPublishedDate(job) ? 'Publicada'    : 'Encontrada'; }
+    function jobDateIcon(job)       { return hasPublishedDate(job) ? 'event'        : 'travel_explore'; }
+    function jobDateTitle(job) {
+      return hasPublishedDate(job)
+        ? 'Publicada pelo portal em ' + formatJobDate(job)
+        : 'O portal nao informou a data de publicacao. Encontrada pela varredura em ' + formatJobDate(job);
     }
 
     function renderFeed() {
@@ -1211,9 +1515,9 @@
             <div class="mt-2 flex flex-wrap items-center gap-1.5 text-[10px] font-mono">
               <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200/60">${escapeHtml(job.work_model || 'Presencial')}</span>
               <span class="px-2 py-0.5 rounded ${isDiscarded ? 'bg-slate-200 text-slate-600' : 'bg-brand-50 text-brand-700 border border-brand-100 font-semibold'}">${escapeHtml(job.source)}</span>
-              <span class="px-2 py-0.5 rounded bg-slate-50 text-slate-500 border border-slate-200/60 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
-                ${dateStr}
+              <span class="px-2 py-0.5 rounded bg-slate-50 text-slate-500 border border-slate-200/60 flex items-center gap-1" title="${escapeHtml(jobDateTitle(job))}">
+                <span class="material-symbols-outlined text-[11px] text-slate-400">${jobDateIcon(job)}</span>
+                ${jobDateShortLabel(job)} ${dateStr}
               </span>
             </div>
 
@@ -1235,9 +1539,9 @@
                 <span class="font-bold text-slate-900">${escapeHtml(job.company)}</span>
                 <span class="text-slate-400">• ${escapeHtml(job.location || job.city || 'RS')}</span>
                 <span class="px-2 py-0.5 rounded bg-slate-100 text-[10px] text-slate-600 border border-slate-200">${escapeHtml(job.source)}</span>
-                <span class="px-2 py-0.5 rounded bg-slate-50 text-[10px] text-slate-500 border border-slate-200 flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>
-                  ${dateStr}
+                <span class="px-2 py-0.5 rounded bg-slate-50 text-[10px] text-slate-500 border border-slate-200 flex items-center gap-1" title="${escapeHtml(jobDateTitle(job))}">
+                  <span class="material-symbols-outlined text-[11px] text-slate-400">${jobDateIcon(job)}</span>
+                  ${jobDateShortLabel(job)} ${dateStr}
                 </span>
                 <span class="px-2 py-0.5 rounded ${isUnread ? 'bg-brand-50 text-brand-700 font-bold' : 'bg-slate-100 text-slate-500'} text-[10px]">
                   ${formatStatusBadge(job)}
@@ -1314,6 +1618,11 @@
       document.getElementById('inspectorSalary').innerText = job.salary || 'A combinar';
       document.getElementById('inspectorScore').innerText = `${job.match_score}% Match`;
       document.getElementById('inspectorDate').innerText = dateStr;
+      const dateLabelEl = document.getElementById('inspectorDateLabel');
+      if (dateLabelEl) {
+        dateLabelEl.innerText = jobDateLabel(job);
+        dateLabelEl.title = jobDateTitle(job);
+      }
       document.getElementById('inspectorDescription').innerText = job.description || 'Sem descrição detalhada fornecida.';
       document.getElementById('inspectorNotes').value = job.notes || '';
       document.getElementById('inspectorApplyBtn').href = job.url;
@@ -1355,9 +1664,9 @@
         <span class="px-2.5 py-0.5 rounded-md bg-brand-50 text-brand-700 font-mono text-xs font-semibold border border-brand-100">
           ${escapeHtml(job.source)}
         </span>
-        <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono text-xs font-medium border border-slate-200 flex items-center gap-1">
-          <span class="material-symbols-outlined text-[13px] text-slate-400">calendar_today</span>
-          ${dateStr}
+        <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono text-xs font-medium border border-slate-200 flex items-center gap-1" title="${escapeHtml(jobDateTitle(job))}">
+          <span class="material-symbols-outlined text-[13px] text-slate-400">${jobDateIcon(job)}</span>
+          ${jobDateShortLabel(job)} ${dateStr}
         </span>
         <span class="px-2.5 py-0.5 rounded-md ${isUnread ? 'bg-indigo-100 text-indigo-800 font-bold' : 'bg-slate-100 text-slate-600'} font-mono text-xs border border-slate-200">
           ${formatStatusBadge(job)}
@@ -1396,18 +1705,10 @@
         markJobViewed(job);
       }
 
-      const userData = getUserData();
-      // job.id nao entra como chave (ver comentario em markJobViewed).
-      const kExtId = job?.external_id || '';
-      const kHash = job?.dedup_hash || '';
-      const kUrl = job?.url || '';
-
-      const stateObj = { status: newStatus, notes: job?.notes || '', viewed: true, updated_at: Date.now() };
-      if (kExtId) userData[kExtId] = stateObj;
-      if (kHash) userData[kHash] = stateObj;
-      if (kUrl) userData[kUrl] = stateObj;
-      saveUserData(userData);
-      if (job) saveJobToSupabase(job, newStatus, job.notes, true);
+      if (job) {
+        const merged = setLocalJobState(job, { status: newStatus, viewed: true });
+        if (merged) pushToSupabase(job, merged);
+      }
 
       fetch(`./api/jobs/${jobId}/status`, {
         method: 'PATCH',
@@ -1427,18 +1728,10 @@
         markJobViewed(job);
       }
 
-      const userData = getUserData();
-      // job.id nao entra como chave (ver comentario em markJobViewed).
-      const kExtId = job?.external_id || '';
-      const kHash = job?.dedup_hash || '';
-      const kUrl = job?.url || '';
-
-      const stateObj = { status: job?.status || 'nova', notes: notes, viewed: true, updated_at: Date.now() };
-      if (kExtId) userData[kExtId] = stateObj;
-      if (kHash) userData[kHash] = stateObj;
-      if (kUrl) userData[kUrl] = stateObj;
-      saveUserData(userData);
-      if (job) saveJobToSupabase(job, job.status, notes, true);
+      if (job) {
+        const merged = setLocalJobState(job, { notes: notes, viewed: true });
+        if (merged) pushToSupabase(job, merged);
+      }
 
       fetch(`./api/jobs/${currentActiveJobId}/notes`, {
         method: 'PATCH',
@@ -1484,7 +1777,7 @@
             <h4 class="font-bold text-xs text-slate-800 line-clamp-2">${escapeHtml(job.title)}</h4>
             <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1.5 border-t border-slate-100">
               <span>📍 ${escapeHtml(job.city || 'RS')}</span>
-              <span class="flex items-center gap-0.5 text-slate-500"><span class="material-symbols-outlined text-[11px] text-slate-400">calendar_today</span>${dateStr}</span>
+              <span class="flex items-center gap-0.5 text-slate-500" title="${escapeHtml(jobDateTitle(job))}"><span class="material-symbols-outlined text-[11px] text-slate-400">${jobDateIcon(job)}</span>${dateStr}</span>
             </div>
             <div class="flex items-center justify-end pt-1.5 border-t border-slate-100">
               <button class="pipe-discard-btn text-[10px] font-mono font-semibold text-slate-400 hover:text-red-600 transition">
@@ -1646,9 +1939,9 @@
         showToast("Nenhuma vaga para exportar.", "error");
         return;
       }
-      let csv = "ID,Título,Empresa,Cidade,Modalidade,Categoria,Salário,Fonte,Status,Visualizada,Publicação,Link\n";
+      let csv = "ID,Título,Empresa,Cidade,Modalidade,Categoria,Salário,Fonte,Status,Visualizada,Publicada em,Encontrada em,Link\n";
       currentFilteredJobs.forEach(j => {
-        csv += `"${j.id}","${(j.title||'').replace(/"/g, '""')}","${(j.company||'').replace(/"/g, '""')}","${j.city||''}","${j.work_model||''}","${j.category||''}","${(j.salary||'').replace(/"/g, '""')}","${j.source||''}","${j.status||''}","${j.viewed?'Sim':'Não'}","${formatJobDate(j)}","${j.url||''}"\n`;
+        csv += `"${j.id}","${(j.title||'').replace(/"/g, '""')}","${(j.company||'').replace(/"/g, '""')}","${j.city||''}","${j.work_model||''}","${j.category||''}","${(j.salary||'').replace(/"/g, '""')}","${j.source||''}","${j.status||''}","${j.viewed?'Sim':'Não'}","${hasPublishedDate(j) ? formatIsoDate(j.published_at) : ''}","${j.created_at ? new Date(j.created_at).toLocaleDateString('pt-BR') : ''}","${j.url||''}"\n`;
       });
       const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement("a");

@@ -4,7 +4,7 @@ import json
 import sqlite3
 import asyncio
 import threading
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
 # Configurar stdout para UTF-8 no Windows
@@ -28,6 +28,20 @@ from backend.app.core.config import config
 from backend.app.services.telegram import telegram_notifier
 
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+# Valores aceitos, herdados dos enums que viviam em backend/app/models/job.py.
+# Sem Pydantic, a validacao passa a ser feita aqui.
+VALID_STATUSES = {"nova", "interesse", "candidatado", "entrevista", "aprovado", "descartada"}
+MAX_PAGE_SIZE = 500
+
+
+def _int_param(qs, name, default, minimum, maximum):
+    """Le um parametro numerico da query string sem derrubar a requisicao."""
+    try:
+        value = int(qs.get(name, [default])[0])
+    except (TypeError, ValueError):
+        return default
+    return max(minimum, min(maximum, value))
 
 def sync_static_files():
     try:
@@ -88,8 +102,8 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
             work_model = qs.get("work_model", ["todos"])[0]
             search = qs.get("search", [None])[0]
             only_fav = qs.get("only_favorites", ["false"])[0].lower() == "true"
-            limit = int(qs.get("limit", [100])[0])
-            offset = int(qs.get("offset", [0])[0])
+            limit = _int_param(qs, "limit", 100, 1, MAX_PAGE_SIZE)
+            offset = _int_param(qs, "offset", 0, 0, 10 ** 9)
 
             jobs = get_jobs(
                 category=category,
@@ -189,10 +203,14 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
             try:
                 job_id = int(path.split("/api/jobs/")[1].split("/status")[0])
                 new_status = data.get("status")
-                if new_status:
-                    update_job(job_id, {"status": new_status})
-                    sync_static_files()
-                    return self._send_json({"success": True, "status": new_status})
+                if new_status not in VALID_STATUSES:
+                    return self._send_json(
+                        {"success": False, "error": f"Status invalido. Use um de: {sorted(VALID_STATUSES)}"}, 400
+                    )
+                if not update_job(job_id, {"status": new_status}):
+                    return self._send_json({"success": False, "error": "Vaga nao encontrada"}, 404)
+                sync_static_files()
+                return self._send_json({"success": True, "status": new_status})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)}, 400)
 
@@ -203,6 +221,17 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
                 update_job(job_id, {"notes": notes})
                 sync_static_files()
                 return self._send_json({"success": True, "notes": notes})
+            except Exception as e:
+                return self._send_json({"success": False, "error": str(e)}, 400)
+
+        elif "/api/jobs/" in path and "/favorite" in path:
+            try:
+                job_id = int(path.split("/api/jobs/")[1].split("/favorite")[0])
+                is_favorite = bool(data.get("is_favorite"))
+                if not update_job(job_id, {"is_favorite": is_favorite}):
+                    return self._send_json({"success": False, "error": "Vaga nao encontrada"}, 404)
+                sync_static_files()
+                return self._send_json({"success": True, "is_favorite": is_favorite})
             except Exception as e:
                 return self._send_json({"success": False, "error": str(e)}, 400)
 
@@ -231,7 +260,16 @@ def run_server(port=8000):
     sync_jobs_from_json()
 
     server_address = ("", port)
-    httpd = HTTPServer(server_address, JobAggregatorHandler)
+    # ThreadingHTTPServer (nao HTTPServer simples): o navegador abre varias
+    # conexoes simultaneas ao carregar a pagina (pool de conexoes do Chrome).
+    # Com HTTPServer, que atende uma conexao por vez, bastava uma dessas
+    # conexoes ficar ociosa (aberta mas sem enviar pedido) para travar o
+    # servidor inteiro - celular e desktop paravam de responder ao mesmo
+    # tempo, sem nenhum ataque envolvido. O banco ja usa
+    # check_same_thread=False e busy_timeout, entao ja estava preparado
+    # para acesso concorrente.
+    httpd = ThreadingHTTPServer(server_address, JobAggregatorHandler)
+    httpd.daemon_threads = True  # threads de conexao nao travam o Ctrl+C
     print(f"\n[OK] Servidor ativo e pronto!")
     print(f"[LINK] Acesse no navegador: http://localhost:{port}")
     print("=" * 60)
