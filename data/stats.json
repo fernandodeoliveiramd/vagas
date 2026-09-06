@@ -1,25 +1,25 @@
 {
   "success": true,
   "stats": {
-    "total_jobs": 43,
-    "today_jobs": 8,
+    "total_jobs": 46,
+    "today_jobs": 0,
     "by_status": {
-      "nova": 43
+      "nova": 46
     },
     "by_category": {
       "gestao_projetos": 3,
       "industrial_eletrica": 35,
-      "tecnologia_jr": 5
+      "tecnologia_jr": 8
     },
     "by_city": {
       "Pelotas": 14,
-      "Remoto": 4,
+      "Remoto": 7,
       "Rio Grande": 25
     },
     "by_source": {
       "Catho": 3,
       "Equatorial Energia": 1,
-      "LinkedIn": 11,
+      "LinkedIn": 14,
       "Sagres Logística": 1,
       "Sicredi Carreiras": 1,
       "Trabalha Brasil": 25,
