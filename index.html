@@ -254,9 +254,15 @@
         <aside id="feedAside" class="w-full lg:w-[400px] lg:min-w-[360px] bg-slate-50 lg:border-r border-slate-200/80 flex flex-col min-h-0 flex-1">
           
           <!-- Feed Header Summary -->
-          <div class="px-3 sm:px-4 py-2 bg-slate-100/60 border-b border-slate-200/60 flex items-center justify-between text-xs text-slate-500 font-mono shrink-0">
-            <span id="feedCountLabel" class="font-bold text-slate-700">0 vagas</span>
-            <button onclick="resetFilters()" class="text-brand-600 hover:underline text-[11px]">Limpar Filtros</button>
+          <div class="px-3 sm:px-4 py-2 bg-slate-100/60 border-b border-slate-200/60 flex items-center justify-between text-xs text-slate-500 font-mono shrink-0 gap-2">
+            <span id="feedCountLabel" class="font-bold text-slate-700 shrink-0">0 vagas</span>
+            <div class="flex items-center gap-2.5 shrink-0">
+              <button id="btnShowDiscarded" onclick="toggleDiscardedView()" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-500 hover:text-red-600 hover:border-red-200 transition" title="Ver vagas descartadas">
+                <span class="material-symbols-outlined text-[13px]">delete</span>
+                Descartadas (<span id="discardedCount">0</span>)
+              </button>
+              <button onclick="resetFilters()" class="text-brand-600 hover:underline text-[11px]">Limpar Filtros</button>
+            </div>
           </div>
 
           <!-- Cards Scroll Container -->
@@ -1092,7 +1098,10 @@
           if (job.status !== 'nova' || job.viewed) return false;
         } else if (status === 'visualizadas') {
           if (job.status === 'descartada' || !job.viewed) return false;
-        } else if (status !== 'todas' && job.status !== status) {
+        } else if (status === 'todas') {
+          // Vagas descartadas saem do feed padrao; use o botao "Descartadas" para ve-las
+          if (job.status === 'descartada') return false;
+        } else if (job.status !== status) {
           return false;
         }
 
@@ -1103,6 +1112,8 @@
 
         return true;
       });
+
+      updateDiscardedButton(status);
 
       // Ordenar: Vagas ativas primeiro (não lidas no topo), descartadas no final
       currentFilteredJobs.sort((a, b) => {
@@ -1533,6 +1544,27 @@
     function setCityFilter(city) {
       document.getElementById('filterCity').value = city;
       applyFilters();
+    }
+
+    function toggleDiscardedView() {
+      const filterStatus = document.getElementById('filterStatus');
+      filterStatus.value = filterStatus.value === 'descartada' ? 'todas' : 'descartada';
+      applyFilters();
+    }
+
+    function updateDiscardedButton(currentStatus) {
+      const countEl = document.getElementById('discardedCount');
+      const btn = document.getElementById('btnShowDiscarded');
+      if (!countEl || !btn) return;
+
+      const discardedTotal = allLoadedJobs.filter(j => j.status === 'descartada').length;
+      countEl.innerText = discardedTotal;
+
+      if (currentStatus === 'descartada') {
+        btn.className = "inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold bg-red-50 border border-red-200 text-red-600 transition";
+      } else {
+        btn.className = "inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-500 hover:text-red-600 hover:border-red-200 transition";
+      }
     }
 
     let searchTimeout = null;
