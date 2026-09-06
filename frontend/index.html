@@ -980,7 +980,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       initSupabaseClient();
       updateSyncUI();
-      loadStats();
       loadJobs();
 
       window.addEventListener('keydown', (e) => {
@@ -1016,29 +1015,17 @@
       if (tab === 'candidaturas') renderPipeline();
     }
 
-    async function loadStats() {
-      try {
-        let res = await fetch('./api/stats').catch(() => null);
-        let data = null;
-        if (res && res.ok) {
-          data = await res.json();
-        } else {
-          let staticRes = await fetch('./data/stats.json').catch(() => null);
-          if (staticRes && staticRes.ok) {
-            data = await staticRes.json();
-          }
-        }
+    function updateHeaderCounters() {
+      const activeJobs = allLoadedJobs.filter(j => j.status !== 'descartada');
+      const countBy = (pred) => activeJobs.filter(pred).length;
+      const matchesCity = (job, city) => (job.city || '').toLowerCase().includes(city) || (job.location || '').toLowerCase().includes(city);
 
-        if (data && data.success) {
-          const stats = data.stats;
-          document.getElementById('statTotal').innerText = stats.total_jobs || 0;
-          document.getElementById('statIndustrial').innerText = stats.by_category?.industrial_eletrica || 0;
-          document.getElementById('statTech').innerText = stats.by_category?.tecnologia_jr || 0;
-          document.getElementById('statProjects').innerText = stats.by_category?.gestao_projetos || 0;
-          document.getElementById('statPelotas').innerText = stats.by_city?.Pelotas || 0;
-          document.getElementById('statRioGrande').innerText = stats.by_city?.['Rio Grande'] || 0;
-        }
-      } catch (err) {}
+      document.getElementById('statTotal').innerText = activeJobs.length;
+      document.getElementById('statIndustrial').innerText = countBy(j => j.category === 'industrial_eletrica');
+      document.getElementById('statTech').innerText = countBy(j => j.category === 'tecnologia_jr');
+      document.getElementById('statProjects').innerText = countBy(j => j.category === 'gestao_projetos');
+      document.getElementById('statPelotas').innerText = countBy(j => matchesCity(j, 'pelotas'));
+      document.getElementById('statRioGrande').innerText = countBy(j => matchesCity(j, 'rio grande'));
     }
 
     async function loadJobs() {
@@ -1114,6 +1101,7 @@
       });
 
       updateDiscardedButton(status);
+      updateHeaderCounters();
 
       // Ordenar: Vagas ativas primeiro (não lidas no topo), descartadas no final
       currentFilteredJobs.sort((a, b) => {
@@ -1605,7 +1593,6 @@
         } else {
           showToast("Dados atualizados!", "info");
         }
-        await loadStats();
         await loadJobs();
       } catch (err) {
         showToast("Dados sincronizados!", "info");
