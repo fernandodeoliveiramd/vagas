@@ -35,8 +35,6 @@ class LinkedInScraper(BaseScraper):
             
             req = urllib.request.Request(url, headers=self.headers)
             ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
             
             with urllib.request.urlopen(req, context=ctx, timeout=10) as response:
                 html = response.read().decode('utf-8', errors='ignore')

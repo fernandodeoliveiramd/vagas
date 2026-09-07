@@ -30,8 +30,9 @@ from backend.app.services.telegram import telegram_notifier
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 
 # Valores aceitos, herdados dos enums que viviam em backend/app/models/job.py.
-# Sem Pydantic, a validacao passa a ser feita aqui.
-VALID_STATUSES = {"nova", "interesse", "candidatado", "entrevista", "aprovado", "descartada"}
+# Sem Pydantic, a validacao passa a ser feita aqui. "expirada" e o status
+# que o verificador de links atribui sozinho (soft-delete, ver verifier.py).
+VALID_STATUSES = {"nova", "interesse", "candidatado", "entrevista", "aprovado", "descartada", "expirada"}
 MAX_PAGE_SIZE = 500
 
 
@@ -64,20 +65,21 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
         # Suprimir logs verbosos de arquivos estáticos
         pass
 
+    # Sem CORS "*": o frontend e servido pelo proprio server.py (mesma
+    # origem), entao fetch('./api/...') nunca precisa de CORS. O unico
+    # efeito pratico de "Access-Control-Allow-Origin: *" aqui seria
+    # permitir que JavaScript de QUALQUER outro site aberto no navegador
+    # (uma aba de outro site, um anuncio malicioso) chamasse esta API em
+    # 127.0.0.1 e lesse a resposta - a mesma classe de ataque que o bind
+    # em loopback (ver run_server) tenta fechar pelo lado da rede.
     def _send_json(self, data, status_code=200):
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
         self.wfile.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
 
     def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_response(204)
         self.end_headers()
 
     def do_GET(self):
@@ -259,7 +261,13 @@ def run_server(port=8000):
     init_db()
     sync_jobs_from_json()
 
-    server_address = ("", port)
+    # 127.0.0.1, nao "" (=0.0.0.0): este servidor nao tem autenticacao
+    # nenhuma - qualquer um na mesma rede (Wi-Fi de cafe, coworking)
+    # poderia apagar vagas (DELETE), disparar varreduras em loop ou
+    # sequestrar o alerta do Telegram trocando o token/chat_id. A
+    # sincronizacao entre aparelhos agora passa pelo Supabase (com RLS),
+    # entao nao ha mais motivo para expor esta API na rede local.
+    server_address = ("127.0.0.1", port)
     # ThreadingHTTPServer (nao HTTPServer simples): o navegador abre varias
     # conexoes simultaneas ao carregar a pagina (pool de conexoes do Chrome).
     # Com HTTPServer, que atende uma conexao por vez, bastava uma dessas

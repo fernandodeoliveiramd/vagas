@@ -11,6 +11,7 @@ from .catho import CathoScraper
 from ..core.config import config
 from ..core.dates import parse_published_at
 from ..database.db import insert_job, log_scrape, get_stats, normalize_url
+from ..services.telegram import telegram_notifier
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +96,19 @@ class ScraperManager:
                 if inserted_id:
                     source_new += 1
                     new_inserted += 1
-                    
+
+                    # notify_new_job existia como metodo pronto no
+                    # TelegramNotifier mas nunca era chamado - a UI
+                    # prometia "alertas em tempo real" e so o botao de
+                    # teste funcionava de fato. is_configured() evita o
+                    # log de aviso repetido quando o bot nao esta setado.
+                    if telegram_notifier.is_configured():
+                        try:
+                            await telegram_notifier.notify_new_job({**job_payload, "id": inserted_id})
+                        except Exception as tg_err:
+                            logger.warning(f"[Telegram] Falha ao notificar nova vaga: {tg_err}")
+
+
             log_scrape(source_name, source_found, source_new, "success")
             logger.info(f"[{source_name}] Vagas encontradas: {source_found}, Novas salvas: {source_new}")
 

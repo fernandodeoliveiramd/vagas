@@ -72,7 +72,7 @@
   <!-- ========================================================= -->
   <!-- 1. TOP NAVBAR (56px)                                      -->
   <!-- ========================================================= -->
-  <header class="h-14 bg-white border-b border-slate-200/80 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 shrink-0 z-40">
+  <header class="h-14 bg-white border-b border-slate-200/80 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 shrink-0 z-40 overflow-x-auto no-scrollbar">
     <!-- Brand / Title -->
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
       <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-brand-500/20 shrink-0">
@@ -105,7 +105,7 @@
 
     <!-- Header Actions -->
     <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-      <button id="btnCloudSyncHeader" onclick="triggerHeaderCloudSync()" title="Sincronização em Nuvem (GitHub Gist)" class="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition active:scale-95" type="button">
+      <button id="btnCloudSyncHeader" onclick="triggerHeaderCloudSync()" title="Sincronização em Nuvem (Supabase)" class="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition active:scale-95" type="button">
         <span id="cloudSyncIcon" class="material-symbols-outlined text-[16px] text-slate-400">cloud_off</span>
         <span id="cloudSyncText" class="hidden md:inline text-[11px] font-mono text-slate-600">Local</span>
       </button>
@@ -187,7 +187,7 @@
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 sm:pb-0">
           
           <!-- Dropdown Cidade -->
-          <select id="filterCity" onchange="applyFilters()" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
+          <select id="filterCity" onchange="applyFilters()" aria-label="Filtrar por cidade" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
             <option value="todas">📍 Cidades</option>
             <option value="Pelotas">Pelotas, RS</option>
             <option value="Rio Grande">Rio Grande, RS</option>
@@ -195,7 +195,7 @@
           </select>
 
           <!-- Dropdown Modalidade -->
-          <select id="filterWorkModel" onchange="applyFilters()" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
+          <select id="filterWorkModel" onchange="applyFilters()" aria-label="Filtrar por modalidade de trabalho" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
             <option value="todos">🏢 Modalidade</option>
             <option value="Presencial">Presencial</option>
             <option value="Híbrido">Híbrido</option>
@@ -203,7 +203,7 @@
           </select>
 
           <!-- Dropdown Status -->
-          <select id="filterStatus" onchange="applyFilters()" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
+          <select id="filterStatus" onchange="applyFilters()" aria-label="Filtrar por status" class="h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 font-medium focus:bg-white focus:outline-none cursor-pointer shrink-0">
             <option value="todas">🎯 Status</option>
             <option value="nao_visualizadas">✨ Novas</option>
             <option value="visualizadas">👀 Já Vistas</option>
@@ -211,6 +211,7 @@
             <option value="candidatado">🚀 Candidatado</option>
             <option value="entrevista">🗓️ Entrevista</option>
             <option value="descartada">✕ Descartadas</option>
+            <option value="expirada">⏱️ Expiradas</option>
           </select>
 
           <!-- View Mode Toggle (Desktop only) -->
@@ -290,7 +291,7 @@
                 <button onclick="saveInspectorNotes()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Salvar Notas">
                   <span class="material-symbols-outlined text-[18px] text-emerald-600">save</span>
                 </button>
-                <a id="inspectorApplyBtnMobile" href="#" target="_blank" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center gap-1 shadow-xs transition">
+                <a id="inspectorApplyBtnMobile" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center gap-1 shadow-xs transition">
                   <span>Candidatar</span>
                   <span class="material-symbols-outlined text-[14px]">open_in_new</span>
                 </a>
@@ -322,7 +323,7 @@
                 <span class="material-symbols-outlined text-[16px] text-emerald-600">save</span>
                 <span>Salvar Notas</span>
               </button>
-              <a id="inspectorApplyBtn" href="#" target="_blank" class="px-4 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition">
+              <a id="inspectorApplyBtn" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition">
                 <span>Ir para Vaga</span>
                 <span class="material-symbols-outlined text-[15px]">open_in_new</span>
               </a>
@@ -380,9 +381,10 @@
                   ✓ Salvo
                 </span>
               </div>
-              <textarea 
-                id="inspectorNotes" 
-                rows="3" 
+              <textarea
+                id="inspectorNotes"
+                rows="3"
+                oninput="handleNotesInput()"
                 placeholder="Ex: Currículo enviado em 03/09, contato do RH: Fulano..."
                 class="w-full bg-white border border-slate-200 rounded-lg p-2.5 sm:p-3 text-sm sm:text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
               ></textarea>
@@ -1278,6 +1280,13 @@
         if (e.key === 'Escape') {
           closeMobileInspector();
         }
+        // "/" foca a busca, exceto quando o usuario ja esta digitando em
+        // outro campo (senao "/" nunca chegaria a esse campo).
+        const tag = document.activeElement ? document.activeElement.tagName : '';
+        if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+          e.preventDefault();
+          document.getElementById('commandSearch').focus();
+        }
       });
 
       window.addEventListener('resize', () => {
@@ -1308,7 +1317,7 @@
     }
 
     function updateHeaderCounters() {
-      const activeJobs = allLoadedJobs.filter(j => j.status !== 'descartada');
+      const activeJobs = allLoadedJobs.filter(j => j.status !== 'descartada' && j.status !== 'expirada');
       const countBy = (pred) => activeJobs.filter(pred).length;
       const matchesCity = (job, city) => (job.city || '').toLowerCase().includes(city) || (job.location || '').toLowerCase().includes(city);
 
@@ -1320,7 +1329,36 @@
       document.getElementById('statRioGrande').innerText = countBy(j => matchesCity(j, 'rio grande'));
     }
 
+    function renderLoadingState() {
+      const feedContainer = document.getElementById('cardsList');
+      if (!feedContainer) return;
+      feedContainer.innerHTML = `
+        <div class="p-8 text-center text-xs text-slate-500 font-mono space-y-2 bg-white rounded-xl border border-slate-200">
+          <span class="material-symbols-outlined text-[28px] text-slate-400 animate-spin">progress_activity</span>
+          <p class="font-bold text-slate-700">Carregando vagas...</p>
+        </div>
+      `;
+    }
+
+    function renderLoadErrorState() {
+      const feedContainer = document.getElementById('cardsList');
+      const countLabel = document.getElementById('feedCountLabel');
+      if (countLabel) countLabel.innerText = '0 vagas';
+      if (!feedContainer) return;
+      feedContainer.innerHTML = `
+        <div class="p-8 text-center text-xs text-slate-500 font-mono space-y-3 bg-white rounded-xl border border-slate-200">
+          <span class="material-symbols-outlined text-[28px] text-rose-400">wifi_off</span>
+          <p class="font-bold text-slate-700">Não foi possível carregar as vagas</p>
+          <p>Verifique se o servidor local está rodando e tente de novo.</p>
+          <button onclick="loadJobs()" class="mt-1 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition">
+            Tentar novamente
+          </button>
+        </div>
+      `;
+    }
+
     async function loadJobs() {
+      renderLoadingState();
       try {
         let res = await fetch('./api/jobs?limit=500').catch(() => null);
         let data = null;
@@ -1349,8 +1387,12 @@
 
           // Sincronizar interações em tempo real com o Supabase
           loadSupabaseData(true);
+        } else {
+          renderLoadErrorState();
+          showToast("Erro ao carregar lista de vagas", "error");
         }
       } catch (err) {
+        renderLoadErrorState();
         showToast("Erro ao carregar lista de vagas", "error");
       }
     }
@@ -1378,8 +1420,9 @@
         } else if (status === 'visualizadas') {
           if (job.status === 'descartada' || !job.viewed) return false;
         } else if (status === 'todas') {
-          // Vagas descartadas saem do feed padrao; use o botao "Descartadas" para ve-las
-          if (job.status === 'descartada') return false;
+          // Vagas descartadas e expiradas saem do feed padrao; use o
+          // dropdown de Status para ve-las.
+          if (job.status === 'descartada' || job.status === 'expirada') return false;
         } else if (job.status !== status) {
           return false;
         }
@@ -1471,7 +1514,6 @@
 
       if (!currentActiveJobId || !currentFilteredJobs.find(j => j.id === currentActiveJobId)) {
         currentActiveJobId = currentFilteredJobs[0].id;
-        markJobViewed(currentFilteredJobs[0]);
       }
 
       let feedHtml = '';
@@ -1479,7 +1521,7 @@
 
       currentFilteredJobs.forEach(job => {
         const isSelected = job.id === currentActiveJobId;
-        const isDiscarded = job.status === 'descartada';
+        const isDiscarded = job.status === 'descartada' || job.status === 'expirada';
         const isUnread = !job.viewed && job.status === 'nova';
         const initial = (job.company || 'V').charAt(0).toUpperCase();
         const dateStr = formatJobDate(job);
@@ -1493,7 +1535,7 @@
           : "cursor-pointer bg-white hover:bg-slate-50/80 p-3 rounded-xl shadow-2xs border border-slate-200 hover:border-slate-300 transition-all";
 
         feedHtml += `
-          <article onclick="selectJob(${job.id})" class="${cardClasses}">
+          <article onclick="selectJob(${job.id})" tabindex="0" role="button" aria-pressed="${isSelected}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectJob(${job.id});}" class="${cardClasses} focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
             <div class="flex items-start justify-between gap-2">
               <div class="flex items-center gap-2.5 min-w-0">
                 <span class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-xs text-brand-700 shrink-0 border border-slate-200/60">${initial}</span>
@@ -1533,7 +1575,7 @@
         `;
 
         tableHtml += `
-          <div onclick="selectJob(${job.id})" class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs hover:border-brand-500 transition cursor-pointer ${isDiscarded ? 'opacity-60 grayscale-[60%]' : ''}">
+          <div onclick="selectJob(${job.id})" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectJob(${job.id});}" class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs hover:border-brand-500 transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${isDiscarded ? 'opacity-60 grayscale-[60%]' : ''}">
             <div class="space-y-1">
               <div class="flex items-center gap-2 text-xs font-mono">
                 <span class="font-bold text-slate-900">${escapeHtml(job.company)}</span>
@@ -1558,7 +1600,7 @@
               <button onclick="event.stopPropagation(); toggleDiscard(${job.id})" class="px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-100 text-slate-600 hover:text-red-600 transition font-semibold">
                 ${isDiscarded ? '↺ Restaurar' : '✕ Descartar'}
               </button>
-              <a href="${job.url}" target="_blank" onclick="event.stopPropagation();" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold shadow-xs transition">
+              <a href="${escapeHtml(safeUrl(job.url))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="px-3.5 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold shadow-xs transition">
                 Vaga ↗
               </a>
             </div>
@@ -1625,9 +1667,9 @@
       }
       document.getElementById('inspectorDescription').innerText = job.description || 'Sem descrição detalhada fornecida.';
       document.getElementById('inspectorNotes').value = job.notes || '';
-      document.getElementById('inspectorApplyBtn').href = job.url;
+      document.getElementById('inspectorApplyBtn').href = safeUrl(job.url);
       const mobileApplyBtn = document.getElementById('inspectorApplyBtnMobile');
-      if (mobileApplyBtn) mobileApplyBtn.href = job.url;
+      if (mobileApplyBtn) mobileApplyBtn.href = safeUrl(job.url);
 
       const statuses = ['nova', 'interesse', 'candidatado', 'entrevista'];
       statuses.forEach(st => {
@@ -1688,11 +1730,15 @@
     function toggleDiscard(jobId) {
       const job = allLoadedJobs.find(j => j.id === jobId);
       if (!job) return;
-      const isDiscarded = job.status === 'descartada';
+      const isDiscarded = job.status === 'descartada' || job.status === 'expirada';
+      const previousStatus = job.status || 'nova';
       const newStatus = isDiscarded ? 'nova' : 'descartada';
       updateJobStatus(jobId, newStatus);
       if (newStatus === 'descartada') {
-        showToast("Vaga descartada e movida para o fim", "info");
+        showToast("Vaga descartada e movida para o fim", "info", {
+          label: 'Desfazer',
+          onClick: () => updateJobStatus(jobId, previousStatus)
+        });
       } else {
         showToast("Vaga restaurada!", "success");
       }
@@ -1719,7 +1765,16 @@
       applyFilters();
     }
 
-    function saveInspectorNotes() {
+    let notesSaveTimeout = null;
+    function handleNotesInput() {
+      clearTimeout(notesSaveTimeout);
+      // Autosave: trocar de vaga ou fechar a aba sem clicar em "Salvar
+      // Notas" nao perdia mais o texto digitado - o timeout curto evita
+      // salvar a cada tecla, mas cobre qualquer pausa natural de digitacao.
+      notesSaveTimeout = setTimeout(() => saveInspectorNotes(true), 800);
+    }
+
+    function saveInspectorNotes(silent = false) {
       if (!currentActiveJobId) return;
       const notes = document.getElementById('inspectorNotes').value;
       const job = allLoadedJobs.find(j => j.id === currentActiveJobId);
@@ -1742,7 +1797,7 @@
       const badge = document.getElementById('saveBadge');
       badge.classList.remove('opacity-0');
       setTimeout(() => badge.classList.add('opacity-0'), 2500);
-      showToast("Anotações salvas!", "success");
+      if (!silent) showToast("Anotações salvas!", "success");
     }
 
     function renderPipeline() {
@@ -1958,6 +2013,7 @@
       if (status === 'candidatado') return '🚀 Candidatado';
       if (status === 'entrevista') return '🗓️ Entrevista';
       if (status === 'descartada') return '✕ Descartada';
+      if (status === 'expirada') return '⏱️ Expirada';
       
       if (job.viewed) {
         return 'Visualizada';
@@ -1965,12 +2021,25 @@
       return '✨ Nova';
     }
 
-    function showToast(msg, type = "info") {
+    function showToast(msg, type = "info", action = null) {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       const bg = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-900';
-      toast.className = `${bg} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-mono font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
+      toast.className = `${bg} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-mono font-semibold flex items-center gap-3 transform transition-all duration-300 translate-y-2 opacity-0`;
       toast.innerHTML = `<span>${escapeHtml(msg)}</span>`;
+
+      if (action && action.label && typeof action.onClick === 'function') {
+        const actionBtn = document.createElement('button');
+        actionBtn.type = 'button';
+        actionBtn.className = 'underline decoration-white/50 hover:decoration-white shrink-0';
+        actionBtn.innerText = action.label;
+        actionBtn.onclick = () => {
+          action.onClick();
+          toast.remove();
+        };
+        toast.appendChild(actionBtn);
+      }
+
       container.appendChild(toast);
 
       setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
@@ -1978,6 +2047,15 @@
         toast.classList.add('translate-y-2', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
       }, 3500);
+    }
+
+    // http/https apenas - bloqueia esquemas como "javascript:" que
+    // executariam codigo se fossem atribuidos direto a um href.
+    function safeUrl(url) {
+      if (typeof url !== 'string') return '#';
+      const trimmed = url.trim();
+      if (/^https?:\/\//i.test(trimmed)) return trimmed;
+      return '#';
     }
 
     function escapeHtml(text) {

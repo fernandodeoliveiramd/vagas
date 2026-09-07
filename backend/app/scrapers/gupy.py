@@ -28,8 +28,6 @@ class GupyScraper(BaseScraper):
             url = f"{self.base_url}?jobName={encoded_term}&limit=50&offset=0"
             req = urllib.request.Request(url, headers=self.headers)
             ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
             
             with urllib.request.urlopen(req, context=ctx, timeout=8) as response:
                 data = json.loads(response.read().decode('utf-8'))
