@@ -1,9 +1,5 @@
-fastapi
-uvicorn
-pydantic
-httpx
-beautifulsoup4
-pyyaml
-apscheduler
-python-multipart
-python-dotenv
+# server.py e export_static.py rodam sobre a biblioteca padrao do Python.
+# As dependencias abaixo sao usadas pelos coletores e pelo alerta do Telegram.
+beautifulsoup4   # parsing de HTML dos portais (linkedin, trabalha_brasil, catho)
+pyyaml           # leitura de config/keywords.yaml e config/locations.yaml
+httpx            # envio das mensagens do Telegram

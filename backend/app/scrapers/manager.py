@@ -7,10 +7,11 @@ from datetime import datetime
 from .gupy import GupyScraper
 from .trabalha_brasil import TrabalhaBrasilScraper
 from .linkedin import LinkedInScraper
-from .local_feed import LocalFeedScraper
 from .catho import CathoScraper
 from ..core.config import config
+from ..core.dates import parse_published_at
 from ..database.db import insert_job, log_scrape, get_stats, normalize_url
+from ..services.telegram import telegram_notifier
 
 logger = logging.getLogger(__name__)
 
@@ -20,13 +21,12 @@ class ScraperManager:
             LinkedInScraper(),
             TrabalhaBrasilScraper(),
             GupyScraper(),
-            CathoScraper(),
-            LocalFeedScraper()
+            CathoScraper()
         ]
 
     async def run_all(self) -> Dict[str, Any]:
         start_time = time.time()
-        logger.info("Iniciando coleta em todos os portais de vagas (LinkedIn, Trabalha Brasil, Gupy, Catho, Polo Regional)...")
+        logger.info("Iniciando coleta em todos os portais de vagas (LinkedIn, Trabalha Brasil, Gupy, Catho)...")
         
         # Executar scrapers em paralelo
         tasks = [scraper.scrape() for scraper in self.scrapers]
@@ -86,14 +86,29 @@ class ScraperManager:
                     "status": "nova",
                     "notes": "",
                     "is_favorite": False,
-                    "published_at": item.get("published_at")
+                    # Resolvido contra o instante da captura: o texto relativo
+                    # do portal ("Ha 3 dias") vira data absoluta e para de mentir
+                    # conforme o tempo passa.
+                    "published_at": parse_published_at(item.get("published_at"))
                 }
                 
                 inserted_id = insert_job(job_payload)
                 if inserted_id:
                     source_new += 1
                     new_inserted += 1
-                    
+
+                    # notify_new_job existia como metodo pronto no
+                    # TelegramNotifier mas nunca era chamado - a UI
+                    # prometia "alertas em tempo real" e so o botao de
+                    # teste funcionava de fato. is_configured() evita o
+                    # log de aviso repetido quando o bot nao esta setado.
+                    if telegram_notifier.is_configured():
+                        try:
+                            await telegram_notifier.notify_new_job({**job_payload, "id": inserted_id})
+                        except Exception as tg_err:
+                            logger.warning(f"[Telegram] Falha ao notificar nova vaga: {tg_err}")
+
+
             log_scrape(source_name, source_found, source_new, "success")
             logger.info(f"[{source_name}] Vagas encontradas: {source_found}, Novas salvas: {source_new}")
 

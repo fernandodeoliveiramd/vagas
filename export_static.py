@@ -31,7 +31,7 @@ async def main():
         print(f"      -> {synced} vagas existentes restauradas do histórico data/jobs.json.")
 
     # 2. Executar varredura
-    print("[1/3] Executando varredura nos portais (LinkedIn, Trabalha Brasil, Gupy, Catho, Polos)...")
+    print("[1/3] Executando varredura nos portais (LinkedIn, Trabalha Brasil, Gupy, Catho)...")
     res = await scraper_manager.run_all()
     print(f"      -> {res.get('total_jobs_found', 0)} encontradas | {res.get('new_jobs_inserted', 0)} novas salvas.")
 
