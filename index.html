@@ -13,7 +13,12 @@
 
   <!-- Tailwind CSS CDN & Supabase CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Versao fixada (nao "@2" flutuante) com SRI: uma release nova do
+       cliente Supabase nao muda de comportamento por baixo do app sem
+       ninguem notar, e o hash garante que o arquivo servido e exatamente
+       esse. O Tailwind Play CDN acima nao aceita o mesmo tratamento -
+       e gerado dinamicamente por requisicao, sem versao fixa possivel. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0" integrity="sha384-EyR2P0dlmjnEGcm9xcjdAn0VedZpRHEwDLP9oSS6wYMvzHBHkUrvgonveazJ/sSx" crossorigin="anonymous"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -360,8 +365,8 @@
                 <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Faixa Salarial</span>
                 <span id="inspectorSalary" class="font-bold text-emerald-700 block truncate">A combinar</span>
               </div>
-              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl">
-                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Match</span>
+              <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl" title="Calculado a partir de quanto o título e a descrição da vaga batem com os termos de busca configurados - não é uma nota de qualidade da vaga.">
+                <span class="text-[10px] font-bold text-slate-500 uppercase font-mono block mb-0.5">Match ⓘ</span>
                 <span id="inspectorScore" class="font-bold text-brand-600 block truncate">100% Match</span>
               </div>
               <div class="bg-slate-50 border border-slate-200/80 p-2.5 sm:p-3 rounded-xl col-span-2 sm:col-span-1">
@@ -1545,7 +1550,7 @@
                 </div>
               </div>
               <div class="flex flex-col items-end shrink-0 font-mono text-[10px]">
-                <span class="font-bold ${isDiscarded ? 'text-slate-400' : 'text-emerald-700'}">${job.match_score}% match</span>
+                <span class="font-bold ${isDiscarded ? 'text-slate-400' : 'text-emerald-700'}" title="Calculado a partir de quanto o título e a descrição da vaga batem com os termos de busca configurados - não é uma nota de qualidade da vaga.">${job.match_score}% match</span>
                 <span class="${isUnread ? 'text-brand-600 font-bold' : 'text-slate-400'} mt-0.5">${formatStatusBadge(job)}</span>
               </div>
             </div>
@@ -1593,7 +1598,7 @@
               <div class="flex items-center gap-2 text-xs font-mono text-emerald-700 font-semibold">
                 <span>${escapeHtml(job.salary || 'A combinar')}</span>
                 <span class="text-slate-300">•</span>
-                <span class="text-brand-600">${job.match_score}% Match</span>
+                <span class="text-brand-600" title="Calculado a partir de quanto o título e a descrição da vaga batem com os termos de busca configurados - não é uma nota de qualidade da vaga.">${job.match_score}% Match</span>
               </div>
             </div>
             <div class="flex items-center gap-2 self-end sm:self-center">
@@ -1827,7 +1832,7 @@
           card.innerHTML = `
             <div class="flex items-center justify-between text-[10px] font-mono text-slate-500">
               <span class="font-bold text-slate-900 truncate">${escapeHtml(job.company)}</span>
-              <span class="text-brand-600 font-semibold">${job.match_score}% Match</span>
+              <span class="text-brand-600 font-semibold" title="Calculado a partir de quanto o título e a descrição da vaga batem com os termos de busca configurados - não é uma nota de qualidade da vaga.">${job.match_score}% Match</span>
             </div>
             <h4 class="font-bold text-xs text-slate-800 line-clamp-2">${escapeHtml(job.title)}</h4>
             <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1.5 border-t border-slate-100">
@@ -2059,8 +2064,12 @@
     }
 
     function escapeHtml(text) {
-      if (!text) return '';
-      return text
+      // "!text" tratava 0 e false como string vazia (nao e o caso hoje,
+      // mas e a armadilha classica) e quebrava se recebesse algo que nao
+      // fosse string (ex: text.replace nao e funcao). String(...) cobre
+      // os dois: converte numeros/booleanos e nunca lanca em null/undefined.
+      if (text === null || text === undefined) return '';
+      return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")

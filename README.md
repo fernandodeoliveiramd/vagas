@@ -75,6 +75,21 @@ login ou sincronização — o contador aparece no cabeçalho.
 
 ---
 
+## 🧪 Testes
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Cobre a lógica pura mais sensível a regressão: resolução de datas relativas
+(`backend/app/core/dates.py`), escape do `LIKE` na deduplicação
+(`backend/app/database/db.py`) e a extração de `<title>`/`<h1>` que o
+verificador de links usa para decidir se uma vaga encerrou
+(`backend/app/services/verifier.py`). Roda automaticamente em cada push/PR
+via `.github/workflows/tests.yml`.
+
+---
+
 ## 📱 Configuração de Alertas no Telegram (Opcional)
 
 1. Crie um bot no Telegram com o [@BotFather](https://t.me/botfather) e copie o **Bot Token**.

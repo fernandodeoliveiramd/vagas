@@ -27,7 +27,10 @@ from backend.app.scrapers.manager import scraper_manager
 from backend.app.core.config import config
 from backend.app.services.telegram import telegram_notifier
 
-FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+# O index.html publicado pelo GitHub Pages (raiz do repo, sem backend)
+# e o mesmo servido aqui - nao existe mais um frontend/index.html
+# separado para manter sincronizado a cada mudanca.
+FRONTEND_DIR = BASE_DIR
 
 # Valores aceitos, herdados dos enums que viviam em backend/app/models/job.py.
 # Sem Pydantic, a validacao passa a ser feita aqui. "expirada" e o status
@@ -92,9 +95,17 @@ class JobAggregatorHandler(SimpleHTTPRequestHandler):
             self.path = "/index.html"
             return super().do_GET()
 
-        # Servir arquivos estáticos do frontend
+        # data/*.json e' o unico outro estatico que o app pede (fallback de
+        # loadJobs() quando /api/jobs falha, e o que o GitHub Pages serve
+        # de verdade, ja que la nao ha backend). "directory" aponta para a
+        # raiz do projeto (nao existe mais um frontend/ isolado), entao
+        # tudo que nao for exatamente isso ou uma rota de API cai fora -
+        # sem essa lista, jobs.db (que tem notas e status) ficaria
+        # servido por HTTP junto com o resto do repo.
         if not path.startswith("/api/"):
-            return super().do_GET()
+            if path.startswith("/data/") and path.endswith(".json"):
+                return super().do_GET()
+            return self._send_json({"error": "Rota não encontrada"}, 404)
 
         # API: Listar vagas
         if path == "/api/jobs":

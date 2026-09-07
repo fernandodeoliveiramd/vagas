@@ -392,26 +392,35 @@ def delete_job(job_id: int) -> bool:
         conn.close()
 
 def get_stats() -> Dict[str, Any]:
+    # O frontend ja ignora descartada/expirada nos contadores do
+    # cabecalho (calculados no cliente); total_jobs/today_jobs/by_* aqui
+    # devem bater com o que a pessoa realmente ve no feed - senao
+    # data/stats.json (publicado no Pages) fica com um numero maior que
+    # o feed mostra. by_status e a excecao: e literalmente a contagem
+    # POR status, entao precisa listar descartada/expirada tambem.
+    inactive_statuses = ("descartada", "expirada")
+    placeholders = ",".join("?" for _ in inactive_statuses)
+
     conn = get_db_connection()
     try:
         cursor = conn.cursor()
 
-        cursor.execute("SELECT COUNT(*) FROM jobs")
+        cursor.execute(f"SELECT COUNT(*) FROM jobs WHERE status NOT IN ({placeholders})", inactive_statuses)
         total_jobs = cursor.fetchone()[0]
 
         cursor.execute("SELECT status, COUNT(*) FROM jobs GROUP BY status")
         by_status = dict(cursor.fetchall())
 
-        cursor.execute("SELECT category, COUNT(*) FROM jobs GROUP BY category")
+        cursor.execute(f"SELECT category, COUNT(*) FROM jobs WHERE status NOT IN ({placeholders}) GROUP BY category", inactive_statuses)
         by_category = dict(cursor.fetchall())
 
-        cursor.execute("SELECT city, COUNT(*) FROM jobs WHERE city IS NOT NULL GROUP BY city")
+        cursor.execute(f"SELECT city, COUNT(*) FROM jobs WHERE city IS NOT NULL AND status NOT IN ({placeholders}) GROUP BY city", inactive_statuses)
         by_city = dict(cursor.fetchall())
 
-        cursor.execute("SELECT source, COUNT(*) FROM jobs GROUP BY source")
+        cursor.execute(f"SELECT source, COUNT(*) FROM jobs WHERE status NOT IN ({placeholders}) GROUP BY source", inactive_statuses)
         by_source = dict(cursor.fetchall())
 
-        cursor.execute("SELECT COUNT(*) FROM jobs WHERE date(created_at) = date('now')")
+        cursor.execute(f"SELECT COUNT(*) FROM jobs WHERE date(created_at) = date('now') AND status NOT IN ({placeholders})", inactive_statuses)
         today_jobs = cursor.fetchone()[0]
 
         return {

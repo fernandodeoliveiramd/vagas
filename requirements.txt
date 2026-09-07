@@ -1,5 +1,9 @@
 # server.py e export_static.py rodam sobre a biblioteca padrao do Python.
 # As dependencias abaixo sao usadas pelos coletores e pelo alerta do Telegram.
-beautifulsoup4   # parsing de HTML dos portais (linkedin, trabalha_brasil, catho)
-pyyaml           # leitura de config/keywords.yaml e config/locations.yaml
-httpx            # envio das mensagens do Telegram
+# Versao fixada: sem isso, uma release nova quebrando compatibilidade
+# passa a valer sozinha na proxima varredura do GitHub Actions (roda
+# "pip install -r requirements.txt" do zero a cada execucao), sem
+# ninguem notar ate o workflow falhar.
+beautifulsoup4==4.15.0   # parsing de HTML dos portais (linkedin, trabalha_brasil, catho)
+pyyaml==6.0.3            # leitura de config/keywords.yaml e config/locations.yaml
+httpx==0.28.1            # envio das mensagens do Telegram
