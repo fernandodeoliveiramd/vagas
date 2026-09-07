@@ -243,8 +243,15 @@ class AppConfig:
         elif any(w in full_text or w in norm_loc for w in ["hibrido", "hybrid"]):
             work_model = "Híbrido"
 
+        # Se chegou aqui, city ainda e None: nao bateu pelotas, rio grande
+        # nem remoto. A condicao anterior aqui nunca era verdadeira de
+        # verdade (se "pelotas"/"rio grande" estivesse em norm_loc, a
+        # atribuicao la em cima ja teria pego), entao toda vaga com
+        # localizacao nao reconhecida virava "Pelotas" por padrao -
+        # inclusive vaga de outro estado. Sem cidade reconhecida, e mais
+        # honesto dizer isso do que inventar uma.
         if not city:
-            city = "Pelotas / Rio Grande" if ("pelotas" in norm_loc or "rio grande" in norm_loc) else "Pelotas"
+            city = "Não informado"
 
         return best_category, best_role, city, "RS", work_model, min(100, max(40, best_score))
 
