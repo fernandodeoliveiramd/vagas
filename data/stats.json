@@ -1,24 +1,24 @@
 {
   "success": true,
   "stats": {
-    "total_jobs": 46,
+    "total_jobs": 47,
     "today_jobs": 1,
     "by_status": {
-      "nova": 46
+      "nova": 47
     },
     "by_category": {
       "gestao_projetos": 3,
-      "industrial_eletrica": 34,
+      "industrial_eletrica": 35,
       "tecnologia_jr": 9
     },
     "by_city": {
       "Pelotas": 12,
       "Remoto": 9,
-      "Rio Grande": 25
+      "Rio Grande": 26
     },
     "by_source": {
       "Catho": 3,
-      "LinkedIn": 18,
+      "LinkedIn": 19,
       "Trabalha Brasil": 25
     }
   }
