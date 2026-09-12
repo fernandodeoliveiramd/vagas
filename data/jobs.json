@@ -1,7 +1,31 @@
 {
   "success": true,
-  "count": 47,
+  "count": 48,
   "jobs": [
+    {
+      "id": 55,
+      "external_id": "linkedin_4466434102",
+      "source": "LinkedIn",
+      "title": "Junior Full Stack Software Engineer",
+      "company": "GeniusXLab LLC",
+      "location": "Remoto (Brasil)",
+      "city": "Remoto",
+      "state": "RS",
+      "work_model": "Presencial",
+      "category": "tecnologia_jr",
+      "role_matched": "Desenvolvedor / Programador Júnior",
+      "description": "Vaga recente de Junior Full Stack Software Engineer na empresa GeniusXLab LLC em Remoto. Publicada no LinkedIn.",
+      "salary": "A combinar / Não informado",
+      "url": "https://www.linkedin.com/jobs/view/junior-full-stack-software-engineer-at-geniusxlab-llc-4466434102",
+      "match_score": 40,
+      "status": "nova",
+      "notes": "",
+      "is_favorite": 0,
+      "published_at": "2026-09-11",
+      "created_at": "2026-09-12T04:04:06.050365",
+      "updated_at": "2026-09-12T04:04:06.050365",
+      "dedup_hash": "c131ef87fa98a6e30745d211842cbd6f83d303dcd2ffcc299e7592158d1a0e66"
+    },
     {
       "id": 54,
       "external_id": "linkedin_4463943221",
